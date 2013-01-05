@@ -55,7 +55,7 @@ Modifications for Folder Gallery
       this.resizeDuration = 700;
       this.fadeDuration = 500;
       this.labelImage = "Image";
-      this.labelOf = "sur";
+      this.labelOf = "of";
     }
 
     return LightboxOptions;

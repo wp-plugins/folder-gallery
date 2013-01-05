@@ -3,7 +3,7 @@ Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
 Tested up to: 3.5
-Stable tag: 0.91
+Stable tag: 0.92
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,14 +23,16 @@ For each gallery, a subfolder cache_[width]x[height] is created inside the pictu
 An Options page allow to set the default paramaters of the galleries :
 * Number of images per row (cols)
 * Thumbnails width and height (width & height)
-* Picture border width (border)
-* Padding and Margins (padding & margin)
+* Picture border (border)
+* Padding and Margin (padding & margin)
  
 Any of theses settings can be override using the corresponding shortcode :
 
 	[foldergallery folder="path" title="title" cols=3 width=150 height=90 border=1 padding=2 margin=10]
  
 This plugin uses Lightbox v2.51, by Lokesh Dhakar - http://www.lokeshdhakar.com 
+
+Sample, contact available at http://jalby.org/wordpress/
 
 == Installation ==
 
@@ -43,7 +45,16 @@ This plugin uses Lightbox v2.51, by Lokesh Dhakar - http://www.lokeshdhakar.com
 
 	[foldergallery folder="/wp-content/upload/MyPictures" title="My Picture Gallery"]
 
+== Screenshots ==
+1. Folder Gallery Options
+2. Folder Gallery in a post
+3. Folder Gallery Lightbox
+
 == Changelog ==
 
-= 0.9 =
+= 0.92 [2012-01-05] =
+* Add a 0-column option (When 'Images per Row' is set to 0, the number of columns is set automatically.)
+* Misc changes
+
+= 0.90 [2012-01-05] =
 * First released version

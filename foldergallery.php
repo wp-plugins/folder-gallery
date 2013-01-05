@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 0.91
-Plugin URI: http://www.jalby.org/category/foldergallery/
+Version: 0.92
+Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
 Text Domain: foldergallery
@@ -90,7 +90,7 @@ function fg_gallery($atts) { // Generate gallery
 		'cols' => $options['images_per_row'],
 		'margin' => $options['margin'],
 		'padding' => $options['padding'],
-		'border' => $options['border_width']
+		'border' => $options['border']
 	), $atts ) );
    
 	$folder = rtrim($folder,'/'); // Remove trailing / from path
@@ -128,7 +128,9 @@ function fg_gallery($atts) { // Generate gallery
 		$gallery_code .= "\n";
 		$gallery_code.= '<a title="'. $title .'" href="'.home_url('/').$folder.'/'.$pictures[$idx].'" rel="lightbox['.$lightbox_id.']">';
 		$gallery_code.= '<img src="'.home_url('/').$thumbnail.'" style="'. $imgstyle .'" alt="'. $title.' ['.($idx+1).']'.'" /></a>';
-		if(($idx+1) % $cols == 0) { $gallery_code.= "\n" . '<div class="fg_clear"></div>'; }
+		if($cols>0) {
+			if(($idx+1) % $cols == 0) { $gallery_code.= "\n" . '<div class="fg_clear"></div>'; }
+		}
 	}
 	if ($NoP == 0) {
 		echo "<p style=\"color:red;\"><strong>Folder Gallery Error:</strong> No picture available inside '$folder'.</p>";
@@ -150,11 +152,10 @@ function fg_settings_init() {
 
 function fg_settings_validate($input) {
     $input['images_per_row'] = intval($input['images_per_row']);
-    	if ($input['images_per_row'] == 0) $input['images_per_row'] = 5 ;
     $input['thumbnails_width'] = intval($input['thumbnails_width']);
     	if ($input['thumbnails_width'] == 0) $input['thumbnails_width'] = 150 ;
     $input['thumbnails_height'] = intval($input['thumbnails_height']);
-    $input['border_width'] = intval($input['border_width']);   
+    $input['border'] = intval($input['border']);   
 	$input['padding'] = intval($input['padding']);
 	$input['margin'] = intval($input['margin']);
     return $input;
@@ -162,10 +163,10 @@ function fg_settings_validate($input) {
 
 function fg_settings_default() {
 		$defaults = array( 
-			'border_width' => 1,
+			'border' => 1,
 			'padding' => 2,
 			'margin' => 5,
-			'images_per_row' => 5, 
+			'images_per_row' => 0, 
 			'thumbnails_width' => 160,
 			'thumbnails_height' => 0
 		);
@@ -188,12 +189,12 @@ function fg_settings()
 	echo '<form method="post" action="options.php">';
 	settings_fields('FolderGallery');
 	echo '<table class="form-table"><tbody>';
-	$this->fg_option_field('images_per_row','Images Per Row','');
+	$this->fg_option_field('images_per_row','Images Per Row',' (0 = auto)');
 	$this->fg_option_field('thumbnails_width','Thumbnails Width');
 	$this->fg_option_field('thumbnails_height','Thumbnails Height',' px (0 = auto)');
-	$this->fg_option_field('border_width','Picture Border Width');
+	$this->fg_option_field('border','Picture Border');
 	$this->fg_option_field('padding','Padding');
-	$this->fg_option_field('margin','Margins');	
+	$this->fg_option_field('margin','Margin');	
 	echo '</tbody></table>';
 	submit_button();
 	echo '</form></div>';
