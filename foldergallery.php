@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 0.92
+Version: 0.93
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -37,7 +37,11 @@ function foldergallery() {
 		add_action('admin_menu',array($this,'fg_menu'));
 		add_action('admin_init',array($this,'fg_settings_init'));				
 		add_shortcode('foldergallery', array($this, 'fg_gallery' ));		
+		
+		load_plugin_textdomain('foldergallery', false, basename( dirname( __FILE__ ) ) . '/languages' );
+		
 		add_action('wp_enqueue_scripts', array($this, 'fg_styles_and_scripts'));
+		
 		
 		$options = get_option('FolderGallery');
 		if(empty($options)) {	
@@ -49,8 +53,10 @@ function fg_styles_and_scripts(){
     wp_enqueue_style( 'fg_style', plugins_url('/css/style.css', __FILE__));
 	wp_enqueue_style( 'fg_lightbox_style', plugins_url('/css/lightbox.css', __FILE__));
 	wp_enqueue_script( 'fg_lightbox_script', plugins_url('/js/lightbox.js', __FILE__),array('jquery'));
+	wp_localize_script('fg_lightbox_script', 'FGtrans', array(
+		'labelImage'=> __('Image','foldergallery'),
+		'labelOf'=> __('of','foldergallery') ));
 }
-
 
 /* --------- Folder Gallery Main Functions --------- */
 
@@ -96,7 +102,9 @@ function fg_gallery($atts) { // Generate gallery
 	$folder = rtrim($folder,'/'); // Remove trailing / from path
 
 	if(!is_dir($folder)) {
-		echo "<p style=\"color:red;\"><strong>Folder Gallery Error:</strong> Unable to find the directory '$folder'.</p>";	
+		echo '<p style="color:red;"><strong>'. __('Folder Gallery Error:','foldergallery') .'</strong> ';
+		printf( __('Unable to find the directory %s.','foldergallery'),$folder);
+		echo '</p>';	
 		return;
 	}
 	
@@ -105,7 +113,10 @@ function fg_gallery($atts) { // Generate gallery
 			@mkdir($cache_folder, 0777);
 	}
 	if(!is_dir($cache_folder)) {
-		echo "<p style=\"color:red;\"><strong>Folder Gallery Error:</strong> Unable to create the thumbnails directory inside '$folder'. Verify that this directory is writable (chmod 777).</p>";
+		echo '<p style="color:red;"><strong>'. __('Folder Gallery Error:','foldergallery') .'</strong> ';
+		printf( __('Unable to create the thumbnails directory inside %s.','foldergallery'),$folder); 
+		_e('Verify that this directory is writable (chmod 777).','foldergallery');
+		echo '</p>';
 		return;
 	}
 	
@@ -133,7 +144,9 @@ function fg_gallery($atts) { // Generate gallery
 		}
 	}
 	if ($NoP == 0) {
-		echo "<p style=\"color:red;\"><strong>Folder Gallery Error:</strong> No picture available inside '$folder'.</p>";
+		echo '<p style="color:red;"><strong>'. __('Folder Gallery Error:','foldergallery') .'</strong> ';
+		printf( __('No picture available inside %s.','foldergallery'),$folder);
+		echo '</p>';
 	}	
 	$gallery_code.= "\n</div>";
 	$gallery_code.= "\n" . '<div class="fg_clear"></div>';
@@ -185,16 +198,16 @@ function fg_settings()
 {
 	echo '<div class="wrap">';
 	screen_icon();
-	echo '<h2>Folder Gallery Settings</h2>';
+	echo '<h2>'. __('Folder Gallery Settings','foldergallery') .'</h2>';
 	echo '<form method="post" action="options.php">';
 	settings_fields('FolderGallery');
 	echo '<table class="form-table"><tbody>';
-	$this->fg_option_field('images_per_row','Images Per Row',' (0 = auto)');
-	$this->fg_option_field('thumbnails_width','Thumbnails Width');
-	$this->fg_option_field('thumbnails_height','Thumbnails Height',' px (0 = auto)');
-	$this->fg_option_field('border','Picture Border');
-	$this->fg_option_field('padding','Padding');
-	$this->fg_option_field('margin','Margin');	
+	$this->fg_option_field('images_per_row', __('Images Per Row','foldergallery'),' (0 = auto)');
+	$this->fg_option_field('thumbnails_width', __('Thumbnails Width','foldergallery'));
+	$this->fg_option_field('thumbnails_height', __('Thumbnails Height','foldergallery'),' px (0 = auto)');
+	$this->fg_option_field('border', __('Picture Border','foldergallery'));
+	$this->fg_option_field('padding', __('Padding','foldergallery'));
+	$this->fg_option_field('margin', __('Margin','foldergallery'));	
 	echo '</tbody></table>';
 	submit_button();
 	echo '</form></div>';
