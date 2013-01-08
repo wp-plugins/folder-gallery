@@ -21,6 +21,7 @@ To include a gallery in a post or a page, you have to use the following shortcod
 For each gallery, a subfolder cache_[width]x[height] is created inside the pictures folder when the page is accessed for the first time. 
 
 An Options page allow to set the default paramaters of the galleries :
+
 * Number of images per row (cols)
 * Thumbnails width and height (width & height)
 * Picture border (border)
@@ -51,6 +52,9 @@ Sample, contact available at http://jalby.org/wordpress/
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 0.93 =
+* Internationalization (English, French)
 
 = 0.92 [2012-01-05] =
 * Add a 0-column option (When 'Images per Row' is set to 0, the number of columns is set automatically.)

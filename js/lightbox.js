@@ -40,7 +40,10 @@ lightbox = new Lightbox options
 */
 
 /*
-Modifications for Folder Gallery
+Folder Gallery changes
+= 0.95 =
+- Allow translation of 'Image' and 'Of' Strings with wp_localize_script
+= 0.9 =
 - Removed Close / Loading images
 */
 
@@ -56,8 +59,14 @@ Modifications for Folder Gallery
       this.fadeDuration = 500;
       this.labelImage = "Image";
       this.labelOf = "of";
+      /* Folder Gallery 0.95 modifications */
+      if (typeof FGtrans == 'object') {
+      	if(FGtrans.labelImage) { this.labelImage = FGtrans.labelImage ; }
+      	if(FGtrans.labelOf) { this.labelOf = FGtrans.labelOf ; }
+      }
+      /* End of Folder Gallery modifications */
     }
-
+    
     return LightboxOptions;
 
   })();
