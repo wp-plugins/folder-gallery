@@ -46,6 +46,25 @@ Sample, contact available at http://jalby.org/wordpress/
 
 	[foldergallery folder="/wp-content/upload/MyPictures" title="My Picture Gallery"]
 
+== Frequently Asked Questions ==
+
+= Can I use lightview 3 instead of lightbox 2? =
+
+Yes! However, you have to download and install lightview 3 by hand. Here's how:
+
+1. Download lightview from http://projects.nickstakenburg.com/lightview/download
+2. Unzip the archive then rename the directory to 'lightview' (i.e., remove version number).
+3. Upload the directory 'lightview' to '/wp-content/plugins/foldergallery'.
+4. Done!
+
+You can specify lightview options with the shortcode attribute 'options':
+
+	[foldergaller folder="..." options="controls: { slider: false }, skin: 'mac'"]
+	
+You can set default options in Folder Gallery Settings. 
+
+See http://projects.nickstakenburg.com/lightview/documentation for details about Lightview options.
+
 == Screenshots ==
 1. Folder Gallery Options
 2. Folder Gallery in a post
@@ -53,7 +72,12 @@ Sample, contact available at http://jalby.org/wordpress/
 
 == Changelog ==
 
-= 0.93 =
+= 0.94 (alpha) [2012-01-09] =
+* Support for Lightview 3 (see FAQ)
+* Code cleaning
+* Small improvements
+
+= 0.93 (alpha) [2012-01-08] =
 * Internationalization (English, French)
 
 = 0.92 [2012-01-05] =
