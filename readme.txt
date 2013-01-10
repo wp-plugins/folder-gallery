@@ -3,7 +3,7 @@ Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
 Tested up to: 3.5
-Stable tag: 0.92
+Stable tag: 0.95
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,6 +21,7 @@ To include a gallery in a post or a page, you have to use the following shortcod
 For each gallery, a subfolder cache_[width]x[height] is created inside the pictures folder when the page is accessed for the first time. 
 
 An Options page allow to set the default paramaters of the galleries :
+
 * Number of images per row (cols)
 * Thumbnails width and height (width & height)
 * Picture border (border)
@@ -45,12 +46,37 @@ Sample, contact available at http://jalby.org/wordpress/
 
 	[foldergallery folder="/wp-content/upload/MyPictures" title="My Picture Gallery"]
 
+== Frequently Asked Questions ==
+
+= Can I use lightview 3 instead of lightbox 2? =
+
+Yes! However, you have to download and install lightview 3 by hand. Here's how:
+
+1. Download lightview from http://projects.nickstakenburg.com/lightview/download
+2. Unzip the archive then rename the directory to 'lightview' (i.e., remove version number).
+3. Upload the directory 'lightview' to '/wp-content/plugins/foldergallery'.
+4. Done!
+
+You can specify lightview options with the shortcode attribute 'options':
+
+	[foldergaller folder="..." options="controls: { slider: false }, skin: 'mac'"]
+	
+You can set default options in Folder Gallery Settings. 
+
+See http://projects.nickstakenburg.com/lightview/documentation for details about Lightview options.
+
 == Screenshots ==
 1. Folder Gallery Options
 2. Folder Gallery in a post
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 0.95 [2012-01-10] =
+* Internationalization (English, French)
+* Support for Lightview 3 (see FAQ)
+* Code cleaning
+* Small improvements
 
 = 0.92 [2012-01-05] =
 * Add a 0-column option (When 'Images per Row' is set to 0, the number of columns is set automatically.)
