@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 0.94
+Version: 0.95
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -222,21 +222,21 @@ class foldergallery{
 
 	function fg_option_field( $field, $label, $extra = 'px' ) {
 		$options = get_option( 'FolderGallery' );
-		echo '<tr valign="top">';
-		echo '<th scope="row"><label for="' . $field . '">' . $label . '</label></th>';
-		echo '<td><input id="' . $field . '" name="FolderGallery[' . $field . ']" type="text" value="' . $options["$field"] . '" class="small-text"> ' . $extra . '</td>';
-		echo '</tr>';
+		echo '<tr valign="top">' . "\n";
+		echo '<th scope="row"><label for="' . $field . '">' . $label . "</label></th>\n";
+		echo '<td><input id="' . $field . '" name="FolderGallery[' . $field . ']" type="text" value="' . $options["$field"] . '" class="small-text"> ' . $extra . "</td>\n";
+		echo "</tr>\n";
 	}
 
 	function fg_settings()
 	{
 		global $lightview_path;
-		echo '<div class="wrap">';
+		echo '<div class="wrap">' . "\n";
 		screen_icon();
-		echo '<h2>' . __( 'Folder Gallery Settings', 'foldergallery' ) . '</h2>';
-		echo '<form method="post" action="options.php">';
+		echo '<h2>' . __( 'Folder Gallery Settings', 'foldergallery' ) . "</h2>\n";
+		echo '<form method="post" action="options.php">' . "\n";
 		settings_fields( 'FolderGallery' );
-		echo '<table class="form-table"><tbody>';
+		echo "\n" . '<table class="form-table"><tbody>' . "\n";
 		$this->fg_option_field( 'images_per_row', __( 'Images Per Row', 'foldergallery' ), __( '(0 = auto)', 'foldergallery' ) );
 		$this->fg_option_field( 'thumbnails_width', __( 'Thumbnails Width', 'foldergallery' ) );
 		$this->fg_option_field( 'thumbnails_height', __( 'Thumbnails Height', 'foldergallery' ), ' px ' . __( '(0 = auto)', 'foldergallery' ) );
@@ -245,19 +245,19 @@ class foldergallery{
 		$this->fg_option_field( 'margin', __( 'Margin', 'foldergallery' ) );
 		if ( $lightview_path ) {
 			$options = get_option( 'FolderGallery' );
-			echo '<tr valign="top">';
-			echo '<th scope="row"><label for="lw_options">Lightview Options</label></th>';
-			echo '<td><textarea id="options" rows="5" cols="50" name="FolderGallery[lw_options]" type="text" class="large-text code">' . $options['lw_options'] . '</textarea>';
-			echo '<p class="description">' . __( 'Lightview default options, column-separated.', 'foldergallery' );
+			echo '<tr valign="top">' . "\n";
+			echo '<th scope="row"><label for="lw_options">' . __( 'Lightview Options', 'foldergallery' ) . '</label></th>' . "\n";
+			echo '<td><textarea id="options" rows="5" cols="50" name="FolderGallery[lw_options]" class="large-text code">' . $options['lw_options'] . "</textarea>\n";
+			echo '<p class="description">' . __( 'Lightview default options, comma-separated.', 'foldergallery' );
 			echo " E.g., <code>controls: { slider: false }, skin: 'mac'</code>. ";
-			echo __( 'For more information, see: ', 'foldergallery' );
-			echo '<a href="http://projects.nickstakenburg.com/lightview/documentation/options" target="_blank">http://projects.nickstakenburg.com/lightview</a>.</p>';
-			echo '</td>';
-			echo '</tr>';
+			echo __( 'For details, see:', 'foldergallery' );
+			echo ' <a href="http://projects.nickstakenburg.com/lightview/documentation/options" target="_blank">http://projects.nickstakenburg.com/lightview</a>.</p>' . "\n";
+			echo "</td>\n";
+			echo "</tr>\n";
 		}		
-		echo '</tbody></table>';
+		echo "</tbody></table>\n";
 		submit_button();
-		echo '</form></div>';
+		echo "</form></div>\n";
 	}
 		
 } //End Of Class

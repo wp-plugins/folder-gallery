@@ -3,7 +3,7 @@ Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
 Tested up to: 3.5
-Stable tag: 0.92
+Stable tag: 0.95
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,13 +72,11 @@ See http://projects.nickstakenburg.com/lightview/documentation for details about
 
 == Changelog ==
 
-= 0.94 (alpha) [2012-01-09] =
+= 0.95 [2012-01-10] =
+* Internationalization (English, French)
 * Support for Lightview 3 (see FAQ)
 * Code cleaning
 * Small improvements
-
-= 0.93 (alpha) [2012-01-08] =
-* Internationalization (English, French)
 
 = 0.92 [2012-01-05] =
 * Add a 0-column option (When 'Images per Row' is set to 0, the number of columns is set automatically.)
