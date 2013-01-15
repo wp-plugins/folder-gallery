@@ -44,7 +44,7 @@ Sample, contact available at http://jalby.org/wordpress/
 5. Upload a folder of pictures to '/wp-content/upload/MyPictures'
 6. Insert the following short code in post or page :
 
-	[foldergallery folder="/wp-content/upload/MyPictures" title="My Picture Gallery"]
+	[foldergallery folder="wp-content/upload/MyPictures" title="My Picture Gallery"]
 
 == Frequently Asked Questions ==
 
@@ -55,7 +55,9 @@ Yes! However, you have to download and install lightview 3 by hand. Here's how:
 1. Download lightview from http://projects.nickstakenburg.com/lightview/download
 2. Unzip the archive then rename the directory to 'lightview' (i.e., remove version number).
 3. Upload the directory 'lightview' to '/wp-content/plugins/foldergallery'.
-4. Done!
+4. Go To Settings / Folder Gallery and select Lightview as Gallery Engine.
+5. Done!
+
 
 You can specify lightview options with the shortcode attribute 'options':
 
@@ -65,6 +67,8 @@ You can set default options in Folder Gallery Settings.
 
 See http://projects.nickstakenburg.com/lightview/documentation for details about Lightview options.
 
+Lightview need to be reinstall everytime the plugin is updated.
+
 == Screenshots ==
 1. Folder Gallery Options
 2. Folder Gallery in a post
@@ -72,15 +76,21 @@ See http://projects.nickstakenburg.com/lightview/documentation for details about
 
 == Changelog ==
 
-= 0.95 [2012-01-10] =
+= 0.96 [2013-01-??] =
+* Scripts are loaded on page with galleries
+* Add support for fancybox (included)
+* Add an option to change gallery 'engine' (Lightbox, Fancybox -- Lightview, when installed)
+
+
+= 0.95 [2013-01-10] =
 * Internationalization (English, French)
 * Support for Lightview 3 (see FAQ)
 * Code cleaning
 * Small improvements
 
-= 0.92 [2012-01-05] =
+= 0.92 [2013-01-05] =
 * Add a 0-column option (When 'Images per Row' is set to 0, the number of columns is set automatically.)
 * Misc changes
 
-= 0.90 [2012-01-05] =
+= 0.90 [2013-01-05] =
 * First released version
