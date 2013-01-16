@@ -317,7 +317,7 @@ class foldergallery{
 		
 		echo "\t" .	'<option value="none"';
 		if ( 'none' == $fg_options['engine'] ) echo ' selected="selected"';
-		echo '>None</option>' . "\n";
+		echo '>' . __( 'None', 'foldergallery') . '</option>' . "\n";
 
 		echo "</select>\n";
 
