@@ -45,7 +45,7 @@ msgid "Folder Gallery Settings"
 msgstr ""
 
 #: foldergallery.php:205
-msgid "Images Per Row"
+msgid "Columns"
 msgstr ""
 
 #: foldergallery.php:206
@@ -80,6 +80,10 @@ msgstr ""
 msgid "Lightview default options, comma-separated."
 msgstr ""
 
-#: foldergallery.php:253
-msgid "For details, see:"
+#: foldergallery.php:301
+msgid "Gallery Engine"
+msgstr ""
+
+#: foldergallery.php:320
+msgid "None"
 msgstr ""
