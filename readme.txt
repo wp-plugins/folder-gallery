@@ -3,7 +3,7 @@ Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
 Tested up to: 3.5
-Stable tag: 0.95
+Stable tag: 0.97
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,7 +91,7 @@ Otherwise, you should set a different lightbox engine (than the one used by your
 
 == Changelog ==
 
-= 0.97 [2013-01-??] =
+= 0.97 [2013-01-16] =
 * Scripts are only loaded on page with galleries
 * Add support for fancybox (included)
 * Add an option to change gallery 'engine' (Lightbox, Fancybox, Lightview when installed or None)
