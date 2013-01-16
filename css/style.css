@@ -1,3 +1,2 @@
 .fg_gallery img { margin:0px 5px 5px 0px; padding:2px; border:1px solid #ddd; display:block; float:left; }
 .fg_gallery img:hover { border-color:#888; }
-.fg_clear { clear:both; }

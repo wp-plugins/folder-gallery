@@ -12,26 +12,28 @@ This plugin generates picture galleries from a folder using a shortcode.
 == Description ==
 
 This plugin creates picture galleries from a folder. 
-The pictures folder must be uploaded (using FTP) somewhere on the server (e.g. /wp-content/upload). It must be writable (chmod 777).
+The pictures folder must be uploaded (using FTP) somewhere on the server (e.g. wp-content/upload). It must be writable (chmod 777).
 
 To include a gallery in a post or a page, you have to use the following shortcode :
 
-	[foldergallery folder="path_to_folder" title="Gallery title"]. 
+	`[foldergallery folder="local_path_to_folder" title="Gallery title"]`
 
 For each gallery, a subfolder cache_[width]x[height] is created inside the pictures folder when the page is accessed for the first time. 
 
 An Options page allow to set the default paramaters of the galleries :
 
-* Number of images per row (cols)
+* Number of images per row (columns)
 * Thumbnails width and height (width & height)
 * Picture border (border)
 * Padding and Margin (padding & margin)
  
 Any of theses settings can be override using the corresponding shortcode :
 
-	[foldergallery folder="path" title="title" cols=3 width=150 height=90 border=1 padding=2 margin=10]
+	`[foldergallery folder="path" title="title" columns=3 
+			width=150 height=90 border=1 padding=2 margin=10]`
  
-This plugin uses Lightbox v2.51, by Lokesh Dhakar - http://www.lokeshdhakar.com 
+This plugin uses Lightbox v2.51 by Lokesh Dhakar - http://www.lokeshdhakar.com 
+and Fancybox v2.1.3 by Janis Skarnelis - http://www.fancyapps.com/fancybox/
 
 Sample, contact available at http://jalby.org/wordpress/
 
@@ -41,7 +43,7 @@ Sample, contact available at http://jalby.org/wordpress/
 2. Upload the directory 'foldergallery' to the '/wp-content/plugins/' directory
 3. Activate the plugin through the 'Plugins' menu in WordPress
 4. Go to Settings / Folder Gallery to change the default settings
-5. Upload a folder of pictures to '/wp-content/upload/MyPictures'
+5. Upload a folder of pictures to 'wp-content/upload/MyPictures'
 6. Insert the following short code in post or page :
 
 	[foldergallery folder="wp-content/upload/MyPictures" title="My Picture Gallery"]
@@ -61,13 +63,26 @@ Yes! However, you have to download and install lightview 3 by hand. Here's how:
 
 You can specify lightview options with the shortcode attribute 'options':
 
-	[foldergaller folder="..." options="controls: { slider: false }, skin: 'mac'"]
+	`[foldergaller folder="path" title="My Gallery"
+		options="controls: { slider: false }, skin: 'mac'"]`
 	
-You can set default options in Folder Gallery Settings. 
+You can set default options in Folder Gallery Options Page. 
 
 See http://projects.nickstakenburg.com/lightview/documentation for details about Lightview options.
 
 Lightview need to be reinstall everytime the plugin is updated.
+
+= Can I use Folder Gallery along with another Lightbox plugin? =
+
+If your Lightbox plugin automatically handles images, you may set the lightbox engine to 'None' in Folder Gallery Options.
+This works with
+
+* Fancybox 1.0.7+ by Kevin Sylvestre
+* jQuery Colorbox 4.5+ by Arne Franken
+* Lightview Plus 3.1.3+ by Puzich
+* Maybe other (tell me !)
+
+Otherwise, you should set a different lightbox engine (than the one used by your plugin) in Folder Gallery Options.
 
 == Screenshots ==
 1. Folder Gallery Options
@@ -76,10 +91,11 @@ Lightview need to be reinstall everytime the plugin is updated.
 
 == Changelog ==
 
-= 0.96 [2013-01-??] =
-* Scripts are loaded on page with galleries
+= 0.97 [2013-01-??] =
+* Scripts are only loaded on page with galleries
 * Add support for fancybox (included)
-* Add an option to change gallery 'engine' (Lightbox, Fancybox -- Lightview, when installed)
+* Add an option to change gallery 'engine' (Lightbox, Fancybox, Lightview when installed or None)
+* Misc changes 
 
 
 = 0.95 [2013-01-10] =
