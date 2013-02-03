@@ -2,8 +2,8 @@
 Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
-Tested up to: 3.5
-Stable tag: 0.97
+Tested up to: 3.5.1
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,7 @@ The pictures folder must be uploaded (using FTP) somewhere on the server (e.g. w
 
 To include a gallery in a post or a page, you have to use the following shortcode :
 
-	`[foldergallery folder="local_path_to_folder" title="Gallery title"]`
+	[foldergallery folder="local_path_to_folder" title="Gallery title"]
 
 For each gallery, a subfolder cache_[width]x[height] is created inside the pictures folder when the page is accessed for the first time. 
 
@@ -29,8 +29,8 @@ An Options page allow to set the default paramaters of the galleries :
  
 Any of theses settings can be override using the corresponding shortcode :
 
-	`[foldergallery folder="path" title="title" columns=3 
-			width=150 height=90 border=1 padding=2 margin=10]`
+	[foldergallery folder="path" title="title" columns=3 
+			width=150 height=90 border=1 padding=2 margin=10]
  
 This plugin uses Lightbox v2.51 by Lokesh Dhakar - http://www.lokeshdhakar.com 
 and Fancybox v2.1.3 by Janis Skarnelis - http://www.fancyapps.com/fancybox/
@@ -63,14 +63,14 @@ Yes! However, you have to download and install lightview 3 by hand. Here's how:
 
 You can specify lightview options with the shortcode attribute 'options':
 
-	`[foldergaller folder="path" title="My Gallery"
-		options="controls: { slider: false }, skin: 'mac'"]`
+	[foldergaller folder="path" title="My Gallery"
+		options="controls: { slider: false }, skin: 'mac'"]
 	
 You can set default options in Folder Gallery Options Page. 
 
 See http://projects.nickstakenburg.com/lightview/documentation for details about Lightview options.
 
-Lightview need to be reinstall everytime the plugin is updated.
+Lightview need to be reinstalled everytime the plugin is updated.
 
 = Can I use Folder Gallery along with another Lightbox plugin? =
 
@@ -91,8 +91,12 @@ Otherwise, you should set a different lightbox engine (than the one used by your
 
 == Changelog ==
 
+= 1.0 [2013-02-03] =
+* Fix a problem with case of file extension of thumbnails.
+* Update Fancybox to 2.1.4
+
 = 0.97 [2013-01-16] =
-* Scripts are only loaded on page with galleries
+* Scripts are only loaded on pages with galleries
 * Add support for fancybox (included)
 * Add an option to change gallery 'engine' (Lightbox, Fancybox, Lightview when installed or None)
 * Misc changes 

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 0.97
+Version: 1.0
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -198,7 +198,7 @@ class foldergallery{
 
 		$NoP = count( $pictures );
 		for ( $idx = 0 ; $idx < $NoP ; $idx++ ) {
-			$thumbnail = $cache_folder . '/' . $pictures[ $idx ];
+			$thumbnail = $cache_folder . '/' . strtolower($pictures[ $idx ]);
 			if ( ! file_exists( $thumbnail ) ) {
 				$this->save_thumbnail( $folder . '/' . $pictures[ $idx ], $thumbnail, $width, $height );
 			}
@@ -208,7 +208,8 @@ class foldergallery{
 					$gallery_code.= '<a title="' . $title . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" rel="lightbox[' . $lightbox_id . ']">';
 				break;
 				case 'fancybox2' :
-					$gallery_code.= '<a class ="fancybox" title="' . $title . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" rel="' . $lightbox_id . '">';
+					$subtitle = $title . ' (' . ($idx+1) . '/' . $NoP . ')';
+					$gallery_code.= '<a class ="fancybox" title="' . $subtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" rel="' . $lightbox_id . '">';
 				break;
 				case 'lightview' :
 					if ( $options ) $options = " data-lightview-group-options=\"$options\"";
