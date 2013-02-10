@@ -1,11 +1,10 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.0
+Version: 1.1b1
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
-Text Domain: foldergallery
 Description: This plugin creates picture galleries from a folder. The gallery is automatically generated in a post or page with a shortcode. Usage: [foldergallery folder="local_path_to_folder" title="Gallery title"]. For each gallery, a subfolder cache_[width]x[height] is created inside the pictures folder when the page is accessed for the first time. The picture folder must be writable (chmod 777).
 Tags: gallery, folder, lightbox, lightview
 Requires: 3.5
@@ -35,8 +34,6 @@ new foldergallery();
 
 class foldergallery{
 
-	var $lightview_path;
-
 	function foldergallery() {		
 		add_action( 'admin_menu', array( $this, 'fg_menu' ) );	
 		add_action( 'admin_init', array( $this, 'fg_settings_init' ) );
@@ -47,7 +44,6 @@ class foldergallery{
 	}
 
 	function fg_init() {
-		global $lightview_path;
 		load_plugin_textdomain( 'foldergallery', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 		$fg_options = get_option( 'FolderGallery' );
 		if ( empty( $fg_options ) ) {
@@ -66,6 +62,10 @@ class foldergallery{
 				$fg_options['engine'] = 'lightbox2';
 				update_option( 'FolderGallery', $fg_options );
 			}
+		}
+		if ( ! $fg_options['thumbnails'] ) { // 1.1 update
+			$fg_options['thumbnails'] = 'all';
+			update_option( 'FolderGallery', $fg_options );
 		}
 	}
 
@@ -162,6 +162,7 @@ class foldergallery{
 			'margin'  => $fg_options['margin'],
 			'padding' => $fg_options['padding'],
 			'border'  => $fg_options['border'],
+			'thumbnails' => $fg_options['thumbnails'],
 			'options' => $fg_options['lw_options'],
 		), $atts ) );
 
@@ -192,6 +193,8 @@ class foldergallery{
 		$imgstyle .= "padding:{$padding}px;";
 		$imgstyle .= "border-width:{$border}px;";
 
+		if ( 'all' != $thumbnails ) $columns = 0;
+			
 		$this->fg_scripts();			
 		$lightbox_id = md5( $folder );
 		$gallery_code = '<div class="fg_gallery">';
@@ -202,28 +205,38 @@ class foldergallery{
 			if ( ! file_exists( $thumbnail ) ) {
 				$this->save_thumbnail( $folder . '/' . $pictures[ $idx ], $thumbnail, $width, $height );
 			}
+			if ( $idx > 0 && 'all' != $thumbnails ) {
+				$linkstyle = ' style="display:none;"';
+			} else {
+				$linkstyle ='';
+			}
+			
 			$gallery_code .= "\n";
 			switch ( $fg_options['engine'] ) {
 				case 'lightbox2' :
-					$gallery_code.= '<a title="' . $title . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" rel="lightbox[' . $lightbox_id . ']">';
+					$gallery_code.= '<a title="' . $title . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" rel="lightbox[' . $lightbox_id . ']"' . $linkstyle . '>';
 				break;
 				case 'fancybox2' :
 					$subtitle = $title . ' (' . ($idx+1) . '/' . $NoP . ')';
-					$gallery_code.= '<a class ="fancybox" title="' . $subtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" rel="' . $lightbox_id . '">';
+					$gallery_code.= '<a class ="fancybox" title="' . $subtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" rel="' . $lightbox_id . '"' . $linkstyle . '>';
 				break;
 				case 'lightview' :
 					if ( $options ) $options = " data-lightview-group-options=\"$options\"";
-					$gallery_code .= '<a title="' . $title . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" class="lightview" data-lightview-group="' . $lightbox_id . '"' . $options . '>';
+					$gallery_code .= '<a title="' . $title . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" class="lightview" data-lightview-group="' . $lightbox_id . '"' . $options . $linkstyle . '>';
 					$options = ''; // group-options required only once per group.
 				break;
 				case 'none' :
-					$gallery_code .= '<a title="' . $title . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '">';
+					$gallery_code .= '<a title="' . $title . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '"' . $linkstyle . '>';
 				break;
 			}		
+			if ( 0 == $idx && 'none' == $thumbnails ) {
+				$gallery_code .= '<span class="fg_title">' . $title . '</span>';
+				$gallery_code .= '<img src="' . home_url( '/' ) . $thumbnail . '" alt="' . $title . ' [' . ( $idx + 1 ) . ']' . '" style="display:none;" /></a>';
+			} else {
+				$gallery_code .= '<img src="' . home_url( '/' ) . $thumbnail . '" style="' . $imgstyle . '" alt="' . $title . ' [' . ( $idx + 1 ) . ']' . '" /></a>';
+			}
 
-			$gallery_code .= '<img src="' . home_url( '/' ) . $thumbnail . '" style="' . $imgstyle . '" alt="' . $title . ' [' . ( $idx + 1 ) . ']' . '" /></a>';
-
-			if ( $columns>0 ) {
+			if ( $columns > 0 ) {
 				if ( ( $idx + 1 ) % $columns == 0 ) $gallery_code .= "\n" . '<br style="clear: both" />';
 			}
 		}
@@ -233,7 +246,7 @@ class foldergallery{
 			echo '</p>';
 		}	
 		$gallery_code .= "\n</div>";
-		$gallery_code .= "\n" . '<br style="clear: both" />';
+		if ( 'none' != $thumbnails ) $gallery_code .= "\n" . '<br style="clear: both" />';
 		return $gallery_code;
 	}
 
@@ -264,6 +277,7 @@ class foldergallery{
 		$input['border']            = intval( $input['border'] );
 		$input['padding']           = intval( $input['padding'] );
 		$input['margin']            = intval( $input['margin'] );
+		if ( ! in_array( $input['thumbnails'], array( 'all','none','first' ) ) ) $input['thumbnails'] = 'all';
 		return $input;
 	}
 
@@ -276,6 +290,7 @@ class foldergallery{
 				'thumbnails_width' 	=> 160,
 				'thumbnails_height' => 0,
 				'lw_options'        => '',
+				'thumbnails'		=> 'all',
 			);
 			return $defaults;
 	}
@@ -338,6 +353,24 @@ class foldergallery{
 				echo 'You are free to use it on non-commercial websites. Licenses are available for commercial use.</p>';
 			break;
 		}
+		echo "</td>\n</tr>\n";
+
+		echo '<tr valign="top">' . "\n";
+		echo '<th scope="row"><label for="thumbnails">' . __( 'Display Thumbnails', 'foldergallery' ) . '</label></th>' . "\n";
+		echo '<td><select name="FolderGallery[thumbnails]" id="FolderGallery[thumbnails]">' . "\n";
+		
+		echo "\t" .	'<option value="all"';
+		if ( 'all' == $fg_options['thumbnails'] ) echo ' selected="selected"';
+		echo '>' . __( 'All', 'foldergallery' ) . '</option>' . "\n";
+		
+		echo "\t" .	'<option value="first"';
+		if ( 'first' == $fg_options['thumbnails'] ) echo ' selected="selected"';
+		echo '>' . __( 'First', 'foldergallery' ) . '</option>' . "\n";
+
+		echo "\t" .	'<option value="none"';
+		if ( 'none' == $fg_options['thumbnails'] ) echo ' selected="selected"';
+		echo '>' . __( 'None', 'foldergallery' ) . '</option>' . "\n";
+		echo "</select>\n";
 		echo "</td>\n</tr>\n";
 
 		$this->fg_option_field( 'columns', __( 'Columns', 'foldergallery' ), __( '(0 = auto)', 'foldergallery' ) );

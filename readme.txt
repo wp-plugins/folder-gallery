@@ -6,6 +6,7 @@ Tested up to: 3.5.1
 Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Donate link: http://jalby.org/wordpress/donate/
 
 This plugin generates picture galleries from a folder using a shortcode.
 
@@ -26,6 +27,7 @@ An Options page allow to set the default paramaters of the galleries :
 * Thumbnails width and height (width & height)
 * Picture border (border)
 * Padding and Margin (padding & margin)
+* Display Thumbnails (thumbnails)
  
 Any of theses settings can be override using the corresponding shortcode :
 
@@ -33,7 +35,7 @@ Any of theses settings can be override using the corresponding shortcode :
 			width=150 height=90 border=1 padding=2 margin=10]
  
 This plugin uses Lightbox v2.51 by Lokesh Dhakar - http://www.lokeshdhakar.com 
-and Fancybox v2.1.3 by Janis Skarnelis - http://www.fancyapps.com/fancybox/
+and Fancybox v2.1.4 by Janis Skarnelis - http://www.fancyapps.com/fancybox/
 
 Sample, contact available at http://jalby.org/wordpress/
 
@@ -90,6 +92,9 @@ Otherwise, you should set a different lightbox engine (than the one used by your
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 1.1b1 [2013-02-10] =
+* Add a 'thumbnails' option/attribute to set how many thumbnails should be displayed in the gallery : all (default), first or none (display link instead).
 
 = 1.0 [2013-02-03] =
 * Fix a problem with case of file extension of thumbnails.

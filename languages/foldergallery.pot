@@ -2,88 +2,122 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  \n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/folder-gallery\n"
-"POT-Creation-Date: 2013-01-07 06:53:31+00:00\n"
+"POT-Creation-Date: 2013-02-10 10:38+0100\n"
+"PO-Revision-Date: 2013-02-10 10:38+0100\n"
+"Last-Translator: Vincent Jalby <wordpress@jalby.org>\n"
+"Language-Team: Vincent JALBY <wordpress@jalby.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2013-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Vincent JALBY <wordpress@jalby.org>\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_e;_c\n"
+"X-Poedit-SearchPath-0: /Users/vincent/Sites/wordpress/wp-content/plugins/"
+"folder-gallery\n"
 
-#: foldergallery.php:57
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:99
 msgid "Image"
 msgstr ""
 
-#: foldergallery.php:58
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:100
 msgid "of"
 msgstr ""
 
-#: foldergallery.php:105 foldergallery.php:116 foldergallery.php:147
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:172
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:183
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:244
 msgid "Folder Gallery Error:"
 msgstr ""
 
-#: foldergallery.php:106
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:173
+#, php-format
 msgid "Unable to find the directory %s."
 msgstr ""
 
-#: foldergallery.php:117
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:184
+#, php-format
 msgid "Unable to create the thumbnails directory inside %s."
 msgstr ""
 
-#: foldergallery.php:118
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:185
 msgid "Verify that this directory is writable (chmod 777)."
 msgstr ""
 
-#: foldergallery.php:148
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:245
+#, php-format
 msgid "No picture available inside %s."
 msgstr ""
 
-#: foldergallery.php:201
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:265
+msgid "Settings"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:311
 msgid "Folder Gallery Settings"
 msgstr ""
 
-#: foldergallery.php:205
-msgid "Columns"
-msgstr ""
-
-#: foldergallery.php:206
-msgid "Thumbnails Width"
-msgstr ""
-
-#: foldergallery.php:207
-msgid "Thumbnails Height"
-msgstr ""
-
-#: foldergallery.php:207
-msgid "(0 = auto)"
-msgstr ""
-
-#: foldergallery.php:208
-msgid "Picture Border"
-msgstr ""
-
-#: foldergallery.php:209
-msgid "Padding"
-msgstr ""
-
-#: foldergallery.php:210
-msgid "Margin"
-msgstr ""
-
-#: foldergallery.php:249
-msgid "Lightview Options"
-msgstr ""
-
-#: foldergallery.php:251
-msgid "Lightview default options, comma-separated."
-msgstr ""
-
-#: foldergallery.php:301
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:317
 msgid "Gallery Engine"
 msgstr ""
 
-#: foldergallery.php:320
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:336
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:372
 msgid "None"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:359
+msgid "Display Thumbnails"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:364
+msgid "All"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:368
+msgid "First"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:376
+msgid "Columns"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:376
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:378
+msgid "(0 = auto)"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:377
+msgid "Thumbnails Width"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:378
+msgid "Thumbnails Height"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:379
+msgid "Picture Border"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:380
+msgid "Padding"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:381
+msgid "Margin"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:384
+msgid "Lightview Options"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:386
+msgid "Lightview default options, comma-separated."
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:388
+msgid "For details, see:"
 msgstr ""
