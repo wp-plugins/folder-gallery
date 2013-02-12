@@ -23,16 +23,17 @@ For each gallery, a subfolder cache_[width]x[height] is created inside the pictu
 
 An Options page allow to set the default paramaters of the galleries :
 
+* Lightbox JS Engine (Lightbox 2, Fancybox 2, Lightview 3 [optional] or none)
+* Display Thumbnails (all = standard Gallery, single = displays a single thumbnail linked to the lightbox gallery, none = displays a link to the lightbox gallery)
 * Number of images per row (columns)
 * Thumbnails width and height (width & height)
 * Picture border (border)
 * Padding and Margin (padding & margin)
-* Display Thumbnails (thumbnails)
  
-Any of theses settings can be override using the corresponding shortcode :
+Any of theses settings (but the first) can be overridden using the corresponding shortcode :
 
-	[foldergallery folder="path" title="title" columns=3 
-			width=150 height=90 border=1 padding=2 margin=10]
+	[foldergallery folder="path" title="title" columns=1 width=150 
+			height=90 border=1 padding=2 margin=10 thumbnails=first]
  
 This plugin uses Lightbox v2.51 by Lokesh Dhakar - http://www.lokeshdhakar.com 
 and Fancybox v2.1.4 by Janis Skarnelis - http://www.fancyapps.com/fancybox/
@@ -65,7 +66,7 @@ Yes! However, you have to download and install lightview 3 by hand. Here's how:
 
 You can specify lightview options with the shortcode attribute 'options':
 
-	[foldergaller folder="path" title="My Gallery"
+	[foldergallery folder="path" title="My Gallery"
 		options="controls: { slider: false }, skin: 'mac'"]
 	
 You can set default options in Folder Gallery Options Page. 
@@ -86,12 +87,24 @@ This works with
 
 Otherwise, you should set a different lightbox engine (than the one used by your plugin) in Folder Gallery Options.
 
+= I'd like to display a single thumbnail instead of the full thumbnails list =
+
+Add the attribute `thumbnails` in the shortcode with value `single` or `<any valid number 'n'>` to display only the first or n-th thumbnail.
+
+	[foldergallery folder="path" title="My Gallery" thumbnails=5]
+
 == Screenshots ==
 1. Folder Gallery Options
 2. Folder Gallery in a post
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 1.1b2 [2013-02-12] =
+* Allow to specify which thumbnail to display in 'single' mode
+* Display title under the thumbnail in 'single' mode
+* Improved error messages
+* Update FAQ
 
 = 1.1b1 [2013-02-10] =
 * Add a 'thumbnails' option/attribute to set how many thumbnails should be displayed in the gallery : all (default), first or none (display link instead).

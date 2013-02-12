@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.1b1
+Version: 1.1b2
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -169,10 +169,16 @@ class foldergallery{
 		$folder = rtrim( $folder, '/' ); // Remove trailing / from path
 
 		if ( !is_dir( $folder ) ) {
-			echo '<p style="color:red;"><strong>' . __( 'Folder Gallery Error:', 'foldergallery' ) . '</strong> ';
-			printf( __( 'Unable to find the directory %s.', 'foldergallery' ), $folder );
-			echo '</p>';	
-			return;
+			return '<p style="color:red;"><strong>' . __( 'Folder Gallery Error:', 'foldergallery' ) . '</strong> ' .
+				sprintf( __( 'Unable to find the directory %s.', 'foldergallery' ), $folder ) . '</p>';	
+		}
+
+		$pictures = $this->file_array( $folder );
+
+		$NoP = count( $pictures );		
+		if ( 0 == $NoP ) {
+			return '<p style="color:red;"><strong>' . __( 'Folder Gallery Error:', 'foldergallery' ) . '</strong> ' .
+				sprintf( __( 'No picture available inside %s.', 'foldergallery' ), $folder ) . '</p>';
 		}
 	
 		$cache_folder = $folder . '/cache_' . $width . 'x' . $height;
@@ -180,15 +186,11 @@ class foldergallery{
 				@mkdir( $cache_folder, 0777 );
 		}
 		if ( ! is_dir( $cache_folder ) ) {
-			echo '<p style="color:red;"><strong>' . __( 'Folder Gallery Error:', 'foldergallery' ) . '</strong> ';
-			printf( __( 'Unable to create the thumbnails directory inside %s.', 'foldergallery' ), $folder );
-			_e( 'Verify that this directory is writable (chmod 777).', 'foldergallery' );
-			echo '</p>';
-			return;
+			return '<p style="color:red;"><strong>' . __( 'Folder Gallery Error:', 'foldergallery' ) . '</strong> ' .
+				sprintf( __( 'Unable to create the thumbnails directory inside %s.', 'foldergallery' ), $folder ) . ' ' .
+				__( 'Verify that this directory is writable (chmod 777).', 'foldergallery' ) . '</p>';
 		}
-	
-		$pictures = $this->file_array( $folder );
-
+			
 		$imgstyle = "margin:0px {$margin}px {$margin}px 0px;";
 		$imgstyle .= "padding:{$padding}px;";
 		$imgstyle .= "border-width:{$border}px;";
@@ -198,12 +200,22 @@ class foldergallery{
 		$this->fg_scripts();			
 		$lightbox_id = md5( $folder );
 		$gallery_code = '<div class="fg_gallery">';
-
-		$NoP = count( $pictures );
+	
 		for ( $idx = 0 ; $idx < $NoP ; $idx++ ) {
-			$thumbnail = $cache_folder . '/' . strtolower($pictures[ $idx ]);
+			// Set the thumbnail to use, depending of thumbnails option.
+			if ( $thumbnails != 'all' ) {
+				if ( intval($thumbnails) > 0 && intval($thumbnails) < $NoP ) {
+					$thumbnail_idx = intval($thumbnails)-1;
+				} else {
+					$thumbnail_idx = 0;
+				}
+			} else {
+				$thumbnail_idx = $idx;	
+			}
+			$thumbnail = $cache_folder . '/' . strtolower($pictures[ $thumbnail_idx ]);
+		
 			if ( ! file_exists( $thumbnail ) ) {
-				$this->save_thumbnail( $folder . '/' . $pictures[ $idx ], $thumbnail, $width, $height );
+				$this->save_thumbnail( $folder . '/' . $pictures[ $thumbnail_idx ], $thumbnail, $width, $height );
 			}
 			if ( $idx > 0 && 'all' != $thumbnails ) {
 				$linkstyle = ' style="display:none;"';
@@ -230,21 +242,19 @@ class foldergallery{
 				break;
 			}		
 			if ( 0 == $idx && 'none' == $thumbnails ) {
-				$gallery_code .= '<span class="fg_title">' . $title . '</span>';
+				$gallery_code .= '<span class="fg_title_link">' . $title . '</span>';
 				$gallery_code .= '<img src="' . home_url( '/' ) . $thumbnail . '" alt="' . $title . ' [' . ( $idx + 1 ) . ']' . '" style="display:none;" /></a>';
 			} else {
 				$gallery_code .= '<img src="' . home_url( '/' ) . $thumbnail . '" style="' . $imgstyle . '" alt="' . $title . ' [' . ( $idx + 1 ) . ']' . '" /></a>';
+				if ( 0 == $idx && ( 'single' == $thumbnails || intval($thumbnails) > 0 ) ) {
+					$gallery_code .= '<br style="clear:both" /><span class="fg_title" style="margin:0 auto;">' . $title . '</span>';
+				}
 			}
 
 			if ( $columns > 0 ) {
 				if ( ( $idx + 1 ) % $columns == 0 ) $gallery_code .= "\n" . '<br style="clear: both" />';
 			}
 		}
-		if ( 0 == $NoP ) {
-			echo '<p style="color:red;"><strong>' . __( 'Folder Gallery Error:', 'foldergallery' ) . '</strong> ';
-			printf( __( 'No picture available inside %s.', 'foldergallery' ), $folder );
-			echo '</p>';
-		}	
 		$gallery_code .= "\n</div>";
 		if ( 'none' != $thumbnails ) $gallery_code .= "\n" . '<br style="clear: both" />';
 		return $gallery_code;
@@ -277,7 +287,7 @@ class foldergallery{
 		$input['border']            = intval( $input['border'] );
 		$input['padding']           = intval( $input['padding'] );
 		$input['margin']            = intval( $input['margin'] );
-		if ( ! in_array( $input['thumbnails'], array( 'all','none','first' ) ) ) $input['thumbnails'] = 'all';
+		if ( ! in_array( $input['thumbnails'], array( 'all','none','single' ) ) ) $input['thumbnails'] = 'all';
 		return $input;
 	}
 
@@ -363,9 +373,9 @@ class foldergallery{
 		if ( 'all' == $fg_options['thumbnails'] ) echo ' selected="selected"';
 		echo '>' . __( 'All', 'foldergallery' ) . '</option>' . "\n";
 		
-		echo "\t" .	'<option value="first"';
-		if ( 'first' == $fg_options['thumbnails'] ) echo ' selected="selected"';
-		echo '>' . __( 'First', 'foldergallery' ) . '</option>' . "\n";
+		echo "\t" .	'<option value="single"';
+		if ( 'single' == $fg_options['thumbnails'] ) echo ' selected="selected"';
+		echo '>' . __( 'Single', 'foldergallery' ) . '</option>' . "\n";
 
 		echo "\t" .	'<option value="none"';
 		if ( 'none' == $fg_options['thumbnails'] ) echo ' selected="selected"';

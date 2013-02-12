@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/folder-gallery\n"
-"POT-Creation-Date: 2013-02-10 10:38+0100\n"
-"PO-Revision-Date: 2013-02-10 10:38+0100\n"
+"POT-Creation-Date: 2013-02-12 15:35+0100\n"
+"PO-Revision-Date: 2013-02-12 15:35+0100\n"
 "Last-Translator: Vincent Jalby <wordpress@jalby.org>\n"
 "Language-Team: Vincent JALBY <wordpress@jalby.org>\n"
 "MIME-Version: 1.0\n"
@@ -28,8 +28,8 @@ msgid "of"
 msgstr ""
 
 #: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:172
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:183
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:244
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:180
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:189
 msgid "Folder Gallery Error:"
 msgstr ""
 
@@ -38,86 +38,86 @@ msgstr ""
 msgid "Unable to find the directory %s."
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:184
-#, php-format
-msgid "Unable to create the thumbnails directory inside %s."
-msgstr ""
-
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:185
-msgid "Verify that this directory is writable (chmod 777)."
-msgstr ""
-
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:245
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:181
 #, php-format
 msgid "No picture available inside %s."
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:265
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:190
+#, php-format
+msgid "Unable to create the thumbnails directory inside %s."
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:191
+msgid "Verify that this directory is writable (chmod 777)."
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:275
 msgid "Settings"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:311
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:321
 msgid "Folder Gallery Settings"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:317
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:327
 msgid "Gallery Engine"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:336
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:372
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:346
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:382
 msgid "None"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:359
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:369
 msgid "Display Thumbnails"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:364
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:374
 msgid "All"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:368
-msgid "First"
-msgstr ""
-
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:376
-msgid "Columns"
-msgstr ""
-
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:376
 #: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:378
-msgid "(0 = auto)"
-msgstr ""
-
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:377
-msgid "Thumbnails Width"
-msgstr ""
-
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:378
-msgid "Thumbnails Height"
-msgstr ""
-
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:379
-msgid "Picture Border"
-msgstr ""
-
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:380
-msgid "Padding"
-msgstr ""
-
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:381
-msgid "Margin"
-msgstr ""
-
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:384
-msgid "Lightview Options"
+msgid "Single"
 msgstr ""
 
 #: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:386
-msgid "Lightview default options, comma-separated."
+msgid "Columns"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:386
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:388
+msgid "(0 = auto)"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:387
+msgid "Thumbnails Width"
 msgstr ""
 
 #: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:388
+msgid "Thumbnails Height"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:389
+msgid "Picture Border"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:390
+msgid "Padding"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:391
+msgid "Margin"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:394
+msgid "Lightview Options"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:396
+msgid "Lightview default options, comma-separated."
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:398
 msgid "For details, see:"
 msgstr ""
