@@ -3,7 +3,7 @@ Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
 Tested up to: 3.5.1
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://jalby.org/wordpress/donate/
@@ -33,7 +33,7 @@ An Options page allow to set the default paramaters of the galleries :
 Any of theses settings (but the first) can be overridden using the corresponding shortcode :
 
 	[foldergallery folder="path" title="title" columns=1 width=150 
-			height=90 border=1 padding=2 margin=10 thumbnails=first]
+			height=90 border=1 padding=2 margin=10 thumbnails=single]
  
 This plugin uses Lightbox v2.51 by Lokesh Dhakar - http://www.lokeshdhakar.com 
 and Fancybox v2.1.4 by Janis Skarnelis - http://www.fancyapps.com/fancybox/
@@ -100,14 +100,10 @@ Add the attribute `thumbnails` in the shortcode with value `single` or `<any val
 
 == Changelog ==
 
-= 1.1b2 [2013-02-12] =
-* Allow to specify which thumbnail to display in 'single' mode
-* Display title under the thumbnail in 'single' mode
+= 1.1 [2013-02-18] =
+* Add a 'thumbnails' option/attribute to set how many thumbnails should be displayed in the gallery : all (default), single or none (display a link instead).
 * Improved error messages
 * Update FAQ
-
-= 1.1b1 [2013-02-10] =
-* Add a 'thumbnails' option/attribute to set how many thumbnails should be displayed in the gallery : all (default), first or none (display link instead).
 
 = 1.0 [2013-02-03] =
 * Fix a problem with case of file extension of thumbnails.
