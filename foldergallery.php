@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.1
+Version: 1.1.1b1
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -148,6 +148,7 @@ class foldergallery{
 			}
 			closedir( $handle );
 		}
+		sort( $files );
 		return $files;
 	}
 				
