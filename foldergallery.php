@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.1.1b1
+Version: 1.2
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -48,12 +48,8 @@ class foldergallery{
 		$fg_options = get_option( 'FolderGallery' );
 		if ( empty( $fg_options ) ) {
 			update_option( 'FolderGallery', $this->fg_settings_default() );
-		} elseif ( isset( $fg_options['images_per_row'] ) ) { // images_per_row => columns
-			$fg_options['columns'] = $fg_options['images_per_row'];
-			unset( $fg_options['images_per_row'] );
-			update_option( 'FolderGallery', $fg_options );
 		}
-		if ( ! $fg_options['engine'] ) {
+		if ( ! isset( $fg_options['engine'] ) ) {
 			$fg_options['engine'] = 'lightbox2';
 			update_option( 'FolderGallery', $fg_options );
 		}
@@ -63,8 +59,12 @@ class foldergallery{
 				update_option( 'FolderGallery', $fg_options );
 			}
 		}
-		if ( ! $fg_options['thumbnails'] ) { // 1.1 update
+		if ( ! isset( $fg_options['thumbnails'] ) ) { // 1.1 update
 			$fg_options['thumbnails'] = 'all';
+			update_option( 'FolderGallery', $fg_options );
+		}
+		if ( ! isset( $fg_options['fb_title'] ) ) { // 1.2 update
+			$fg_options['fb_title'] = 'float';
 			update_option( 'FolderGallery', $fg_options );
 		}
 	}
@@ -77,10 +77,10 @@ class foldergallery{
 				wp_enqueue_style( 'fg-lightbox-style', plugins_url( '/css/lightbox.css', __FILE__ ) );
 			break;
 			case 'fancybox2' :
-				wp_enqueue_style( 'fg-fancybox-style', plugins_url( '/fancybox/source/jquery.fancybox.css', __FILE__ ) );
+				wp_enqueue_style( 'fancybox-style', plugins_url( '/fancybox/source/jquery.fancybox.css', __FILE__ ) );
 			break;
 			case 'lightview' :
-				wp_enqueue_style( 'lightview', plugins_url( '/lightview/css/lightview/lightview.css', __FILE__ ) );		
+				wp_enqueue_style( 'lightview-style', plugins_url( '/lightview/css/lightview/lightview.css', __FILE__ ) );		
 			break;
 			case 'none' :
 				// do nothing for now
@@ -93,7 +93,7 @@ class foldergallery{
 		$fg_options = get_option( 'FolderGallery' );	
 		switch ( $fg_options['engine'] ) {
 			case 'lightbox2' :
-				wp_enqueue_script( 'fg-lightbox-script', plugins_url( '/js/fg_lightbox.js', __FILE__ ), array( 'jquery' ) );
+				wp_enqueue_script( 'fg-lightbox-script', plugins_url( '/js/fg-lightbox.js', __FILE__ ), array( 'jquery' ) );
 				if ( $firstcall ) {
 					wp_localize_script( 'fg-lightbox-script', 'FGtrans', array(
 						'labelImage' => __( 'Image', 'foldergallery' ),
@@ -104,8 +104,15 @@ class foldergallery{
 				}
 			break;
 			case 'fancybox2' :
-				wp_enqueue_script( 'fancybox', plugins_url( '/fancybox/source/jquery.fancybox.pack.js', __FILE__ ), array( 'jquery' ) );
-				wp_enqueue_script( 'fg_fancybox', plugins_url( '/js/fg_fancybox.js', __FILE__ ), array( 'jquery' ) );
+				wp_enqueue_script( 'fancybox-script', plugins_url( '/fancybox/source/jquery.fancybox.pack.js', __FILE__ ), array( 'jquery' ) );
+				wp_enqueue_script( 'fg-fancybox-script', plugins_url( '/js/fg-fancybox.js', __FILE__ ), array( 'jquery' ) );
+				if ( $firstcall ) {
+					wp_localize_script( 'fg-fancybox-script', 'FancyBoxGalleryOptions', array(
+						'title' => $fg_options['fb_title'],
+						)
+					);
+					$firstcall = 0;
+				}
 			break;
 			case 'lightview' :
 				global $is_IE;
@@ -113,7 +120,7 @@ class foldergallery{
 					wp_enqueue_script( 'excanvas', plugins_url( '/lightview/js/excanvas/excanvas.js', __FILE__  ), array( 'jquery' ) );
 				}
 				wp_enqueue_script( 'lightview_spinners', plugins_url( '/lightview/js/spinners/spinners.min.js', __FILE__ ), array( 'jquery' ) );
-				wp_enqueue_script( 'lightview', plugins_url( '/lightview/js/lightview/lightview.js', __FILE__ ) );   		
+				wp_enqueue_script( 'lightview-script', plugins_url( '/lightview/js/lightview/lightview.js', __FILE__ ) );   		
 			break;
 			case 'none' :
 				// Do nothing for now
@@ -231,7 +238,7 @@ class foldergallery{
 					$gallery_code.= '<a title="' . $subtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" rel="lightbox[' . $lightbox_id . ']"' . $linkstyle . '>';
 				break;
 				case 'fancybox2' :				
-					$gallery_code.= '<a class ="fancybox" title="' . $subtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" rel="' . $lightbox_id . '"' . $linkstyle . '>';
+					$gallery_code.= '<a class="fancybox-gallery" title="' . $subtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" rel="' . $lightbox_id . '"' . $linkstyle . '>';
 				break;
 				case 'lightview' :
 					if ( $options ) $options = " data-lightview-group-options=\"$options\"";
@@ -296,21 +303,24 @@ class foldergallery{
 		$input['padding']           = intval( $input['padding'] );
 		$input['margin']            = intval( $input['margin'] );
 		if ( ! in_array( $input['thumbnails'], array( 'all','none','single' ) ) ) $input['thumbnails'] = 'all';
+		if ( ! in_array( $input['fb_title'], array( 'inside','outside','float','over','null' ) ) ) $input['fb_title'] = 'all';
 		return $input;
 	}
 
 	function fg_settings_default() {
-			$defaults = array(
-				'border' 			=> 1,
-				'padding' 			=> 2,
-				'margin' 			=> 5,
-				'columns' 	        => 0,
-				'thumbnails_width' 	=> 160,
-				'thumbnails_height' => 0,
-				'lw_options'        => '',
-				'thumbnails'		=> 'all',
-			);
-			return $defaults;
+		$defaults = array(
+			'engine'			=> 'lightbox2',
+			'border' 			=> 1,
+			'padding' 			=> 2,
+			'margin' 			=> 5,
+			'columns' 	        => 0,
+			'thumbnails_width' 	=> 160,
+			'thumbnails_height' => 0,
+			'lw_options'        => '',
+			'thumbnails'		=> 'all',
+			'fb_title'			=> 'float',
+		);
+		return $defaults;
 	}
 
 	function fg_option_field( $field, $label, $extra = 'px' ) {
@@ -409,6 +419,36 @@ class foldergallery{
 			echo "</tr>\n";
 		} else {
 			echo '<input type="hidden" name="FolderGallery[lw_options]" id="lw_options" value="' . $fg_options['lw_options'] . '" />';
+		}		
+		// Fancybox 2 options
+		if ( 'fancybox2' == $fg_options['engine'] ) {
+			echo '<tr valign="top">' . "\n";
+			echo '<th scope="row"><label for="fb_title">' . __( 'Fancybox Title Style', 'foldergallery' ) . '</label></th>' . "\n";
+			echo '<td><select name="FolderGallery[fb_title]" id="FolderGallery[fb_title]">' . "\n";
+		
+			echo "\t" .	'<option value="inside"';
+			if ( 'inside' == $fg_options['fb_title'] ) echo ' selected="selected"';
+			echo '>' . __( 'Inside', 'foldergallery' ) . '</option>' . "\n";
+		
+			echo "\t" .	'<option value="outside"';
+			if ( 'outside' == $fg_options['fb_title'] ) echo ' selected="selected"';
+			echo '>' . __( 'Outside', 'foldergallery' ) . '</option>' . "\n";
+			
+			echo "\t" .	'<option value="over"';
+			if ( 'over' == $fg_options['fb_title'] ) echo ' selected="selected"';
+			echo '>' . __( 'Over', 'foldergallery' ) . '</option>' . "\n";
+			
+			echo "\t" .	'<option value="float"';
+			if ( 'float' == $fg_options['fb_title'] ) echo ' selected="selected"';
+			echo '>' . __( 'Float', 'foldergallery' ) . '</option>' . "\n";
+
+			echo "\t" .	'<option value="null"';
+			if ( 'null' == $fg_options['fb_title'] ) echo ' selected="selected"';
+			echo '>' . __( 'None', 'foldergallery' ) . '</option>' . "\n";
+			echo "</select>\n";
+			echo "</td>\n</tr>\n";
+		} else {
+			echo '<input type="hidden" name="FolderGallery[fb_title]" id="fb_title" value="' . $fg_options['fb_title'] . '" />';
 		}
 		echo "</tbody></table>\n";
 		submit_button();

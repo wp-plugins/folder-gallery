@@ -3,7 +3,7 @@ Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
 Tested up to: 3.5.1
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://jalby.org/wordpress/donate/
@@ -99,6 +99,11 @@ Add the attribute `thumbnails` in the shortcode with value `single` or `<any val
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 1.2 [2013-03-16] =
+* Pictures are now sorted alphabetically
+* Global option to change title style when lightbox engine is selected
+* Misc changes to support a forthcoming plugin
 
 = 1.1 [2013-02-18] =
 * Add a 'thumbnails' option/attribute to set how many thumbnails should be displayed in the gallery : all (default), single or none (display a link instead).
