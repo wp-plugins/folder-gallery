@@ -102,7 +102,7 @@ Add the attribute `thumbnails` in the shortcode with value `single` or `<any val
 
 = 1.2 [2013-03-16] =
 * Pictures are now sorted alphabetically
-* Global option to change title style when lightbox engine is selected
+* Global option to change title style when fancybox engine is selected
 * Misc changes to support a forthcoming plugin
 
 = 1.1 [2013-02-18] =
