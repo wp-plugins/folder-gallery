@@ -24,11 +24,12 @@ For each gallery, a subfolder cache_[width]x[height] is created inside the pictu
 An Options page allow to set the default paramaters of the galleries :
 
 * Lightbox JS Engine (Lightbox 2, Fancybox 2, Lightview 3 [optional] or none)
-* Display Thumbnails (all = standard Gallery, single = displays a single thumbnail linked to the lightbox gallery, none = displays a link to the lightbox gallery)
+* Display Thumbnails (thumbnails) (all = standard Gallery, single = displays a single thumbnail linked to the lightbox gallery, none = displays a link to the lightbox gallery)
 * Number of images per row (columns)
 * Thumbnails width and height (width & height)
 * Picture border (border)
 * Padding and Margin (padding & margin)
+* Picture subtitle (subtitle) (default, filename, filenamewithoutextension, none)
  
 Any of theses settings (but the first) can be overridden using the corresponding shortcode :
 
@@ -89,9 +90,20 @@ Otherwise, you should set a different lightbox engine (than the one used by your
 
 = I'd like to display a single thumbnail instead of the full thumbnails list =
 
-Add the attribute `thumbnails` in the shortcode with value `single` or `<any valid number 'n'>` to display only the first or n-th thumbnail.
+Add the attribute `thumbnails` in the shortcode with value `single` to display only the first thumbnail.
 
-	[foldergallery folder="path" title="My Gallery" thumbnails=5]
+	[foldergallery folder="path" title="My Gallery" thumbnails="single"]
+
+If you want to use a different picture (than the first) as the single thumbnail for the gallery, add a picture with name !!! (e.g., `!!!.jpg`) to your gallery. This picture will be used as thumbnail, but won't be included in the (lightbox) gallery.
+
+To hide gallery title under the thumbnail, add `title=""`. You then should set `subtitle' to something else than `default`, e.g., `subtitle="filename"`.
+
+= I'd like to display only the n first thumbnails instead of the full thumbnails list =
+
+Add the attribute `thumbnails` in the shortcode with value `n` to display only the n first thumbnail.
+
+	[foldergallery folder="path" title="My Gallery" thumbnails=3]
+
 
 == Screenshots ==
 1. Folder Gallery Options
@@ -99,6 +111,11 @@ Add the attribute `thumbnails` in the shortcode with value `single` or `<any val
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 1.3b1 [2013-04-26] =
+* Global option to set picture's subtitle style (default, subtitle, subtitlewithoutextension, none)
+* Several changes related to single-thumbnail-gallery (thumbnails="single"). Read the FAQ!
+* Option to display the thumbnails of the first pictures only. Read the FAQ!
 
 = 1.2 [2013-03-16] =
 * Pictures are now sorted alphabetically
