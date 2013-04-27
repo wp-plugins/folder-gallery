@@ -23,15 +23,16 @@ For each gallery, a subfolder cache_[width]x[height] is created inside the pictu
 
 An Options page allow to set the default paramaters of the galleries :
 
-* Lightbox JS Engine (Lightbox 2, Fancybox 2, Lightview 3 [optional] or none)
-* Display Thumbnails (thumbnails) (all = standard Gallery, single = displays a single thumbnail linked to the lightbox gallery, none = displays a link to the lightbox gallery)
+* Lightbox JS Engine: Lightbox 2, Fancybox 2, Lightview 3 [optional] or none
+* Display Thumbnails (thumbnails): all = standard Gallery, single = displays a single thumbnail linked to the lightbox gallery, none = displays a link to the lightbox gallery
 * Number of images per row (columns)
 * Thumbnails width and height (width & height)
 * Picture border (border)
 * Padding and Margin (padding & margin)
-* Picture subtitle (subtitle) (default, filename, filenamewithoutextension, none)
+* Picture subtitle (subtitle): default (title + picture number), filename, filenamewithoutextension, none
+* Autoplay Speed: Slideshow speed in seconds. 0 to turn autoplay off. Available with Fancybox engine only.
  
-Any of theses settings (but the first) can be overridden using the corresponding shortcode :
+Most of theses settings can be overridden using the corresponding shortcode :
 
 	[foldergallery folder="path" title="title" columns=1 width=150 
 			height=90 border=1 padding=2 margin=10 thumbnails=single]
@@ -111,6 +112,9 @@ Add the attribute `thumbnails` in the shortcode with value `n` to display only t
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 1.3b2 [2013-04-27] =
+* Global option to set autoplay speed when Fancy Box engine is selected.
 
 = 1.3b1 [2013-04-26] =
 * Global option to set picture's subtitle style (default, subtitle, subtitlewithoutextension, none)

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.3b1
+Version: 1.3b2
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -67,8 +67,9 @@ class foldergallery{
 			$fg_options['fb_title'] = 'float';
 			update_option( 'FolderGallery', $fg_options );
 		}
-		if ( ! isset( $fg_options['subtitle'] ) ) { // 1.3 update
+		if ( ! isset( $fg_options['fb_speed'] ) ) { // 1.3 update
 			$fg_options['subtitle'] = 'default';
+			$fg_options['fb_speed'] = 0;
 			update_option( 'FolderGallery', $fg_options );
 		}
 	}
@@ -113,6 +114,7 @@ class foldergallery{
 				if ( $firstcall ) {
 					wp_localize_script( 'fg-fancybox-script', 'FancyBoxGalleryOptions', array(
 						'title' => $fg_options['fb_title'],
+						'speed' => $fg_options['fb_speed'],
 						)
 					);
 					$firstcall = 0;
@@ -345,6 +347,8 @@ class foldergallery{
 		$input['margin']            = intval( $input['margin'] );
 		if ( ! in_array( $input['thumbnails'], array( 'all','none','single' ) ) ) $input['thumbnails'] = 'all';
 		if ( ! in_array( $input['fb_title'], array( 'inside','outside','float','over','null' ) ) ) $input['fb_title'] = 'all';
+		if ( ! in_array( $input['subtitle'], array( 'default','none','filename','filenamewithoutextension' ) ) ) $input['subtitle'] = 'default';
+		$input['fb_speed']            = intval( $input['fb_speed'] );
 		return $input;
 	}
 
@@ -361,6 +365,7 @@ class foldergallery{
 			'thumbnails'		=> 'all',
 			'subtitle'			=> 'default',
 			'fb_title'			=> 'float',
+			'fb_speed'			=> 1,
 		);
 		return $defaults;
 	}
@@ -508,8 +513,12 @@ class foldergallery{
 			echo '>' . __( 'None', 'foldergallery' ) . '</option>' . "\n";
 			echo "</select>\n";
 			echo "</td>\n</tr>\n";
+			
+			$this->fg_option_field( 'fb_speed', __( 'Autoplay Speed', 'foldergallery' ), ' seconds ' . __( '(0 = off)', 'foldergallery' ) );
+			
 		} else {
 			echo '<input type="hidden" name="FolderGallery[fb_title]" id="fb_title" value="' . $fg_options['fb_title'] . '" />';
+			echo '<input type="hidden" name="FolderGallery[fb_speed]" id="fb_speed" value="' . $fg_options['fb_speed'] . '" />';
 		}
 		echo "</tbody></table>\n";
 		submit_button();
