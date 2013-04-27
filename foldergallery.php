@@ -365,7 +365,7 @@ class foldergallery{
 			'thumbnails'		=> 'all',
 			'subtitle'			=> 'default',
 			'fb_title'			=> 'float',
-			'fb_speed'			=> 1,
+			'fb_speed'			=> 0,
 		);
 		return $defaults;
 	}
