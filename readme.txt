@@ -95,7 +95,7 @@ Add the attribute `thumbnails` in the shortcode with value `single` to display o
 
 	[foldergallery folder="path" title="My Gallery" thumbnails="single"]
 
-If you want to use a different picture (than the first) as the single thumbnail for the gallery, add a picture with name !!! (e.g., `!!!.jpg`) to your gallery. This picture will be used as thumbnail, but won't be included in the (lightbox) gallery.
+If you want to use a different picture (than the first) as the single thumbnail for the gallery, add a picture with name !!! (e.g., `!!!.jpg`) to your gallery. This picture will be used as thumbnail, but won't be included in the (lightbox) gallery. Another option is to use the shortcode attribute `thumbnails=-n` where `n`is the picture number (in the gallery) you want to use as single thumbnail. 
 
 To hide gallery title under the thumbnail, add `title=""`. You then should set `subtitle' to something else than `default`, e.g., `subtitle="filename"`.
 
@@ -112,6 +112,10 @@ Add the attribute `thumbnails` in the shortcode with value `n` to display only t
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 1.3b3 [2013-04-28] =
+* Restore the option to choose which picture to use as single-thumbnail-gallery. Read the FAQ!
+* Misc bug corrections
 
 = 1.3b2 [2013-04-27] =
 * Global option to set autoplay speed when Fancy Box engine is selected.

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.3b2
+Version: 1.3b3
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -218,28 +218,32 @@ class foldergallery{
 		//if ( 'all' != $thumbnails ) $columns = 0; // Moved below
 			
 		$this->fg_scripts();			
-		$lightbox_id = md5( $folder );
+		$lightbox_id = uniqid(); //md5( $folder . );
 		$gallery_code = '<div class="fg_gallery">';
 		
-		// If first picture == !thumbnail then skip it (but use it as 'single' thumbnail).
+		// If first picture == !!! then skip it (but use it as 'single' thumbnail).
 		if ( $this->filename_without_extension( $pictures[ 0 ] ) == '!!!' ) {
 			$start_idx = 1 ;		
 		} else {
 			$start_idx = 0 ;
 		}
 		// Trick to display only the first thumbnails.		
-		if (intval($thumbnails) > 1) { // 1 = single should not be used
+		if ( intval($thumbnails) > 1 ) { // 1 = single should not be used
 			$max_thumbnails_idx = intval($thumbnails) - 1 + $start_idx;
 			$thumbnails = 'all';
 		} else {
 			$max_thumbnails_idx = $NoP - 1 + $start_idx;
 		}
-	
+		// (single) thumbnail idx set as thumbnails=-n shortcode attribute
+		$thumbnail_idx = 0;
+		if ( intval($thumbnails) < 0 ) {
+			$thumbnail_idx = - intval($thumbnails) -1;
+			$thumbnails = 'single';
+		}
+		
 		for ( $idx = $start_idx ; $idx < $NoP ; $idx++ ) {
 			// Set the thumbnail to use, depending of thumbnails option.
-			if ( 'single' == $thumbnails ) {
-				$thumbnail_idx = 0;
-			} else {
+			if ( 'all' == $thumbnails ) {
 				$thumbnail_idx = $idx;	
 			}
 			$thumbnail = $cache_folder . '/' . strtolower($pictures[ $thumbnail_idx ]);
@@ -266,7 +270,7 @@ class foldergallery{
 				break;
 				default :
 					//$thesubtitle = ( 'all' == $thumbnails || $idx > 0 ) ? $title . ' (' . ($idx+1) . '/' . $NoP . ')' : $title;
-					$thesubtitle = $title . ' (' . ($idx+1) . '/' . $NoP . ')' ;	
+					$thesubtitle = $title . ' (' . ($idx+1-$start_idx) . '/' . ($NoP-$start_idx) . ')' ;	
 			}		
 			// Let's start
 			$gallery_code .= "\n";
