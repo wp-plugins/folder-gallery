@@ -3,7 +3,7 @@ Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
 Tested up to: 3.5.1
-Stable tag: 1.2
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://jalby.org/wordpress/donate/
@@ -37,8 +37,8 @@ Most of theses settings can be overridden using the corresponding shortcode :
 	[foldergallery folder="path" title="title" columns=1 width=150 
 			height=90 border=1 padding=2 margin=10 thumbnails=single]
  
-This plugin uses Lightbox v2.51 by Lokesh Dhakar - http://www.lokeshdhakar.com 
-and Fancybox v2.1.4 by Janis Skarnelis - http://www.fancyapps.com/fancybox/
+This plugin uses Lightbox v2.6 by Lokesh Dhakar - http://www.lokeshdhakar.com 
+and Fancybox v2.1.5 by Janis Skarnelis - http://www.fancyapps.com/fancybox/
 
 Sample, contact available at http://jalby.org/wordpress/
 
@@ -80,7 +80,7 @@ Lightview need to be reinstalled everytime the plugin is updated.
 = Can I use Folder Gallery along with another Lightbox plugin? =
 
 If your Lightbox plugin automatically handles images, you may set the lightbox engine to 'None' in Folder Gallery Options.
-This works with
+This should work with
 
 * Fancybox 1.0.7+ by Kevin Sylvestre
 * jQuery Colorbox 4.5+ by Arne Franken
@@ -113,17 +113,14 @@ Add the attribute `thumbnails` in the shortcode with value `n` to display only t
 
 == Changelog ==
 
-= 1.3b3 [2013-04-28] =
-* Restore the option to choose which picture to use as single-thumbnail-gallery. Read the FAQ!
-* Misc bug corrections
-
-= 1.3b2 [2013-04-27] =
-* Global option to set autoplay speed when Fancy Box engine is selected.
-
-= 1.3b1 [2013-04-26] =
+= 1.3 [2013-08-05] =
+* Update Lightbox 2 JS to 2.6 (JQuery/Wordpress 3.6 compatibility)
+* Update Fancybox JS to 2.1.5
 * Global option to set picture's subtitle style (default, subtitle, subtitlewithoutextension, none)
-* Several changes related to single-thumbnail-gallery (thumbnails="single"). Read the FAQ!
+* Global option to set autoplay speed when Fancy Box engine is selected.
 * Option to display the thumbnails of the first pictures only. Read the FAQ!
+* Several changes and improvements related to single-thumbnail-gallery (thumbnails="single"). Read the FAQ!
+* Misc bug corrections
 
 = 1.2 [2013-03-16] =
 * Pictures are now sorted alphabetically

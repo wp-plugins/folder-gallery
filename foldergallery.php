@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.3b3
+Version: 1.3
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -270,17 +270,18 @@ class foldergallery{
 				break;
 				default :
 					//$thesubtitle = ( 'all' == $thumbnails || $idx > 0 ) ? $title . ' (' . ($idx+1) . '/' . $NoP . ')' : $title;
-					$thesubtitle = $title . ' (' . ($idx+1-$start_idx) . '/' . ($NoP-$start_idx) . ')' ;	
+					$thesubtitle = $title ;
+					if ( 'lightbox2' != $fg_options['engine'] ) $thesubtitle .= ' (' . ($idx+1-$start_idx) . '/' . ($NoP-$start_idx) . ')' ;
 			}		
 			// Let's start
 			$gallery_code .= "\n";
 			// Set the link
 			switch ( $fg_options['engine'] ) {
 				case 'lightbox2' :
-					$gallery_code.= '<a title="' . $thesubtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" rel="lightbox[' . $lightbox_id . ']"' . $linkstyle . '>';
+					$gallery_code.= '<a title="' . $thesubtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" data-lightbox="' . $lightbox_id . '"' . $linkstyle . '>';
 				break;
 				case 'fancybox2' :				
-					$gallery_code.= '<a class="fancybox-gallery" title="' . $thesubtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" rel="' . $lightbox_id . '"' . $linkstyle . '>';
+					$gallery_code.= '<a class="fancybox-gallery" title="' . $thesubtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" data-fancybox-group="' . $lightbox_id . '"' . $linkstyle . '>';
 				break;
 				case 'lightview' :
 					if ( $options ) $options = " data-lightview-group-options=\"$options\"";
