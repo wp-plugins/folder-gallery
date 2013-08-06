@@ -30,6 +30,8 @@ An Options page allow to set the default paramaters of the galleries :
 * Picture border (border)
 * Padding and Margin (padding & margin)
 * Picture subtitle (subtitle): default (title + picture number), filename, filenamewithoutextension, none
+* Show Thumbnail Subtitles (show_thumbnail_subtitles): 0 (no), 1 (yes). Display (or not) the subtitle under the picture thumbnail.
+* Fancybox Subtitle Style: Inside, Outside, Over, Float, None. Available with Fancybox engine only.
 * Autoplay Speed: Slideshow speed in seconds. 0 to turn autoplay off. Available with Fancybox engine only.
  
 Most of theses settings can be overridden using the corresponding shortcode :
@@ -101,7 +103,7 @@ To hide gallery title under the thumbnail, add `title=""`. You then should set `
 
 = I'd like to display only the n first thumbnails instead of the full thumbnails list =
 
-Add the attribute `thumbnails` in the shortcode with value `n` to display only the n first thumbnail.
+Add the attribute `thumbnails` in the shortcode with value `n` to display only the n first thumbnails.
 
 	[foldergallery folder="path" title="My Gallery" thumbnails=3]
 
@@ -112,6 +114,11 @@ Add the attribute `thumbnails` in the shortcode with value `n` to display only t
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 1.3.1b1 [2013-08-06] =
+* Global option to display the subtitle under the picture thumbnail.
+* Several changes in layout and CSS. Hopefully it breaks nothing!
+* Minor bug fixes
 
 = 1.3 [2013-08-05] =
 * Update Lightbox 2 JS to 2.6 (JQuery/Wordpress 3.6 compatibility)

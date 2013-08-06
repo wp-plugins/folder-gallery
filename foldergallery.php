@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.3
+Version: 1.3.1b1
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -70,6 +70,10 @@ class foldergallery{
 		if ( ! isset( $fg_options['fb_speed'] ) ) { // 1.3 update
 			$fg_options['subtitle'] = 'default';
 			$fg_options['fb_speed'] = 0;
+			update_option( 'FolderGallery', $fg_options );
+		}
+		if ( ! isset( $fg_options['show_thumbnail_subtitles'] ) ) { // 1.3.1 update
+			$fg_options['show_thumbnail_subtitles'] = 0;
 			update_option( 'FolderGallery', $fg_options );
 		}
 	}
@@ -184,6 +188,7 @@ class foldergallery{
 			'thumbnails' => $fg_options['thumbnails'],
 			'options' => $fg_options['lw_options'],
 			'subtitle'=> $fg_options['subtitle'],
+			'show_thumbnail_subtitles'=> $fg_options['show_thumbnail_subtitles'],
 		), $atts ) );
 
 		$folder = rtrim( $folder, '/' ); // Remove trailing / from path
@@ -211,9 +216,12 @@ class foldergallery{
 				__( 'Verify that this directory is writable (chmod 777).', 'foldergallery' ) . '</p>';
 		}
 			
-		$imgstyle = "margin:0px {$margin}px {$margin}px 0px;";
-		$imgstyle .= "padding:{$padding}px;";
+		//$imgstyle = "margin:0px {$margin}px {$margin}px 0px;";
+		$imgstyle = "padding:{$padding}px;";
 		$imgstyle .= "border-width:{$border}px;";
+		
+		$rmargin = $margin-1; // remove the 1px right margin of img (Safari bug)
+		$thmbdivstyle = "margin:0px {$rmargin}px {$margin}px 0px;";
 
 		//if ( 'all' != $thumbnails ) $columns = 0; // Moved below
 			
@@ -252,10 +260,9 @@ class foldergallery{
 				$this->save_thumbnail( $folder . '/' . $pictures[ $thumbnail_idx ], $thumbnail, $width, $height );
 			}
 			if ( ( $idx > $start_idx && 'all' != $thumbnails ) || $idx > $max_thumbnails_idx ) {
-				$linkstyle = ' style="display:none;"';
+				//$linkstyle = ' style="display:none;"';
+				$thmbdivstyle = "display:none;";
 				$columns = 0;
-			} else {
-				$linkstyle ='';
 			}
 			// Set the Picture subtitle
 			switch ( $subtitle ) {
@@ -274,22 +281,22 @@ class foldergallery{
 					if ( 'lightbox2' != $fg_options['engine'] ) $thesubtitle .= ' (' . ($idx+1-$start_idx) . '/' . ($NoP-$start_idx) . ')' ;
 			}		
 			// Let's start
-			$gallery_code .= "\n";
+			$gallery_code .= "\n<div class=\"fg_thumbnail\" style=\"$thmbdivstyle\">";
 			// Set the link
 			switch ( $fg_options['engine'] ) {
 				case 'lightbox2' :
-					$gallery_code.= '<a title="' . $thesubtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" data-lightbox="' . $lightbox_id . '"' . $linkstyle . '>';
+					$gallery_code.= '<a title="' . $thesubtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" data-lightbox="' . $lightbox_id . '">';
 				break;
 				case 'fancybox2' :				
-					$gallery_code.= '<a class="fancybox-gallery" title="' . $thesubtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" data-fancybox-group="' . $lightbox_id . '"' . $linkstyle . '>';
+					$gallery_code.= '<a class="fancybox-gallery" title="' . $thesubtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" data-fancybox-group="' . $lightbox_id . '">';
 				break;
 				case 'lightview' :
 					if ( $options ) $options = " data-lightview-group-options=\"$options\"";
-					$gallery_code .= '<a title="' . $thesubtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" class="lightview" data-lightview-group="' . $lightbox_id . '"' . $options . $linkstyle . '>';
+					$gallery_code .= '<a title="' . $thesubtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" class="lightview" data-lightview-group="' . $lightbox_id . '"' . $options . '>';
 					$options = ''; // group-options required only once per group.
 				break;
 				case 'none' :
-					$gallery_code .= '<a title="' . $thesubtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '"' . $linkstyle . '>';
+					$gallery_code .= '<a title="' . $thesubtitle . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '">';
 				break;
 			}
 			// Set the thumbnail/title 	
@@ -303,7 +310,7 @@ class foldergallery{
 				if ( $idx == $start_idx ) {
 					$gallery_code .= '<img src="' . home_url( '/' ) . $thumbnail . '" style="' . $imgstyle . '" alt="' . $title . '" /></a>';
 					if ( $title != '' ) {
-						$gallery_code .= '<br style="clear:both" /><span class="fg_title" style="margin:0 auto;">' . $title . '</span>';
+						$gallery_code .= '<div class="fg_title">' . $title . '</div>';
 					}
 				} else {
 					$gallery_code .= '</a>';
@@ -312,14 +319,18 @@ class foldergallery{
 				$gallery_code .= '</a>';
 			} else {
 				$gallery_code .= '<img src="' . home_url( '/' ) . $thumbnail . '" style="' . $imgstyle . '" alt="' . $thesubtitle . '" /></a>';
+				if ( 1 == $show_thumbnail_subtitles ) $gallery_code .= '<div class="fg_subtitle">' . $thesubtitle . '</div>';	
 			}
+			$gallery_code .= '</div>';
 
 			if ( $columns > 0 ) {
-				if ( ( $idx + 1 ) % $columns == 0 ) $gallery_code .= "\n" . '<br style="clear: both" />';
+				if ( ( $idx + 1 - $start_idx) % $columns == 0 ) $gallery_code .= "\n" . '<br style="clear: both" />';
 			}
 		}
 		$gallery_code .= "\n</div>\n";
-		if ( 'all' == $thumbnails ) $gallery_code .= '<br style="clear: both" />';
+		if ( 'all' == $thumbnails ) {
+			$gallery_code .= '<br style="clear: both" />';
+		}
 		return $gallery_code;
 	}
 
@@ -353,7 +364,8 @@ class foldergallery{
 		if ( ! in_array( $input['thumbnails'], array( 'all','none','single' ) ) ) $input['thumbnails'] = 'all';
 		if ( ! in_array( $input['fb_title'], array( 'inside','outside','float','over','null' ) ) ) $input['fb_title'] = 'all';
 		if ( ! in_array( $input['subtitle'], array( 'default','none','filename','filenamewithoutextension' ) ) ) $input['subtitle'] = 'default';
-		$input['fb_speed']            = intval( $input['fb_speed'] );
+		$input['show_thumbnail_subtitles']     = intval( $input['show_thumbnail_subtitles'] );
+		$input['fb_speed']          = intval( $input['fb_speed'] );
 		return $input;
 	}
 
@@ -369,6 +381,7 @@ class foldergallery{
 			'lw_options'        => '',
 			'thumbnails'		=> 'all',
 			'subtitle'			=> 'default',
+			'show_thumbnail_subtitles'		=> 0,
 			'fb_title'			=> 'float',
 			'fb_speed'			=> 0,
 		);
@@ -477,6 +490,20 @@ class foldergallery{
 		echo '>' . __( 'None', 'foldergallery') . '</option>' . "\n";
 		echo "</select>\n";
 		echo "</td>\n</tr>\n";
+		// show_thumbnail_subtitles
+		echo '<tr valign="top">' . "\n";
+		echo '<th scope="row"><label for="show_thumbnail_subtitles">' . __( 'Show Thumbnail Subtitles', 'foldergallery' ) . '</label></th>' . "\n";
+		echo '<td><select name="FolderGallery[show_thumbnail_subtitles]" id="FolderGallery[show_thumbnail_subtitles]">' . "\n";		
+		echo "\t" .	'<option value="0"';
+		if ( '0' == $fg_options['show_thumbnail_subtitles'] ) echo ' selected="selected"';
+		echo '>'. __('No', 'foldergallery') . '</option>' . "\n";
+		echo "\t" .	'<option value="1"';
+		if ( '1' == $fg_options['show_thumbnail_subtitles'] ) echo ' selected="selected"';
+		echo '>' . __('Yes', 'foldergallery') . '</option>' . "\n";
+		echo "</select>\n";
+		echo "</td>\n</tr>\n";
+
+
 		// Lightview		
 		if ( 'lightview' == $fg_options['engine'] ) {			
 			echo '<tr valign="top">' . "\n";
