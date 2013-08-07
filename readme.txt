@@ -29,7 +29,7 @@ An Options page allow to set the default paramaters of the galleries :
 * Thumbnails width and height (width & height)
 * Picture border (border)
 * Padding and Margin (padding & margin)
-* Picture subtitle (subtitle): default (title + picture number), filename, filenamewithoutextension, none
+* Subtitle Format (subtitle): default (title + picture number), filename, filenamewithoutextension, smartfilename (filename with underscores and front numbers removed), none
 * Show Thumbnail Subtitles (show_thumbnail_subtitles): 0 (no), 1 (yes). Display (or not) the subtitle under the picture thumbnail.
 * Fancybox Subtitle Style: Inside, Outside, Over, Float, None. Available with Fancybox engine only.
 * Autoplay Speed: Slideshow speed in seconds. 0 to turn autoplay off. Available with Fancybox engine only.
@@ -107,6 +107,16 @@ Add the attribute `thumbnails` in the shortcode with value `n` to display only t
 
 	[foldergallery folder="path" title="My Gallery" thumbnails=3]
 
+= I'd like to display a (sub)title under each thumbnail =
+
+You have to set show_thumbnail_subtitles to 1 (or change the global option in Folder Gallery Settings) using 
+
+	[foldergallery folder="path" title="My Gallery" show_thumbnail_subtitles=1]
+
+The subtitle format is set with the attribute `subtitle`. It can be set to `filename`, `filenamewithoutextension` or `smartfilename` which displays the filename without extension, front number removed and underscores (_) replaced with spaces.
+
+	[foldergallery folder="path" title="My Gallery" show_thumbnail_subtitles=1 subtitle='smartfilename']
+
 
 == Screenshots ==
 1. Folder Gallery Options
@@ -114,6 +124,11 @@ Add the attribute `thumbnails` in the shortcode with value `n` to display only t
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 1.3.1b2 [2013-08-07] =
+* New 'smartfilename' option for subtitle style
+* Set width of thumbnail div
+* Misc changes
 
 = 1.3.1b1 [2013-08-06] =
 * Global option to display the subtitle under the picture thumbnail.

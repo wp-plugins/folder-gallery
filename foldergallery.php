@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.3.1b1
+Version: 1.3.1b2
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -217,11 +217,14 @@ class foldergallery{
 		}
 			
 		//$imgstyle = "margin:0px {$margin}px {$margin}px 0px;";
-		$imgstyle = "padding:{$padding}px;";
+		$imgstyle = "width:{$width}px;";
+		$imgstyle .= "margin:0;";
+		$imgstyle .= "padding:{$padding}px;";
 		$imgstyle .= "border-width:{$border}px;";
 		
-		$rmargin = $margin-1; // remove the 1px right margin of img (Safari bug)
-		$thmbdivstyle = "margin:0px {$rmargin}px {$margin}px 0px;";
+		$thmbdivstyle = "width:{$width}px;";
+		$thmbdivstyle .= "margin:0px {$margin}px {$margin}px 0px;";
+		
 
 		//if ( 'all' != $thumbnails ) $columns = 0; // Moved below
 			
@@ -274,6 +277,11 @@ class foldergallery{
 				break;
 				case 'filenamewithoutextension' :
 					$thesubtitle = $this->filename_without_extension( $pictures[ $idx ] );
+				break;
+				case 'smartfilename' :
+					$thesubtitle = $this->filename_without_extension( $pictures[ $idx ] );
+					$thesubtitle = preg_replace ( '/^\d+/' , '' , $thesubtitle );
+					$thesubtitle = str_replace( '_', ' ', $thesubtitle );
 				break;
 				default :
 					//$thesubtitle = ( 'all' == $thumbnails || $idx > 0 ) ? $title . ' (' . ($idx+1) . '/' . $NoP . ')' : $title;
@@ -363,7 +371,7 @@ class foldergallery{
 		$input['margin']            = intval( $input['margin'] );
 		if ( ! in_array( $input['thumbnails'], array( 'all','none','single' ) ) ) $input['thumbnails'] = 'all';
 		if ( ! in_array( $input['fb_title'], array( 'inside','outside','float','over','null' ) ) ) $input['fb_title'] = 'all';
-		if ( ! in_array( $input['subtitle'], array( 'default','none','filename','filenamewithoutextension' ) ) ) $input['subtitle'] = 'default';
+		if ( ! in_array( $input['subtitle'], array( 'default','none','filename','filenamewithoutextension','smartfilename' ) ) ) $input['subtitle'] = 'default';
 		$input['show_thumbnail_subtitles']     = intval( $input['show_thumbnail_subtitles'] );
 		$input['fb_speed']          = intval( $input['fb_speed'] );
 		return $input;
@@ -474,7 +482,7 @@ class foldergallery{
 		$this->fg_option_field( 'margin', __( 'Margin', 'foldergallery' ) );
 		// Subtitle
 		echo '<tr valign="top">' . "\n";
-		echo '<th scope="row"><label for="subtitle">' . __( 'Picture Subtitle', 'foldergallery' ) . '</label></th>' . "\n";
+		echo '<th scope="row"><label for="subtitle">' . __( 'Subtitle Format', 'foldergallery' ) . '</label></th>' . "\n";
 		echo '<td><select name="FolderGallery[subtitle]" id="FolderGallery[subtitle]">' . "\n";		
 		echo "\t" .	'<option value="default"';
 		if ( 'default' == $fg_options['subtitle'] ) echo ' selected="selected"';
@@ -484,7 +492,10 @@ class foldergallery{
 		echo '>' . __('Filename', 'foldergallery') . '</option>' . "\n";
 		echo "\t" .	'<option value="filenamewithoutextension"';
 		if ( 'filenamewithoutextension' == $fg_options['subtitle'] ) echo ' selected="selected"';
-		echo '>' . __('Filename without extension', 'foldergallery') . '</option>' . "\n";		
+		echo '>' . __('Filename without extension', 'foldergallery') . '</option>' . "\n";	
+		echo "\t" .	'<option value="smartfilename"';
+		if ( 'smartfilename' == $fg_options['subtitle'] ) echo ' selected="selected"';
+		echo '>' . __('Smart Filename', 'foldergallery') . '</option>' . "\n";	
 		echo "\t" .	'<option value="none"';
 		if ( 'none' == $fg_options['subtitle'] ) echo ' selected="selected"';
 		echo '>' . __( 'None', 'foldergallery') . '</option>' . "\n";

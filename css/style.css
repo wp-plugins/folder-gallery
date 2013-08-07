@@ -3,5 +3,5 @@
 .fg_title { font-style: italic; }
 .fg_subtitle { font-style: italic; }
 
-.fg_thumbnail { margin:0; display:block; float:left; text-align:center;}
-.fg_gallery img { margin:0px 1px 0px 0px; padding:2px; border:1px solid #ddd;}
+.fg_thumbnail { padding:0; display:block; float:left; text-align:center; }
+.fg_gallery img { border:1px solid #ddd; }
