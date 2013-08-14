@@ -4,14 +4,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/folder-gallery\n"
-"POT-Creation-Date: 2013-02-12 15:35+0100\n"
-"PO-Revision-Date: 2013-02-12 15:35+0100\n"
+"POT-Creation-Date: 2013-08-14 14:46+0100\n"
+"PO-Revision-Date: 2013-08-14 14:46+0100\n"
 "Last-Translator: Vincent Jalby <wordpress@jalby.org>\n"
 "Language-Team: Vincent JALBY <wordpress@jalby.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -19,105 +19,176 @@ msgstr ""
 "X-Poedit-SearchPath-0: /Users/vincent/Sites/wordpress/wp-content/plugins/"
 "folder-gallery\n"
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:99
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:109
 msgid "Image"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:100
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:110
 msgid "of"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:172
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:180
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:189
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:203
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:211
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:220
 msgid "Folder Gallery Error:"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:173
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:204
 #, php-format
 msgid "Unable to find the directory %s."
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:181
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:212
 #, php-format
 msgid "No picture available inside %s."
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:190
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:221
 #, php-format
 msgid "Unable to create the thumbnails directory inside %s."
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:191
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:222
 msgid "Verify that this directory is writable (chmod 777)."
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:275
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:363
 msgid "Settings"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:321
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:420
 msgid "Folder Gallery Settings"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:327
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:426
 msgid "Gallery Engine"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:346
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:382
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:445
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:478
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:518
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:573
 msgid "None"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:369
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:468
 msgid "Display Thumbnails"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:374
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:472
 msgid "All"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:378
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:475
 msgid "Single"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:386
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:483
+msgid "Sort Pictures by"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:487
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:509
+msgid "Filename"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:490
+msgid "Filename (descending)"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:494
 msgid "Columns"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:386
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:388
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:494
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:496
 msgid "(0 = auto)"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:387
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:495
 msgid "Thumbnails Width"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:388
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:496
 msgid "Thumbnails Height"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:389
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:497
 msgid "Picture Border"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:390
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:498
 msgid "Padding"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:391
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:499
 msgid "Margin"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:394
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:502
+msgid "Subtitle Format"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:506
+msgid "Default (Title + Picture Number)"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:512
+msgid "Filename without extension"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:515
+msgid "Smart Filename"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:523
+msgid "Show Thumbnail Subtitles"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:527
+msgid "No"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:530
+msgid "Yes"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:538
 msgid "Lightview Options"
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:396
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:540
 msgid "Lightview default options, comma-separated."
 msgstr ""
 
-#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:398
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:542
 msgid "For details, see:"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:552
+msgid "Fancybox Subtitle Style"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:557
+msgid "Inside"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:561
+msgid "Outside"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:565
+msgid "Over"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:569
+msgid "Float"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:577
+msgid "Autoplay Speed"
+msgstr ""
+
+#: /Users/vincent/Sites/wordpress/wp-content/plugins/folder-gallery/foldergallery.php:577
+msgid "(0 = off)"
 msgstr ""

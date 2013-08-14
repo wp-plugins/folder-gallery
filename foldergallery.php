@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.3.1b2
+Version: 1.3.1b3
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -72,8 +72,9 @@ class foldergallery{
 			$fg_options['fb_speed'] = 0;
 			update_option( 'FolderGallery', $fg_options );
 		}
-		if ( ! isset( $fg_options['show_thumbnail_subtitles'] ) ) { // 1.3.1 update
+		if ( ! isset( $fg_options['sort'] ) ) { // 1.3.1 update
 			$fg_options['show_thumbnail_subtitles'] = 0;
+			$fg_options['sort'] = 'filename';
 			update_option( 'FolderGallery', $fg_options );
 		}
 	}
@@ -135,7 +136,7 @@ class foldergallery{
 			case 'none' :
 				// Do nothing for now
 			break;
-		}		
+		}	
 	}
 
 	/* --------- Folder Gallery Main Functions --------- */
@@ -154,7 +155,7 @@ class foldergallery{
 		}
 	}
 
-	function file_array( $directory ) { // List all JPG & PNG files in $directory
+	function file_array( $directory, $sort ) { // List all JPG & PNG files in $directory
 		$files = array();
 		if( $handle = opendir( $directory ) ) {
 			while ( false !== ( $file = readdir( $handle ) ) ) {
@@ -165,7 +166,11 @@ class foldergallery{
 			}
 			closedir( $handle );
 		}
-		sort( $files );
+		if ( 'filename' == $sort ) {
+			sort( $files );
+		} else {
+			rsort( $files );
+		}
 		return $files;
 	}
 
@@ -189,6 +194,7 @@ class foldergallery{
 			'options' => $fg_options['lw_options'],
 			'subtitle'=> $fg_options['subtitle'],
 			'show_thumbnail_subtitles'=> $fg_options['show_thumbnail_subtitles'],
+			'sort'	  => $fg_options['sort'],
 		), $atts ) );
 
 		$folder = rtrim( $folder, '/' ); // Remove trailing / from path
@@ -198,7 +204,7 @@ class foldergallery{
 				sprintf( __( 'Unable to find the directory %s.', 'foldergallery' ), $folder ) . '</p>';	
 		}
 
-		$pictures = $this->file_array( $folder );
+		$pictures = $this->file_array( $folder, $sort );
 
 		$NoP = count( $pictures );		
 		if ( 0 == $NoP ) {
@@ -369,6 +375,7 @@ class foldergallery{
 		$input['border']            = intval( $input['border'] );
 		$input['padding']           = intval( $input['padding'] );
 		$input['margin']            = intval( $input['margin'] );
+		if ( ! in_array( $input['sort'], array( 'filename','filename_desc' ) ) ) $input['sort'] = 'filename';
 		if ( ! in_array( $input['thumbnails'], array( 'all','none','single' ) ) ) $input['thumbnails'] = 'all';
 		if ( ! in_array( $input['fb_title'], array( 'inside','outside','float','over','null' ) ) ) $input['fb_title'] = 'all';
 		if ( ! in_array( $input['subtitle'], array( 'default','none','filename','filenamewithoutextension','smartfilename' ) ) ) $input['subtitle'] = 'default';
@@ -380,6 +387,7 @@ class foldergallery{
 	function fg_settings_default() {
 		$defaults = array(
 			'engine'			=> 'lightbox2',
+			'sort'				=> 'filename',
 			'border' 			=> 1,
 			'padding' 			=> 2,
 			'margin' 			=> 5,
@@ -458,19 +466,28 @@ class foldergallery{
 
 		echo '<tr valign="top">' . "\n";
 		echo '<th scope="row"><label for="thumbnails">' . __( 'Display Thumbnails', 'foldergallery' ) . '</label></th>' . "\n";
-		echo '<td><select name="FolderGallery[thumbnails]" id="FolderGallery[thumbnails]">' . "\n";
-		
-		echo "\t" .	'<option value="all"';
-		if ( 'all' == $fg_options['thumbnails'] ) echo ' selected="selected"';
-		echo '>' . __( 'All', 'foldergallery' ) . '</option>' . "\n";
-		
-		echo "\t" .	'<option value="single"';
-		if ( 'single' == $fg_options['thumbnails'] ) echo ' selected="selected"';
-		echo '>' . __( 'Single', 'foldergallery' ) . '</option>' . "\n";
+		echo '<td><select name="FolderGallery[thumbnails]" id="FolderGallery[thumbnails]">' . "\n";	
+			echo "\t" .	'<option value="all"';
+				if ( 'all' == $fg_options['thumbnails'] ) echo ' selected="selected"';
+				echo '>' . __( 'All', 'foldergallery' ) . '</option>' . "\n";		
+			echo "\t" .	'<option value="single"';
+				if ( 'single' == $fg_options['thumbnails'] ) echo ' selected="selected"';
+				echo '>' . __( 'Single', 'foldergallery' ) . '</option>' . "\n";
+			echo "\t" .	'<option value="none"';
+				if ( 'none' == $fg_options['thumbnails'] ) echo ' selected="selected"';
+				echo '>' . __( 'None', 'foldergallery' ) . '</option>' . "\n";
+		echo "</select>\n";
+		echo "</td>\n</tr>\n";
 
-		echo "\t" .	'<option value="none"';
-		if ( 'none' == $fg_options['thumbnails'] ) echo ' selected="selected"';
-		echo '>' . __( 'None', 'foldergallery' ) . '</option>' . "\n";
+		echo '<tr valign="top">' . "\n";
+		echo '<th scope="row"><label for="sort">' . __( 'Sort Pictures by', 'foldergallery' ) . '</label></th>' . "\n";
+		echo '<td><select name="FolderGallery[sort]" id="FolderGallery[sort]">' . "\n";	
+			echo "\t" .	'<option value="filename"';
+				if ( 'filename' == $fg_options['sort'] ) echo ' selected="selected"';
+				echo '>' . __( 'Filename', 'foldergallery' ) . '</option>' . "\n";		
+			echo "\t" .	'<option value="filename_desc"';
+				if ( 'filename_desc' == $fg_options['sort'] ) echo ' selected="selected"';
+				echo '>' . __( 'Filename (descending)', 'foldergallery' ) . '</option>' . "\n";
 		echo "</select>\n";
 		echo "</td>\n</tr>\n";
 

@@ -2,7 +2,7 @@
 Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
-Tested up to: 3.5.1
+Tested up to: 3.6
 Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -25,6 +25,7 @@ An Options page allow to set the default paramaters of the galleries :
 
 * Lightbox JS Engine: Lightbox 2, Fancybox 2, Lightview 3 [optional] or none
 * Display Thumbnails (thumbnails): all = standard Gallery, single = displays a single thumbnail linked to the lightbox gallery, none = displays a link to the lightbox gallery
+* Sort pictures by (sort) : pictures are sorted by filename (filename) or in reverse order (filename_desc)
 * Number of images per row (columns)
 * Thumbnails width and height (width & height)
 * Picture border (border)
@@ -124,6 +125,9 @@ The subtitle format is set with the attribute `subtitle`. It can be set to `file
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 1.3.1b3 [2013-08-14] =
+* Option (and attribute) to sort pictures by filename in reverse order
 
 = 1.3.1b2 [2013-08-07] =
 * New 'smartfilename' option for subtitle style
