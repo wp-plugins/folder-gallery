@@ -31,7 +31,7 @@ An Options page allow to set the default paramaters of the galleries :
 * Picture border (border)
 * Padding and Margin (padding & margin)
 * Caption Format (caption): default (title + picture number), filename, filenamewithoutextension, smartfilename (filename with underscores and front numbers removed), none
-* Show Thumbnail Captions (show_thumbnail_captions): 0 (no), 1 (yes). Display (or not) the caption under the picture thumbnail.
+* Show Thumbnail Captions (show_thumbnail_captions): yes (true) or no (false). Display (or not) the caption under the picture thumbnail.
 * Fancybox Caption Style: Inside, Outside, Over, Float, None. Available with Fancybox engine only.
 * Autoplay Speed: Slideshow speed in seconds. 0 to turn autoplay off. Available with Fancybox engine only.
  
@@ -112,7 +112,7 @@ Add the attribute `thumbnails` in the shortcode with value `n` to display only t
 
 You have to set show_thumbnail_captions to 1 (or change the global option in Folder Gallery Settings) using 
 
-	[foldergallery folder="path" title="My Gallery" show_thumbnail_captions=1]
+	[foldergallery folder="path" title="My Gallery" show_thumbnail_captions=true]
 
 The caption format is set with the attribute `caption`. It can be set to `filename`, `filenamewithoutextension` or `smartfilename` which displays the filename without extension, front number removed and underscores (_) replaced with spaces.
 
@@ -125,6 +125,10 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 1.4b2 [2013-08-26] =
+* New Gallery Engine "Photo Swipe" when the plugin PhotoSwipe is active
+* Improved captions support
 
 = 1.4b1 [2013-08-26] =
 * Global option to display the caption under the picture thumbnail.

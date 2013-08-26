@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.4b1
+Version: 1.4b2
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -91,6 +91,7 @@ class foldergallery{
 			case 'lightview' :
 				wp_enqueue_style( 'lightview-style', plugins_url( '/lightview/css/lightview/lightview.css', __FILE__ ) );		
 			break;
+			case 'photoswipe' :
 			case 'none' :
 				// do nothing for now
 			break;
@@ -132,6 +133,7 @@ class foldergallery{
 				wp_enqueue_script( 'lightview_spinners', plugins_url( '/lightview/js/spinners/spinners.min.js', __FILE__ ), array( 'jquery' ) );
 				wp_enqueue_script( 'lightview-script', plugins_url( '/lightview/js/lightview/lightview.js', __FILE__ ) );   		
 			break;
+			case 'photoswipe' :
 			case 'none' :
 				// Do nothing for now
 			break;
@@ -225,22 +227,27 @@ class foldergallery{
 				__( 'Verify that this directory is writable (chmod 777).', 'foldergallery' ) . '</p>';
 		}
 		
-		$imgstyle = "width:{$width}px;";
-		$imgstyle .= 'margin:0;';
-		$imgstyle .= "padding:{$padding}px;";
-		$imgstyle .= "border-width:{$border}px;";
-		
-		if ( 'none' != $thumbnails ) {
+		// Image and Thumbnail style
+		if ( 'none' == $thumbnails ) {
+			$thmbdivstyle = '';
+			$imgstyle = "display: none;";
+		} else {
 			$thmbdivstyle = ' style="width:' . ($width + 2*$border + 2*$padding) . 'px;';
 			$thmbdivstyle .= "margin:0px {$margin}px {$margin}px 0px;\"";
-		} else {
-			$thmbdivstyle = '';
+			$imgstyle = "width:{$width}px;";
+			$imgstyle .= 'margin:0;';
+			$imgstyle .= "padding:{$padding}px;";
+			$imgstyle .= "border-width:{$border}px;";
 		}
 
 		$this->fg_scripts();			
 		$lightbox_id = uniqid(); //md5( $folder . );
-		$gallery_code = '<div class="fg_gallery gallery-icon">';
-		
+		// Main Div
+		if ( 'photoswipe' == $fg_options['engine'] ) {
+			$gallery_code = '<div class="fg_gallery gallery-icon">';
+		} else {
+			$gallery_code = '<div class="fg_gallery">';
+		}		
 		// Default single thumbnail
 		$thumbnail_idx = 0;
 		// If first picture == !!! then skip it (but use it as 'single' thumbnail).
@@ -316,31 +323,24 @@ class foldergallery{
 					$gallery_code .= '<a title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" class="lightview" data-lightview-group="' . $lightbox_id . '"' . $options . '>';
 					$options = ''; // group-options required only once per group.
 				break;
+				case 'photoswipe' :
 				case 'none' :
 					$gallery_code .= '<a title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '">';
 				break;
 			}
-			// Set the thumbnail/title 	
-			if ( 'none' == $thumbnails ) {
-				if ( $idx == $start_idx ) {
-					$gallery_code .= '<span class="fg_title_link">' . $title . '</span></a>';
-				} else {
-					$gallery_code .= '</a>';
-				}
-			} elseif ( 'single' == $thumbnails ) {
-				if ( $idx == $start_idx ) {
-					$gallery_code .= '<img src="' . home_url( '/' ) . $thumbnail . '" style="' . $imgstyle . '" alt="' . $title . '" /></a>';
-					if ( $title != '' ) {
-						$gallery_code .= '<div class="fg_title">' . $title . '</div>';
-					}
-				} else {
-					$gallery_code .= '</a>';
-				}
-			} elseif ( $idx > $max_thumbnails_idx ) {
-				$gallery_code .= '</a>';
-			} else {
-				$gallery_code .= '<img src="' . home_url( '/' ) . $thumbnail . '" style="' . $imgstyle . '" alt="' . $thecaption . '" /></a>';
-				if ( 1 == $show_thumbnail_captions ) $gallery_code .= '<div class="fg_caption">' . $thecaption . '</div>';	
+			// Show image (possibly hidden, but required for alt tag)
+			$gallery_code .= '<img src="' . home_url( '/' ) . $thumbnail . '" style="' . $imgstyle . '" alt="' . $thecaption . '" />';
+			// If no thumbnail, show link instead
+			if ( 'none' == $thumbnails && $idx == $start_idx ) {
+					$gallery_code .= '<span class="fg_title_link">' . $title . '</span>';
+			}
+			// Close link
+			$gallery_code .= '</a>';
+			// Display caption
+			if ( $show_thumbnail_captions && 'all' == $thumbnails ) $gallery_code .= '<div class="fg_caption">' . $thecaption . '</div>';	
+			// Display title
+			if ( 'single' == $thumbnails && $idx == $start_idx && $title != '' ) {
+				$gallery_code .= '<div class="fg_title">' . $title . '</div>';
 			}
 			$gallery_code .= '</div>';
 
@@ -363,6 +363,13 @@ class foldergallery{
 
 	function fg_settings_init() {
 		register_setting( 'FolderGallery', 'FolderGallery', array( $this, 'fg_settings_validate' ) );
+		$fg_options = get_option( 'FolderGallery' );
+		if ( 'photoswipe' == $fg_options['engine'] ) {
+			if ( ! is_plugin_active('photoswipe/photoswipe.php') ) {
+				$fg_options['engine'] = 'lightbox2';
+				update_option( 'FolderGallery', $fg_options );
+			}
+		}
 	}
 
 	function fg_plugin_action_links( $links ) { 
@@ -440,7 +447,12 @@ class foldergallery{
 				echo "\t" .	'<option value="lightview"';
 				if ( 'lightview' == $fg_options['engine'] ) echo ' selected="selected"';
 					echo '>Lightview 3 (free for non commercial site)</option>' . "\n";
-			}		
+			}	
+			if ( is_plugin_active('photoswipe/photoswipe.php') ) {
+				echo "\t" .	'<option value="photoswipe"';
+				if ( 'photoswipe' == $fg_options['engine'] ) echo ' selected="selected"';
+					echo '>Photo Swipe</option>' . "\n";			
+			}	
 			echo "\t" .	'<option value="none"';
 				if ( 'none' == $fg_options['engine'] ) echo ' selected="selected"';
 		echo '>' . __( 'None', 'foldergallery') . '</option>' . "\n";
