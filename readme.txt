@@ -3,7 +3,7 @@ Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
 Tested up to: 3.6
-Stable tag: 1.3
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://jalby.org/wordpress/donate/
@@ -126,15 +126,12 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 
 == Changelog ==
 
-= 1.4b2 [2013-08-26] =
-* New Gallery Engine "Photo Swipe" when the plugin PhotoSwipe is active
-* Improved captions support
-
-= 1.4b1 [2013-08-26] =
+= 1.4 [2013-08-31] =
 * Global option to display the caption under the picture thumbnail.
 * Several changes in layout and CSS. Hopefully it breaks nothing!
 * New 'smartfilename' option for caption style
 * Option (and attribute) to sort pictures by filename in reverse order
+* Improved captions support
 * Compatibility with PhotoSwipe WP plugin
 * Minor bug fixes
 
