@@ -2,8 +2,8 @@
 Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
-Tested up to: 3.5.1
-Stable tag: 1.2
+Tested up to: 3.6
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://jalby.org/wordpress/donate/
@@ -25,11 +25,14 @@ An Options page allow to set the default paramaters of the galleries :
 
 * Lightbox JS Engine: Lightbox 2, Fancybox 2, Lightview 3 [optional] or none
 * Display Thumbnails (thumbnails): all = standard Gallery, single = displays a single thumbnail linked to the lightbox gallery, none = displays a link to the lightbox gallery
+* Sort pictures by (sort) : pictures are sorted by filename (filename) or in reverse order (filename_desc)
 * Number of images per row (columns)
 * Thumbnails width and height (width & height)
 * Picture border (border)
 * Padding and Margin (padding & margin)
-* Picture subtitle (subtitle): default (title + picture number), filename, filenamewithoutextension, none
+* Caption Format (caption): default (title + picture number), filename, filenamewithoutextension, smartfilename (filename with underscores and front numbers removed), none
+* Show Thumbnail Captions (show_thumbnail_captions): yes (true) or no (false). Display (or not) the caption under the picture thumbnail.
+* Fancybox Caption Style: Inside, Outside, Over, Float, None. Available with Fancybox engine only.
 * Autoplay Speed: Slideshow speed in seconds. 0 to turn autoplay off. Available with Fancybox engine only.
  
 Most of theses settings can be overridden using the corresponding shortcode :
@@ -37,8 +40,8 @@ Most of theses settings can be overridden using the corresponding shortcode :
 	[foldergallery folder="path" title="title" columns=1 width=150 
 			height=90 border=1 padding=2 margin=10 thumbnails=single]
  
-This plugin uses Lightbox v2.51 by Lokesh Dhakar - http://www.lokeshdhakar.com 
-and Fancybox v2.1.4 by Janis Skarnelis - http://www.fancyapps.com/fancybox/
+This plugin uses Lightbox v2.6 by Lokesh Dhakar - http://www.lokeshdhakar.com 
+and Fancybox v2.1.5 by Janis Skarnelis - http://www.fancyapps.com/fancybox/
 
 Sample, contact available at http://jalby.org/wordpress/
 
@@ -80,7 +83,7 @@ Lightview need to be reinstalled everytime the plugin is updated.
 = Can I use Folder Gallery along with another Lightbox plugin? =
 
 If your Lightbox plugin automatically handles images, you may set the lightbox engine to 'None' in Folder Gallery Options.
-This works with
+This should work with
 
 * Fancybox 1.0.7+ by Kevin Sylvestre
 * jQuery Colorbox 4.5+ by Arne Franken
@@ -97,13 +100,23 @@ Add the attribute `thumbnails` in the shortcode with value `single` to display o
 
 If you want to use a different picture (than the first) as the single thumbnail for the gallery, add a picture with name !!! (e.g., `!!!.jpg`) to your gallery. This picture will be used as thumbnail, but won't be included in the (lightbox) gallery. Another option is to use the shortcode attribute `thumbnails=-n` where `n`is the picture number (in the gallery) you want to use as single thumbnail. 
 
-To hide gallery title under the thumbnail, add `title=""`. You then should set `subtitle' to something else than `default`, e.g., `subtitle="filename"`.
+To hide gallery title under the thumbnail, add `title=""`. You then should set `caption' to something else than `default`, e.g., `caption="filename"`.
 
 = I'd like to display only the n first thumbnails instead of the full thumbnails list =
 
-Add the attribute `thumbnails` in the shortcode with value `n` to display only the n first thumbnail.
+Add the attribute `thumbnails` in the shortcode with value `n` to display only the n first thumbnails.
 
 	[foldergallery folder="path" title="My Gallery" thumbnails=3]
+
+= I'd like to display a (sub)title under each thumbnail =
+
+You have to set show_thumbnail_captions to 1 (or change the global option in Folder Gallery Settings) using 
+
+	[foldergallery folder="path" title="My Gallery" show_thumbnail_captions=true]
+
+The caption format is set with the attribute `caption`. It can be set to `filename`, `filenamewithoutextension` or `smartfilename` which displays the filename without extension, front number removed and underscores (_) replaced with spaces.
+
+	[foldergallery folder="path" title="My Gallery" show_thumbnail_captions=1 caption='smartfilename']
 
 
 == Screenshots ==
@@ -113,17 +126,23 @@ Add the attribute `thumbnails` in the shortcode with value `n` to display only t
 
 == Changelog ==
 
-= 1.3b3 [2013-04-28] =
-* Restore the option to choose which picture to use as single-thumbnail-gallery. Read the FAQ!
-* Misc bug corrections
+= 1.4 [2013-08-31] =
+* Global option to display the caption under the picture thumbnail.
+* Several changes in layout and CSS. Hopefully it breaks nothing!
+* New 'smartfilename' option for caption style
+* Option (and attribute) to sort pictures by filename in reverse order
+* Improved captions support
+* Compatibility with PhotoSwipe WP plugin
+* Minor bug fixes
 
-= 1.3b2 [2013-04-27] =
+= 1.3 [2013-08-05] =
+* Update Lightbox 2 JS to 2.6 (JQuery/Wordpress 3.6 compatibility)
+* Update Fancybox JS to 2.1.5
+* Global option to set picture's caption style (default, filename, filenamewithoutextension, none)
 * Global option to set autoplay speed when Fancy Box engine is selected.
-
-= 1.3b1 [2013-04-26] =
-* Global option to set picture's subtitle style (default, subtitle, subtitlewithoutextension, none)
-* Several changes related to single-thumbnail-gallery (thumbnails="single"). Read the FAQ!
 * Option to display the thumbnails of the first pictures only. Read the FAQ!
+* Several changes and improvements related to single-thumbnail-gallery (thumbnails="single"). Read the FAQ!
+* Misc bug corrections
 
 = 1.2 [2013-03-16] =
 * Pictures are now sorted alphabetically
