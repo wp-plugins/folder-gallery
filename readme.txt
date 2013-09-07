@@ -82,15 +82,15 @@ Lightview need to be reinstalled everytime the plugin is updated.
 
 = Can I use Folder Gallery along with another Lightbox plugin? =
 
-If your Lightbox plugin automatically handles images, you may set the lightbox engine to 'None' in Folder Gallery Options.
+Folder Gallery has built-in support for "Responsive Lightbox" plugin by dFactory. After activating the plugin, select it in Folder Gallery Settings (Gallery Engine).
+
+Otherwise, if your Lightbox plugin automatically handles images, you may set the lightbox engine to 'None' in Folder Gallery Options.
 This should work with
 
 * Fancybox 1.0.7+ by Kevin Sylvestre
 * jQuery Colorbox 4.5+ by Arne Franken
 * Lightview Plus 3.1.3+ by Puzich
-* Maybe other (tell me !)
-
-Otherwise, you should set a different lightbox engine (than the one used by your plugin) in Folder Gallery Options.
+* Maybe other
 
 = I'd like to display a single thumbnail instead of the full thumbnails list =
 
@@ -125,6 +125,9 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 1.4.1b2 [2013-09-07] =
+* Support for Responsive Lightbox Plugin
 
 = 1.4 [2013-08-31] =
 * Global option to display the caption under the picture thumbnail.

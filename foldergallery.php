@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.4
+Version: 1.4.1b2
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -92,6 +92,7 @@ class foldergallery{
 				wp_enqueue_style( 'lightview-style', plugins_url( '/lightview/css/lightview/lightview.css', __FILE__ ) );		
 			break;
 			case 'photoswipe' :
+			case 'responsive-lightbox' :
 			case 'none' :
 				// do nothing for now
 			break;
@@ -134,6 +135,7 @@ class foldergallery{
 				wp_enqueue_script( 'lightview-script', plugins_url( '/lightview/js/lightview/lightview.js', __FILE__ ) );   		
 			break;
 			case 'photoswipe' :
+			case 'responsive-lightbox' :
 			case 'none' :
 				// Do nothing for now
 			break;
@@ -323,6 +325,9 @@ class foldergallery{
 					$gallery_code .= '<a title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" class="lightview" data-lightview-group="' . $lightbox_id . '"' . $options . '>';
 					$options = ''; // group-options required only once per group.
 				break;
+				case 'responsive-lightbox' :
+					$gallery_code .= '<a rel="lightbox[' . $lightbox_id . ']" title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '">';
+				break;
 				case 'photoswipe' :
 				case 'none' :
 					$gallery_code .= '<a title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '">';
@@ -344,14 +349,15 @@ class foldergallery{
 			}
 			$gallery_code .= '</div>';
 
-			if ( $columns > 0 ) {
+			if ( $columns > 0 && $idx < $NoP-1 ) {
 				if ( ( $idx + 1 - $start_idx) % $columns == 0 ) $gallery_code .= "\n" . '<br style="clear: both" />';
 			}
 		}
-		$gallery_code .= "\n</div>\n";
 		if ( 'all' == $thumbnails ) {
 			$gallery_code .= '<br style="clear: both" />';
 		}
+		$gallery_code .= "\n</div>\n";
+
 		return $gallery_code;
 	}
 
@@ -366,6 +372,12 @@ class foldergallery{
 		$fg_options = get_option( 'FolderGallery' );
 		if ( 'photoswipe' == $fg_options['engine'] ) {
 			if ( ! is_plugin_active('photoswipe/photoswipe.php') ) {
+				$fg_options['engine'] = 'lightbox2';
+				update_option( 'FolderGallery', $fg_options );
+			}
+		}
+		if ( 'responsive-lightbox' == $fg_options['engine'] ) {
+			if ( ! is_plugin_active('responsive-lightbox/responsive-lightbox.php') ) {
 				$fg_options['engine'] = 'lightbox2';
 				update_option( 'FolderGallery', $fg_options );
 			}
@@ -446,12 +458,17 @@ class foldergallery{
 			if ( is_dir( plugin_dir_path( __FILE__ ) . 'lightview' ) ) {
 				echo "\t" .	'<option value="lightview"';
 				if ( 'lightview' == $fg_options['engine'] ) echo ' selected="selected"';
-					echo '>Lightview 3 (free for non commercial site)</option>' . "\n";
-			}	
+				echo '>Lightview 3 (free for non commercial site)</option>' . "\n";
+			}
+			if ( is_plugin_active('responsive-lightbox/responsive-lightbox.php') ) {
+				echo "\t" .	'<option value="responsive-lightbox"';
+				if ( 'responsive-lightbox' == $fg_options['engine'] ) echo ' selected="selected"';
+				echo '>Responsive Lightbox (Plugin)</option>' . "\n";			
+			}
 			if ( is_plugin_active('photoswipe/photoswipe.php') ) {
 				echo "\t" .	'<option value="photoswipe"';
 				if ( 'photoswipe' == $fg_options['engine'] ) echo ' selected="selected"';
-					echo '>Photo Swipe</option>' . "\n";			
+				echo '>Photo Swipe (Plugin)</option>' . "\n";			
 			}	
 			echo "\t" .	'<option value="none"';
 				if ( 'none' == $fg_options['engine'] ) echo ' selected="selected"';
