@@ -2,7 +2,7 @@
 Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
-Tested up to: 3.6
+Tested up to: 3.8.1
 Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -25,7 +25,7 @@ An Options page allow to set the default paramaters of the galleries :
 
 * Lightbox JS Engine: Lightbox 2, Fancybox 2, Lightview 3 [optional] or none
 * Display Thumbnails (thumbnails): all = standard Gallery, single = displays a single thumbnail linked to the lightbox gallery, none = displays a link to the lightbox gallery
-* Sort pictures by (sort) : pictures are sorted by filename (filename) or in reverse order (filename_desc)
+* Sort pictures by (sort) : pictures are sorted by filename (filename) or in reverse order (filename_desc) or randomly (random)
 * Number of images per row (columns)
 * Thumbnails width and height (width & height)
 * Picture border (border)
@@ -33,6 +33,7 @@ An Options page allow to set the default paramaters of the galleries :
 * Caption Format (caption): default (title + picture number), filename, filenamewithoutextension, smartfilename (filename with underscores and front numbers removed), none
 * Show Thumbnail Captions (show_thumbnail_captions): yes (true) or no (false). Display (or not) the caption under the picture thumbnail.
 * Fancybox Caption Style: Inside, Outside, Over, Float, None. Available with Fancybox engine only.
+* Fancybox Transition: Elastic, Fade. Available with Fancybox engine only.
 * Autoplay Speed: Slideshow speed in seconds. 0 to turn autoplay off. Available with Fancybox engine only.
  
 Most of theses settings can be overridden using the corresponding shortcode :
@@ -126,8 +127,10 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 
 == Changelog ==
 
-= 1.4.1b2 [2013-09-07] =
+= 1.4.1b3 [2014-02-02] =
 * Support for Responsive Lightbox Plugin
+* Global option to set transition effect when Fancy Box engine is selected
+* Option (and attribute) to sort pictures randomly
 
 = 1.4 [2013-08-31] =
 * Global option to display the caption under the picture thumbnail.
