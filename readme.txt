@@ -2,8 +2,8 @@
 Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
-Tested up to: 3.6
-Stable tag: 1.4
+Tested up to: 3.8.1
+Stable tag: 1.5b1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://jalby.org/wordpress/donate/
@@ -23,17 +23,18 @@ For each gallery, a subfolder cache_[width]x[height] is created inside the pictu
 
 An Options page allow to set the default paramaters of the galleries :
 
-* Lightbox JS Engine: Lightbox 2, Fancybox 2, Lightview 3 [optional] or none
+* Lightbox JS Engine: Lightbox 2, Fancybox 2 (if installed), Lightview 3 (if installed), Easy Fancybox Plugin (if available), Responsive Lightbox Plugin (if available) or none
 * Display Thumbnails (thumbnails): all = standard Gallery, single = displays a single thumbnail linked to the lightbox gallery, none = displays a link to the lightbox gallery
-* Sort pictures by (sort) : pictures are sorted by filename (filename) or in reverse order (filename_desc)
+* Sort pictures by (sort) : pictures are sorted by filename (filename) or in reverse order (filename_desc) or randomly (random)
 * Number of images per row (columns)
 * Thumbnails width and height (width & height)
 * Picture border (border)
 * Padding and Margin (padding & margin)
 * Caption Format (caption): default (title + picture number), filename, filenamewithoutextension, smartfilename (filename with underscores and front numbers removed), none
 * Show Thumbnail Captions (show_thumbnail_captions): yes (true) or no (false). Display (or not) the caption under the picture thumbnail.
-* Fancybox Caption Style: Inside, Outside, Over, Float, None. Available with Fancybox engine only.
-* Autoplay Speed: Slideshow speed in seconds. 0 to turn autoplay off. Available with Fancybox engine only.
+* Fancybox Caption Style: Inside, Outside, Over, Float, None. Available with Fancybox 2 engine only (if installed).
+* Fancybox Transition: Elastic, Fade. Available with Fancybox 2 engine only (if installed).
+* Autoplay Speed: Slideshow speed in seconds. 0 to turn autoplay off. Available with Fancybox 2 engine only (if installed).
  
 Most of theses settings can be overridden using the corresponding shortcode :
 
@@ -41,7 +42,6 @@ Most of theses settings can be overridden using the corresponding shortcode :
 			height=90 border=1 padding=2 margin=10 thumbnails=single]
  
 This plugin uses Lightbox v2.6 by Lokesh Dhakar - http://www.lokeshdhakar.com 
-and Fancybox v2.1.5 by Janis Skarnelis - http://www.fancyapps.com/fancybox/
 
 Sample, contact available at http://jalby.org/wordpress/
 
@@ -55,16 +55,30 @@ Sample, contact available at http://jalby.org/wordpress/
 6. Insert the following short code in post or page :
 
 	[foldergallery folder="wp-content/upload/MyPictures" title="My Picture Gallery"]
+	
+7. To use Fancybox 2 engine, see FAQ
 
 == Frequently Asked Questions ==
 
-= Can I use lightview 3 instead of lightbox 2? =
+= How to use Fancybox 2 instead of Lightbox 2? =
+
+1. Download fancybox 2 from http://fancyapps.com/fancybox/#license
+2. Unzip the archive then rename the directory to 'fancybox'.
+3. Upload the directory 'fancybox' to '/wp-content'.
+4. Go To Wordpress > Settings > Folder Gallery and select Fancybox 2 as Gallery Engine.
+5. Done!
+
+= Can I use Easy Fancybox plugin along with Folder Gallery? =
+
+Yes! First install and activate Easy Fancybox plugin. In Wordpress > Settings > Media > Fancybox > Images > Gallery, Disabled Autogllery. Then, in Wordpress > Settings > Folder Gallery, select "Easy Fancybox (plugin)" as Gallery Engine.
+
+= Can I use lightview 3 instead of Lightbox 2? =
 
 Yes! However, you have to download and install lightview 3 by hand. Here's how:
 
 1. Download lightview from http://projects.nickstakenburg.com/lightview/download
 2. Unzip the archive then rename the directory to 'lightview' (i.e., remove version number).
-3. Upload the directory 'lightview' to '/wp-content/plugins/foldergallery'.
+3. Upload the directory 'lightview' to '/wp-content'.
 4. Go To Settings / Folder Gallery and select Lightview as Gallery Engine.
 5. Done!
 
@@ -78,11 +92,9 @@ You can set default options in Folder Gallery Options Page.
 
 See http://projects.nickstakenburg.com/lightview/documentation for details about Lightview options.
 
-Lightview need to be reinstalled everytime the plugin is updated.
-
 = Can I use Folder Gallery along with another Lightbox plugin? =
 
-Folder Gallery has built-in support for "Responsive Lightbox" plugin by dFactory. After activating the plugin, select it in Folder Gallery Settings (Gallery Engine).
+Folder Gallery has built-in support for "Easy Fancybox" plugin by RavanH and "Responsive Lightbox" plugin by dFactory. After activating the plugin, select it in Folder Gallery Settings (Gallery Engine).
 
 Otherwise, if your Lightbox plugin automatically handles images, you may set the lightbox engine to 'None' in Folder Gallery Options.
 This should work with
@@ -126,8 +138,13 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 
 == Changelog ==
 
-= 1.4.1b2 [2013-09-07] =
+= 1.5b1 [2014-02-14] =
+* Because of license compatibility, Fancybox 2 is not included in Folder Gallery anymore. You have to install it yourself or use a Fancybox plugin (see FAQ)
+* Change the location of Lightview 3 installation (see FAQ)
 * Support for Responsive Lightbox Plugin
+* Support for Easy Fancybox Plugin
+* Global option to set transition effect when Fancybox 2 engine is selected
+* Option (and attribute) to sort pictures randomly
 
 = 1.4 [2013-08-31] =
 * Global option to display the caption under the picture thumbnail.
