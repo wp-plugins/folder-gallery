@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.4.1b3
+Version: 1.5b1
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -55,7 +55,13 @@ class foldergallery{
 			update_option( 'FolderGallery', $fg_options );
 		}
 		if ( 'lightview' == $fg_options['engine'] ) {
-			if ( ! is_dir( plugin_dir_path( __FILE__ ) . 'lightview' ) ) {
+			if ( ! is_dir( WP_CONTENT_DIR . '/lightview' ) ) {
+				$fg_options['engine'] = 'lightbox2';
+				update_option( 'FolderGallery', $fg_options );
+			}
+		}		
+		if ( 'fancybox2' == $fg_options['engine'] ) {
+			if ( ! is_dir( WP_CONTENT_DIR . '/fancybox' ) ) {
 				$fg_options['engine'] = 'lightbox2';
 				update_option( 'FolderGallery', $fg_options );
 			}
@@ -90,13 +96,14 @@ class foldergallery{
 				wp_enqueue_style( 'fg-lightbox-style', plugins_url( '/css/lightbox.css', __FILE__ ) );
 			break;
 			case 'fancybox2' :
-				wp_enqueue_style( 'fancybox-style', plugins_url( '/fancybox/source/jquery.fancybox.css', __FILE__ ) );
+				wp_enqueue_style( 'fancybox-style', content_url( '/fancybox/source/jquery.fancybox.css', __FILE__ ) );
 			break;
 			case 'lightview' :
-				wp_enqueue_style( 'lightview-style', plugins_url( '/lightview/css/lightview/lightview.css', __FILE__ ) );		
+				wp_enqueue_style( 'lightview-style', content_url( '/lightview/css/lightview/lightview.css', __FILE__ ) );		
 			break;
 			case 'photoswipe' :
 			case 'responsive-lightbox' :
+			case 'easy-fancybox' :
 			case 'none' :
 				// do nothing for now
 			break;
@@ -119,7 +126,7 @@ class foldergallery{
 				}
 			break;
 			case 'fancybox2' :
-				wp_enqueue_script( 'fancybox-script', plugins_url( '/fancybox/source/jquery.fancybox.pack.js', __FILE__ ), array( 'jquery' ) );
+				wp_enqueue_script( 'fancybox-script', content_url( '/fancybox/source/jquery.fancybox.pack.js', __FILE__ ), array( 'jquery' ) );
 				wp_enqueue_script( 'fg-fancybox-script', plugins_url( '/js/fg-fancybox.js', __FILE__ ), array( 'jquery' ) );
 				if ( $firstcall ) {
 					wp_localize_script( 'fg-fancybox-script', 'FancyBoxGalleryOptions', array(
@@ -134,13 +141,14 @@ class foldergallery{
 			case 'lightview' :
 				global $is_IE;
 				if ( $is_IE ) {
-					wp_enqueue_script( 'excanvas', plugins_url( '/lightview/js/excanvas/excanvas.js', __FILE__  ), array( 'jquery' ) );
+					wp_enqueue_script( 'excanvas', content_url( '/lightview/js/excanvas/excanvas.js', __FILE__  ), array( 'jquery' ) );
 				}
-				wp_enqueue_script( 'lightview_spinners', plugins_url( '/lightview/js/spinners/spinners.min.js', __FILE__ ), array( 'jquery' ) );
-				wp_enqueue_script( 'lightview-script', plugins_url( '/lightview/js/lightview/lightview.js', __FILE__ ) );   		
+				wp_enqueue_script( 'lightview_spinners', content_url( '/lightview/js/spinners/spinners.min.js', __FILE__ ), array( 'jquery' ) );
+				wp_enqueue_script( 'lightview-script', content_url( '/lightview/js/lightview/lightview.js', __FILE__ ) );   		
 			break;
 			case 'photoswipe' :
 			case 'responsive-lightbox' :
+			case 'easy-fancybox' :
 			case 'none' :
 				// Do nothing for now
 			break;
@@ -346,6 +354,9 @@ class foldergallery{
 				case 'responsive-lightbox' :
 					$gallery_code .= '<a rel="lightbox[' . $lightbox_id . ']" title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '">';
 				break;
+				case 'easy-fancybox' :
+					$gallery_code .= '<a class="fancybox" rel="' . $lightbox_id . '" title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '">';
+				break;
 				case 'photoswipe' :
 				case 'none' :
 					$gallery_code .= '<a title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '">';
@@ -396,6 +407,12 @@ class foldergallery{
 		}
 		if ( 'responsive-lightbox' == $fg_options['engine'] ) {
 			if ( ! is_plugin_active('responsive-lightbox/responsive-lightbox.php') ) {
+				$fg_options['engine'] = 'lightbox2';
+				update_option( 'FolderGallery', $fg_options );
+			}
+		}
+		if ( 'easy-fancybox' == $fg_options['engine'] ) {
+			if ( ! is_plugin_active('easy-fancybox/easy-fancybox.php') ) {
 				$fg_options['engine'] = 'lightbox2';
 				update_option( 'FolderGallery', $fg_options );
 			}
@@ -471,14 +488,21 @@ class foldergallery{
 		echo '<td><select name="FolderGallery[engine]" id="FolderGallery[engine]">' . "\n";	
 			echo "\t" .	'<option value="lightbox2"';
 				if ( 'lightbox2' == $fg_options['engine'] ) echo ' selected="selected"';
-				echo '>Lightbox 2 (default)</option>' . "\n";
-			echo "\t" .	'<option value="fancybox2"';
-				if ( 'fancybox2' == $fg_options['engine'] ) echo ' selected="selected"';
-				echo '>Fancybox 2 (free for non commercial site)</option>' . "\n";
-			if ( is_dir( plugin_dir_path( __FILE__ ) . 'lightview' ) ) {
+				echo '>Lightbox 2 (default)</option>' . "\n";			
+			if ( is_dir( WP_CONTENT_DIR . '/fancybox' ) ) {
+				echo "\t" .	'<option value="fancybox2"';
+					if ( 'fancybox2' == $fg_options['engine'] ) echo ' selected="selected"';
+					echo '>Fancybox 2 (free for non commercial site)</option>' . "\n";
+			}
+			if ( is_dir( WP_CONTENT_DIR . '/lightview' ) ) {
 				echo "\t" .	'<option value="lightview"';
 				if ( 'lightview' == $fg_options['engine'] ) echo ' selected="selected"';
 				echo '>Lightview 3 (free for non commercial site)</option>' . "\n";
+			}
+			if ( is_plugin_active('easy-fancybox/easy-fancybox.php') ) {
+				echo "\t" .	'<option value="easy-fancybox"';
+				if ( 'easy-fancybox' == $fg_options['engine'] ) echo ' selected="selected"';
+				echo '>Easy Fancybox (Plugin)</option>' . "\n";			
 			}
 			if ( is_plugin_active('responsive-lightbox/responsive-lightbox.php') ) {
 				echo "\t" .	'<option value="responsive-lightbox"';
