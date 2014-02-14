@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.4.1b2
+Version: 1.4.1
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -76,6 +76,10 @@ class foldergallery{
 			$fg_options['sort'] = 'filename';
 			update_option( 'FolderGallery', $fg_options );
 		}
+		if ( ! isset( $fg_options['fb_effect'] ) ) { // 1.4.1 update
+			$fg_options['fb_effect'] = 'elastic';
+			update_option( 'FolderGallery', $fg_options );
+		}
 	}
 
 	function fg_styles(){
@@ -121,6 +125,7 @@ class foldergallery{
 					wp_localize_script( 'fg-fancybox-script', 'FancyBoxGalleryOptions', array(
 						'title' => $fg_options['fb_title'],
 						'speed' => $fg_options['fb_speed'],
+						'effect' => $fg_options['fb_effect'],						
 						)
 					);
 					$firstcall = 0;
@@ -169,11 +174,24 @@ class foldergallery{
 			}
 			closedir( $handle );
 		}
-		if ( 'filename' == $sort ) {
-			sort( $files );
-		} else {
-			rsort( $files );
-		}
+		switch ( $sort ) {
+			case 'random' :
+				sort( $files );
+				$firstfile = $files[0];
+				if ( $this->filename_without_extension( $firstfile ) == '!!!' ) {
+					unset( $files[0] );
+					shuffle( $files );
+					array_unshift( $files, $firstfile );
+				} else {
+					shuffle( $files );
+				}							
+				break;
+			case 'filename_desc' :
+				rsort( $files );
+				break;
+			default:
+				sort( $files );
+		}		
 		return $files;
 	}
 
@@ -399,9 +417,10 @@ class foldergallery{
 		$input['border']            = intval( $input['border'] );
 		$input['padding']           = intval( $input['padding'] );
 		$input['margin']            = intval( $input['margin'] );
-		if ( ! in_array( $input['sort'], array( 'filename','filename_desc' ) ) ) $input['sort'] = 'filename';
+		if ( ! in_array( $input['sort'], array( 'filename','filename_desc','random' ) ) ) $input['sort'] = 'filename';
 		if ( ! in_array( $input['thumbnails'], array( 'all','none','single' ) ) ) $input['thumbnails'] = 'all';
 		if ( ! in_array( $input['fb_title'], array( 'inside','outside','float','over','null' ) ) ) $input['fb_title'] = 'all';
+		if ( ! in_array( $input['fb_effect'], array( 'elastic','fade' ) ) ) $input['fb_effect'] = 'elastic';
 		if ( ! in_array( $input['caption'], array( 'default','none','filename','filenamewithoutextension','smartfilename' ) ) ) $input['caption'] = 'default';
 		$input['show_thumbnail_captions']     = intval( $input['show_thumbnail_captions'] );
 		$input['fb_speed']          = intval( $input['fb_speed'] );
@@ -423,6 +442,7 @@ class foldergallery{
 			'caption'			=> 'default',
 			'show_thumbnail_captions'		=> 0,
 			'fb_title'			=> 'float',
+			'fb_effect'			=> 'elastic',
 			'fb_speed'			=> 0,
 		);
 		return $defaults;
@@ -517,6 +537,9 @@ class foldergallery{
 			echo "\t" .	'<option value="filename_desc"';
 				if ( 'filename_desc' == $fg_options['sort'] ) echo ' selected="selected"';
 				echo '>' . __( 'Filename (descending)', 'foldergallery' ) . '</option>' . "\n";
+			echo "\t" .	'<option value="random"';
+				if ( 'random' == $fg_options['sort'] ) echo ' selected="selected"';
+				echo '>' . __( 'Random', 'foldergallery' ) . '</option>' . "\n";
 		echo "</select>\n";
 		echo "</td>\n</tr>\n";
 
@@ -594,6 +617,18 @@ class foldergallery{
 				echo "\t" .	'<option value="null"';
 					if ( 'null' == $fg_options['fb_title'] ) echo ' selected="selected"';
 					echo '>' . __( 'None', 'foldergallery' ) . '</option>' . "\n";
+			echo "</select>\n";
+			echo "</td>\n</tr>\n";
+			
+			echo '<tr valign="top">' . "\n";
+			echo '<th scope="row"><label for="fb_effect">' . __( 'Fancybox Transition', 'foldergallery' ) . '</label></th>' . "\n";
+			echo '<td><select name="FolderGallery[fb_effect]" id="FolderGallery[fb_effect]">' . "\n";		
+				echo "\t" .	'<option value="elastic"';
+					if ( 'elastic' == $fg_options['fb_effect'] ) echo ' selected="selected"';
+					echo '>' . 'Elastic' . '</option>' . "\n";	
+				echo "\t" .	'<option value="fade"';
+					if ( 'fade' == $fg_options['fb_effect'] ) echo ' selected="selected"';
+					echo '>' . 'Fade' . '</option>' . "\n";			
 			echo "</select>\n";
 			echo "</td>\n</tr>\n";
 			

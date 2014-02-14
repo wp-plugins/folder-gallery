@@ -13,6 +13,12 @@ if ( 0 == FancyBoxGalleryOptions.speed ) {
 	$autoplay = true;
 	$speed = FancyBoxGalleryOptions.speed*1000;
 }
+var $effect;
+if('fade' == FancyBoxGalleryOptions.effect) {
+	$effect = 'fade';
+} else {
+	$effect = 'elastic';
+}
 
 jQuery(document).ready(function() {
 	jQuery(".fancybox-gallery").fancybox({
@@ -20,6 +26,8 @@ jQuery(document).ready(function() {
 			title : $title_option
     	},
     	autoPlay : $autoplay,
-    	playSpeed : $speed
+    	playSpeed : $speed,
+    	nextEffect : $effect,
+    	prevEffect : $effect
 	});
 });
