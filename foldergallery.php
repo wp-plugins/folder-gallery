@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.5b1
+Version: 1.5b2
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -14,7 +14,7 @@ Text Domain: foldergallery
 Domain Path: /languages
 */
 
-/*  Copyright 2013  Vincent Jalby  (wordpress /at/ jalby /dot/ org)
+/*  Copyright 2014  Vincent Jalby  (wordpress /at/ jalby /dot/ org)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
@@ -170,36 +170,45 @@ class foldergallery{
 			$image->save( $savepath );
 		}
 	}
-
-	function file_array( $directory, $sort ) { // List all JPG & PNG files in $directory
-		$files = array();
-		if( $handle = opendir( $directory ) ) {
-			while ( false !== ( $file = readdir( $handle ) ) ) {
-				$ext = strtolower( pathinfo( $file, PATHINFO_EXTENSION ) );
-				if ( 'jpg' == $ext || 'png' == $ext ) {
-					$files[] = $file;
-				}
-			}
-			closedir( $handle );
+	
+	function file_array( $directory , $sort) { // List all image files in $directory
+		$cwd = getcwd();
+		chdir( $directory );
+		$files = glob( '*.{jpg,JPG,gif,GIF,png,PNG,jpeg,JPEG,bmp,BMP}' , GLOB_BRACE );
+		if ( 0 == count($files) ) {
+			chdir( $cwd );	
+			return array();		
 		}
+		// Remove first file if its name is !!!
+		sort( $files ); // Sort by name
+		$firstfile = $files[0];
+		if ( $this->filename_without_extension( $firstfile ) == '!!!' ) {
+			unset( $files[0] );
+		} else {
+			$firstfile = false;
+		}
+		// Sort files
 		switch ( $sort ) {
 			case 'random' :
-				sort( $files );
-				$firstfile = $files[0];
-				if ( $this->filename_without_extension( $firstfile ) == '!!!' ) {
-					unset( $files[0] );
-					shuffle( $files );
-					array_unshift( $files, $firstfile );
-				} else {
-					shuffle( $files );
-				}							
-				break;
+				shuffle( $files );		
+			break;
+			case 'date' :
+				array_multisort( array_map( 'filemtime' , $files ) , SORT_ASC, $files );			
+			break;
+			case 'date_desc' :
+				array_multisort( array_map( 'filemtime' , $files ) , SORT_DESC, $files );			
+			break;
 			case 'filename_desc' :
 				rsort( $files );
-				break;
+			break;
 			default:
-				sort( $files );
-		}		
+				//sort( $files ); already done above
+		}
+		// Set back !!! file, if any
+		if ( $firstfile ) {
+			array_unshift( $files, $firstfile );
+		}
+		chdir( $cwd );	
 		return $files;
 	}
 
@@ -283,11 +292,6 @@ class foldergallery{
 			$start_idx = 1 ;		
 		} else {
 			$start_idx = 0 ;
-		}
-		// If last picture == !!! then skip it (but use it as 'single' thumbnail).
-		if ( $this->filename_without_extension( $pictures[ $NoP - 1 ] ) == '!!!' ) {
-			$NoP--;		
-			$thumbnail_idx = $NoP;
 		}
 		// (single) thumbnail idx set as thumbnails=-n shortcode attribute		
 		if ( intval($thumbnails) < 0 ) {
@@ -434,7 +438,7 @@ class foldergallery{
 		$input['border']            = intval( $input['border'] );
 		$input['padding']           = intval( $input['padding'] );
 		$input['margin']            = intval( $input['margin'] );
-		if ( ! in_array( $input['sort'], array( 'filename','filename_desc','random' ) ) ) $input['sort'] = 'filename';
+		if ( ! in_array( $input['sort'], array( 'filename','filename_desc','date','date_desc','random' ) ) ) $input['sort'] = 'filename';
 		if ( ! in_array( $input['thumbnails'], array( 'all','none','single' ) ) ) $input['thumbnails'] = 'all';
 		if ( ! in_array( $input['fb_title'], array( 'inside','outside','float','over','null' ) ) ) $input['fb_title'] = 'all';
 		if ( ! in_array( $input['fb_effect'], array( 'elastic','fade' ) ) ) $input['fb_effect'] = 'elastic';
@@ -561,6 +565,12 @@ class foldergallery{
 			echo "\t" .	'<option value="filename_desc"';
 				if ( 'filename_desc' == $fg_options['sort'] ) echo ' selected="selected"';
 				echo '>' . __( 'Filename (descending)', 'foldergallery' ) . '</option>' . "\n";
+			echo "\t" .	'<option value="date"';
+				if ( 'date' == $fg_options['sort'] ) echo ' selected="selected"';
+				echo '>' . __( 'Date', 'foldergallery' ) . '</option>' . "\n";		
+			echo "\t" .	'<option value="date_desc"';
+				if ( 'date_desc' == $fg_options['sort'] ) echo ' selected="selected"';
+				echo '>' . __( 'Date (descending)', 'foldergallery' ) . '</option>' . "\n";
 			echo "\t" .	'<option value="random"';
 				if ( 'random' == $fg_options['sort'] ) echo ' selected="selected"';
 				echo '>' . __( 'Random', 'foldergallery' ) . '</option>' . "\n";

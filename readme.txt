@@ -25,7 +25,7 @@ An Options page allow to set the default paramaters of the galleries :
 
 * Lightbox JS Engine: Lightbox 2, Fancybox 2 (if installed), Lightview 3 (if installed), Easy Fancybox Plugin (if available), Responsive Lightbox Plugin (if available) or none
 * Display Thumbnails (thumbnails): all = standard Gallery, single = displays a single thumbnail linked to the lightbox gallery, none = displays a link to the lightbox gallery
-* Sort pictures by (sort) : pictures are sorted by filename (filename) or in reverse order (filename_desc) or randomly (random)
+* Sort pictures by (sort) : pictures are sorted by filename (filename) or in reverse order (filename_desc) or by modification date (date or date_desc) or randomly (random)
 * Number of images per row (columns)
 * Thumbnails width and height (width & height)
 * Picture border (border)
@@ -137,6 +137,9 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 1.5b2 [2014-02-22] =
+* Rewrite directory scan : support for gif, bmp pictures ; sort by date option
 
 = 1.5b1 [2014-02-14] =
 * Because of license compatibility, Fancybox 2 is not included in Folder Gallery anymore. You have to install it yourself or use a Fancybox plugin (see FAQ)
