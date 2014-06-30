@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.5b2
+Version: 1.5b3
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -264,6 +264,8 @@ class foldergallery{
 				__( 'Verify that this directory is writable (chmod 777).', 'foldergallery' ) . '</p>';
 		}
 		
+		if ( 1 == $fg_options['permissions'] ) @chmod( $cache_folder, 0777);
+		
 		// Image and Thumbnail style
 		if ( 'none' == $thumbnails ) {
 			$thmbdivstyle = '';
@@ -445,6 +447,7 @@ class foldergallery{
 		if ( ! in_array( $input['caption'], array( 'default','none','filename','filenamewithoutextension','smartfilename' ) ) ) $input['caption'] = 'default';
 		$input['show_thumbnail_captions']     = intval( $input['show_thumbnail_captions'] );
 		$input['fb_speed']          = intval( $input['fb_speed'] );
+		$input['permissions']          = intval( $input['permissions'] );
 		return $input;
 	}
 
@@ -465,6 +468,7 @@ class foldergallery{
 			'fb_title'			=> 'float',
 			'fb_effect'			=> 'elastic',
 			'fb_speed'			=> 0,
+			'permissions'		=> 0,
 		);
 		return $defaults;
 	}
@@ -541,6 +545,10 @@ class foldergallery{
 		}
 		echo "</td>\n</tr>\n";
 
+		echo "</tbody></table>\n";
+		echo '<h3 class="title">' . __('Thumbnail Settings','foldergallery') . "</h3>\n";
+		echo '<table class="form-table"><tbody>' . "\n";
+
 		echo '<tr valign="top">' . "\n";
 		echo '<th scope="row"><label for="thumbnails">' . __( 'Display Thumbnails', 'foldergallery' ) . '</label></th>' . "\n";
 		echo '<td><select name="FolderGallery[thumbnails]" id="FolderGallery[thumbnails]">' . "\n";	
@@ -583,6 +591,24 @@ class foldergallery{
 		$this->fg_option_field( 'border', __( 'Picture Border', 'foldergallery' ) );
 		$this->fg_option_field( 'padding', __( 'Padding', 'foldergallery' ) );
 		$this->fg_option_field( 'margin', __( 'Margin', 'foldergallery' ) );
+
+		// show_thumbnail_captions
+		echo '<tr valign="top">' . "\n";
+		echo '<th scope="row"><label for="show_thumbnail_captions">' . __( 'Show Thumbnail Captions', 'foldergallery' ) . '</label></th>' . "\n";
+		echo '<td><select name="FolderGallery[show_thumbnail_captions]" id="FolderGallery[show_thumbnail_captions]">' . "\n";		
+			echo "\t" .	'<option value="0"';
+				if ( '0' == $fg_options['show_thumbnail_captions'] ) echo ' selected="selected"';
+				echo '>'. __('No', 'foldergallery') . '</option>' . "\n";
+			echo "\t" .	'<option value="1"';
+				if ( '1' == $fg_options['show_thumbnail_captions'] ) echo ' selected="selected"';
+				echo '>' . __('Yes', 'foldergallery') . '</option>' . "\n";
+		echo "</select>\n";
+		echo "</td>\n</tr>\n";
+
+		echo "</tbody></table>\n";
+		echo '<h3 class="title">' . __('Lightbox Settings','foldergallery') . "</h3>\n";
+		echo '<table class="form-table"><tbody>' . "\n";
+
 		// Caption
 		echo '<tr valign="top">' . "\n";
 		echo '<th scope="row"><label for="caption">' . __( 'Caption Format', 'foldergallery' ) . '</label></th>' . "\n";
@@ -604,18 +630,7 @@ class foldergallery{
 			echo '>' . __( 'None', 'foldergallery') . '</option>' . "\n";
 		echo "</select>\n";
 		echo "</td>\n</tr>\n";
-		// show_thumbnail_captions
-		echo '<tr valign="top">' . "\n";
-		echo '<th scope="row"><label for="show_thumbnail_captions">' . __( 'Show Thumbnail Captions', 'foldergallery' ) . '</label></th>' . "\n";
-		echo '<td><select name="FolderGallery[show_thumbnail_captions]" id="FolderGallery[show_thumbnail_captions]">' . "\n";		
-			echo "\t" .	'<option value="0"';
-				if ( '0' == $fg_options['show_thumbnail_captions'] ) echo ' selected="selected"';
-				echo '>'. __('No', 'foldergallery') . '</option>' . "\n";
-			echo "\t" .	'<option value="1"';
-				if ( '1' == $fg_options['show_thumbnail_captions'] ) echo ' selected="selected"';
-				echo '>' . __('Yes', 'foldergallery') . '</option>' . "\n";
-		echo "</select>\n";
-		echo "</td>\n</tr>\n";
+
 
 		// Lightview		
 		if ( 'lightview' == $fg_options['engine'] ) {			
@@ -672,6 +687,19 @@ class foldergallery{
 			echo '<input type="hidden" name="FolderGallery[fb_title]" id="fb_title" value="' . $fg_options['fb_title'] . '" />';
 			echo '<input type="hidden" name="FolderGallery[fb_speed]" id="fb_speed" value="' . $fg_options['fb_speed'] . '" />';
 		}
+		// Misc Settings
+		echo "</tbody></table>\n";
+		echo '<h3 class="title">' . __('Misc Settings','foldergallery') . "</h3>\n";
+		echo '<table class="form-table"><tbody>' . "\n";
+		
+		echo '<tr><th>' . __('Permissions', 'foldergallery')  . '</th><td><label for="permissions"><input name="FolderGallery[permissions]" type="checkbox" id="permissions" value="1"';
+		if ( 1 == $fg_options['permissions'] ) {
+			echo ' checked="checked">';
+		} else {
+			echo '>';
+		}
+		echo __('Force 777 permissions on cache folders','foldergallery') . '</label></td></tr>';
+
 		echo "</tbody></table>\n";
 		submit_button();
 		echo "</form></div>\n";

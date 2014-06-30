@@ -2,8 +2,8 @@
 Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
-Tested up to: 3.8.1
-Stable tag: 1.5b1
+Tested up to: 3.9
+Stable tag: 1.5b3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://jalby.org/wordpress/donate/
@@ -35,13 +35,14 @@ An Options page allow to set the default paramaters of the galleries :
 * Fancybox Caption Style: Inside, Outside, Over, Float, None. Available with Fancybox 2 engine only (if installed).
 * Fancybox Transition: Elastic, Fade. Available with Fancybox 2 engine only (if installed).
 * Autoplay Speed: Slideshow speed in seconds. 0 to turn autoplay off. Available with Fancybox 2 engine only (if installed).
+* Misc settings - Permissions: force 777 permissions on cache folder. Leave it uncheck unless you really know what you do!
  
 Most of theses settings can be overridden using the corresponding shortcode :
 
 	[foldergallery folder="path" title="title" columns=1 width=150 
 			height=90 border=1 padding=2 margin=10 thumbnails=single]
  
-This plugin uses Lightbox v2.6 by Lokesh Dhakar - http://www.lokeshdhakar.com 
+This plugin uses Lightbox v2.7.1 by Lokesh Dhakar - http://www.lokeshdhakar.com 
 
 Sample, contact available at http://jalby.org/wordpress/
 
@@ -137,6 +138,11 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 1.5b3 [2014-06-30] = 
+* Update Lightbox 2 JS to 2.7.1
+* Reorganize Settings page
+* Add an option to force 777 permissions to cache folders
 
 = 1.5b2 [2014-02-22] =
 * Rewrite directory scan : support for gif, bmp pictures ; sort by date option
