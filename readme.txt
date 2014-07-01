@@ -2,8 +2,8 @@
 Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
-Tested up to: 3.9
-Stable tag: 1.5b3
+Tested up to: 3.9.1
+Stable tag: 1.6b1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://jalby.org/wordpress/donate/
@@ -23,7 +23,7 @@ For each gallery, a subfolder cache_[width]x[height] is created inside the pictu
 
 An Options page allow to set the default paramaters of the galleries :
 
-* Lightbox JS Engine: Lightbox 2, Fancybox 2 (if installed), Lightview 3 (if installed), Easy Fancybox Plugin (if available), Responsive Lightbox Plugin (if available) or none
+* Lightbox JS Engine: Lightbox 2 (of installed), Fancybox 2 (if installed), Lightview 3 (if installed), Easy Fancybox Plugin (if available), Responsive Lightbox Plugin (if available) or none (default)
 * Display Thumbnails (thumbnails): all = standard Gallery, single = displays a single thumbnail linked to the lightbox gallery, none = displays a link to the lightbox gallery
 * Sort pictures by (sort) : pictures are sorted by filename (filename) or in reverse order (filename_desc) or by modification date (date or date_desc) or randomly (random)
 * Number of images per row (columns)
@@ -42,18 +42,17 @@ Most of theses settings can be overridden using the corresponding shortcode :
 	[foldergallery folder="path" title="title" columns=1 width=150 
 			height=90 border=1 padding=2 margin=10 thumbnails=single]
  
-This plugin uses Lightbox v2.7.1 by Lokesh Dhakar - http://www.lokeshdhakar.com 
-
 Sample, contact available at http://jalby.org/wordpress/
 
 == Installation ==
 
 1. Unzip the archive foldergallery.zip
 2. Upload the directory 'foldergallery' to the '/wp-content/plugins/' directory
-3. Activate the plugin through the 'Plugins' menu in WordPress
-4. Go to Settings / Folder Gallery to change the default settings
-5. Upload a folder of pictures to 'wp-content/upload/MyPictures'
-6. Insert the following short code in post or page :
+3. Download and upload to '/wp-content/' directory at least on lightbox JS engine (see FAQ)
+4. Activate the plugin through the 'Plugins' menu in WordPress
+5. Go to Settings / Folder Gallery to change the default settings
+6. Upload a folder of pictures to 'wp-content/upload/MyPictures'
+7. Insert the following short code in post or page :
 
 	[foldergallery folder="wp-content/upload/MyPictures" title="My Picture Gallery"]
 	
@@ -61,7 +60,15 @@ Sample, contact available at http://jalby.org/wordpress/
 
 == Frequently Asked Questions ==
 
-= How to use Fancybox 2 instead of Lightbox 2? =
+= How to install Lightbox 2 JS engine? =
+
+1. Download Lightbox 2 from http://lokeshdhakar.com/projects/lightbox2/
+2. Unzip the archive
+3. Upload the directory 'lightbox' to '/wp-content'.
+4. Go To Wordpress > Settings > Folder Gallery and select Lightbox 2 as Gallery Engine.
+5. Done!
+
+= How to install Fancybox 2? =
 
 1. Download fancybox 2 from http://fancyapps.com/fancybox/#license
 2. Unzip the archive then rename the directory to 'fancybox'.
@@ -69,20 +76,13 @@ Sample, contact available at http://jalby.org/wordpress/
 4. Go To Wordpress > Settings > Folder Gallery and select Fancybox 2 as Gallery Engine.
 5. Done!
 
-= Can I use Easy Fancybox plugin along with Folder Gallery? =
-
-Yes! First install and activate Easy Fancybox plugin. In Wordpress > Settings > Media > Fancybox > Images > Gallery, Disabled Autogllery. Then, in Wordpress > Settings > Folder Gallery, select "Easy Fancybox (plugin)" as Gallery Engine.
-
-= Can I use lightview 3 instead of Lightbox 2? =
-
-Yes! However, you have to download and install lightview 3 by hand. Here's how:
+= How to install Lightview 3? =
 
 1. Download lightview from http://projects.nickstakenburg.com/lightview/download
 2. Unzip the archive then rename the directory to 'lightview' (i.e., remove version number).
 3. Upload the directory 'lightview' to '/wp-content'.
 4. Go To Settings / Folder Gallery and select Lightview as Gallery Engine.
 5. Done!
-
 
 You can specify lightview options with the shortcode attribute 'options':
 
@@ -104,6 +104,10 @@ This should work with
 * jQuery Colorbox 4.5+ by Arne Franken
 * Lightview Plus 3.1.3+ by Puzich
 * Maybe other
+
+= Can I use Easy Fancybox plugin along with Folder Gallery? =
+
+Yes! First install and activate Easy Fancybox plugin. In Wordpress > Settings > Media > Fancybox > Images > Gallery, Disabled Autogllery. Then, in Wordpress > Settings > Folder Gallery, select "Easy Fancybox (plugin)" as Gallery Engine.
 
 = I'd like to display a single thumbnail instead of the full thumbnails list =
 
@@ -138,6 +142,10 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 1.6b1 =
+* Because of license compatibility, Lightbox 2 is not included in Folder Gallery anymore. You have to install it yourself (see FAQ)
+* Folder Gallery doesn't include any JS lightbox engine anymore. You have to install one yourself (see FAQ)
 
 = 1.5b3 [2014-06-30] = 
 * Update Lightbox 2 JS to 2.7.1
@@ -192,7 +200,6 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 * Add support for fancybox (included)
 * Add an option to change gallery 'engine' (Lightbox, Fancybox, Lightview when installed or None)
 * Misc changes 
-
 
 = 0.95 [2013-01-10] =
 * Internationalization (English, French)
