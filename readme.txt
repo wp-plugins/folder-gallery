@@ -15,6 +15,8 @@ This plugin generates picture galleries from a folder using a shortcode.
 This plugin creates picture galleries from a folder. 
 The pictures folder must be uploaded (using FTP) somewhere on the server (e.g. wp-content/upload). It must be writable (chmod 777).
 
+Folder Gallery Plugin does not include any lightbox JS engine anymore. You have to install one or use a compatible lightbox plugin. See FAQ.
+
 To include a gallery in a post or a page, you have to use the following shortcode :
 
 	[foldergallery folder="local_path_to_folder" title="Gallery title"]
@@ -23,7 +25,7 @@ For each gallery, a subfolder cache_[width]x[height] is created inside the pictu
 
 An Options page allow to set the default paramaters of the galleries :
 
-* Lightbox JS Engine: Lightbox 2 (of installed), Fancybox 2 (if installed), Lightview 3 (if installed), Easy Fancybox Plugin (if available), Responsive Lightbox Plugin (if available) or none (default)
+* Lightbox JS Engine: Lightbox 2 (if installed), Fancybox 2 (if installed), Lightview 3 (if installed), Easy Fancybox Plugin (if available), Responsive Lightbox Plugin (if available) or none (default)
 * Display Thumbnails (thumbnails): all = standard Gallery, single = displays a single thumbnail linked to the lightbox gallery, none = displays a link to the lightbox gallery
 * Sort pictures by (sort) : pictures are sorted by filename (filename) or in reverse order (filename_desc) or by modification date (date or date_desc) or randomly (random)
 * Number of images per row (columns)
@@ -143,25 +145,20 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 
 == Changelog ==
 
-= 1.6b1 =
-* Because of license compatibility, Lightbox 2 is not included in Folder Gallery anymore. You have to install it yourself (see FAQ)
+= 1.6b1 [2014-07-01] =
+* Because of license issue, Lightbox 2 is not included in Folder Gallery anymore. You have to install it yourself (see FAQ)
 * Folder Gallery doesn't include any JS lightbox engine anymore. You have to install one yourself (see FAQ)
-
-= 1.5b3 [2014-06-30] = 
-* Update Lightbox 2 JS to 2.7.1
 * Reorganize Settings page
 * Add an option to force 777 permissions to cache folders
 
 = 1.5b2 [2014-02-22] =
-* Rewrite directory scan : support for gif, bmp pictures ; sort by date option
-
-= 1.5b1 [2014-02-14] =
 * Because of license compatibility, Fancybox 2 is not included in Folder Gallery anymore. You have to install it yourself or use a Fancybox plugin (see FAQ)
 * Change the location of Lightview 3 installation (see FAQ)
 * Support for Responsive Lightbox Plugin
 * Support for Easy Fancybox Plugin
 * Global option to set transition effect when Fancybox 2 engine is selected
 * Option (and attribute) to sort pictures randomly
+* Rewrite directory scan : support for gif, bmp pictures ; sort by date option
 
 = 1.4 [2013-08-31] =
 * Global option to display the caption under the picture thumbnail.
