@@ -3,7 +3,7 @@ Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
 Tested up to: 3.9.1
-Stable tag: 1.6b1
+Stable tag: 1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://jalby.org/wordpress/donate/
@@ -145,14 +145,12 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 
 == Changelog ==
 
-= 1.6b3 [2014-07-17] =
-* Workaround for unactive glob function
-
-= 1.6b1 [2014-07-01] =
+= 1.6 [2014-07-17] =
 * Because of license issue, Lightbox 2 is not included in Folder Gallery anymore. You have to install it yourself (see FAQ)
 * Folder Gallery doesn't include any JS lightbox engine anymore. You have to install one yourself (see FAQ)
 * Reorganize Settings page
 * Add an option to force 777 permissions to cache folders
+* Workaround for unactive glob function
 
 = 1.5b2 [2014-02-22] =
 * Because of license compatibility, Fancybox 2 is not included in Folder Gallery anymore. You have to install it yourself or use a Fancybox plugin (see FAQ)
