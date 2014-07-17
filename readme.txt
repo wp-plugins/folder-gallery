@@ -145,8 +145,8 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 
 == Changelog ==
 
-= 1.6b2 [2014-07-05] =
-* Workaround for free.fr limitations (glob function)
+= 1.6b3 [2014-07-17] =
+* Workaround for unactive glob function
 
 = 1.6b1 [2014-07-01] =
 * Because of license issue, Lightbox 2 is not included in Folder Gallery anymore. You have to install it yourself (see FAQ)

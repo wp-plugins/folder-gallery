@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.6b2
+Version: 1.6b3
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -169,7 +169,7 @@ class foldergallery{
 		}
 	}
 
-	function freeglob( $directory ) {
+	function myglob( $directory ) {
 		$files = array();
 		if( $handle = opendir( $directory ) ) {
 			while ( false !== ( $file = readdir( $handle ) ) ) {
@@ -182,16 +182,15 @@ class foldergallery{
 		}
 		return $files;
 	}
-
 	
 	function file_array( $directory , $sort) { // List all image files in $directory
 		$cwd = getcwd();
 		chdir( $directory );
 		$files = glob( '*.{jpg,JPG,gif,GIF,png,PNG,jpeg,JPEG,bmp,BMP}' , GLOB_BRACE );
 		// Free.fr doesn't accept glob function. Use a workaround		
-		if ( $files === FALSE ) {
+		if ( 0 == count( $files ) ||  $files === FALSE ) {
 			chdir( $cwd ); // Back to root
-			$files = freeglob( $directory );
+			$files = $this->myglob( $directory );
 			chdir( $directory );
 		}
 		// Verify there's something to sort
