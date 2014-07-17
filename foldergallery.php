@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.6b1
+Version: 1.6
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -168,12 +168,33 @@ class foldergallery{
 			$image->save( $savepath );
 		}
 	}
+
+	function myglob( $directory ) {
+		$files = array();
+		if( $handle = opendir( $directory ) ) {
+			while ( false !== ( $file = readdir( $handle ) ) ) {
+				$ext = strtolower( pathinfo( $file, PATHINFO_EXTENSION ) );
+				if ( 'jpg' == $ext || 'png' == $ext || 'gif' == $ext || 'bmp' == $ext ) {
+					$files[] = $file;
+				}
+			}
+			closedir( $handle );
+		}
+		return $files;
+	}
 	
 	function file_array( $directory , $sort) { // List all image files in $directory
 		$cwd = getcwd();
 		chdir( $directory );
 		$files = glob( '*.{jpg,JPG,gif,GIF,png,PNG,jpeg,JPEG,bmp,BMP}' , GLOB_BRACE );
-		if ( 0 == count($files) ) {
+		// Free.fr doesn't accept glob function. Use a workaround		
+		if ( 0 == count( $files ) ||  $files === FALSE ) {
+			chdir( $cwd ); // Back to root
+			$files = $this->myglob( $directory );
+			chdir( $directory );
+		}
+		// Verify there's something to sort
+		if ( 0 == count($files) || $files === FALSE ) {
 			chdir( $cwd );	
 			return array();		
 		}
