@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.6
+Version: 1.7b3
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -72,24 +72,22 @@ class foldergallery{
 				update_option( 'FolderGallery', $fg_options );
 			}
 		}
-		if ( ! isset( $fg_options['fb_title'] ) ) { // 1.1 + 1.2 update
+		if ( ! isset( $fg_options['fb_speed'] ) ) { // 1.1 + 1.2 + 1.3 update
 			$fg_options['thumbnails'] = 'all';
 			$fg_options['fb_title'] = 'float';
-			update_option( 'FolderGallery', $fg_options );
-		}
-		if ( ! isset( $fg_options['fb_speed'] ) ) { // 1.3 update
 			$fg_options['caption'] = 'default';
 			$fg_options['fb_speed'] = 0;
 			update_option( 'FolderGallery', $fg_options );
 		}
-		if ( ! isset( $fg_options['sort'] ) ) { // 1.4 update
+		if ( ! isset( $fg_options['fb_effect'] ) ) { // 1.4 + 1.4.1 update
 			$fg_options['show_thumbnail_captions'] = 0;
 			$fg_options['caption'] = 'default';
 			$fg_options['sort'] = 'filename';
+			$fg_options['fb_effect'] = 'elastic';
 			update_option( 'FolderGallery', $fg_options );
 		}
-		if ( ! isset( $fg_options['fb_effect'] ) ) { // 1.4.1 update
-			$fg_options['fb_effect'] = 'elastic';
+		if ( ! isset( $fg_options['orientation'] ) ) { // 1.7 update
+			$fg_options['orientation'] = 0;
 			update_option( 'FolderGallery', $fg_options );
 		}
 	}
@@ -155,18 +153,61 @@ class foldergallery{
 
 	/* --------- Folder Gallery Main Functions --------- */
 
-	function save_thumbnail( $path, $savepath, $th_width, $th_height ) { // Save thumbnail
+	function save_thumbnail( $path, $savepath, $th_width, $th_height ) {
+		$fg_options = get_option( 'FolderGallery' );
+		// Get picture
 		$image = wp_get_image_editor( $path );
-		if ( ! is_wp_error( $image ) ) {
-			if ( 0 == $th_height ) { // 0 height => auto
-				$size = $image->get_size();
-				$width = $size['width'];
-				$height = $size['height'];
-				$th_height = floor( $height * ( $th_width / $width ) );
+		if ( is_wp_error( $image ) ) return;		
+		// Correct EXIF orientation	(of main picture)
+		if ( function_exists( 'exif_read_data' ) && $fg_options['orientation'] == 1 ) {	
+			$exif = @ exif_read_data( $path );
+			if ( $exif !== FALSE ) {
+				$orientation = @ $exif['Orientation'];
+				if ( $orientation && $orientation != 1 ) {
+					switch ( $orientation ) {
+						case 2:
+							$image->flip( FALSE, TRUE );
+							$image->save( $path ); 	
+							break;							
+						case 3:
+							$image->rotate( 180 );
+							$image->save( $path ); 
+							break;
+						case 4:
+							$image->flip( TRUE, FALSE );
+							$image->save( $path ); 	
+							break;
+						case 5:
+							$image->flip( FALSE, TRUE );
+							$image->rotate( 90 );
+							$image->save( $path ); 	
+							break;	
+						case 6:
+							$image->rotate( -90 );
+							$image->save( $path ); 
+							break;
+						case 7:
+							$image->flip( FALSE, TRUE );
+							$image->rotate( -90 );
+							$image->save( $path ); 	
+							break;	
+						case 8:
+							$image->rotate( 90 );
+							$image->save( $path ); 
+							break;			
+					}
+				}
 			}
-			$image->resize( $th_width, $th_height, true );
-			$image->save( $savepath );
 		}
+		// Create thumbnail
+		if ( 0 == $th_height ) { // 0 height => auto
+			$size = $image->get_size();
+			$width = $size['width'];
+			$height = $size['height'];
+			$th_height = floor( $height * ( $th_width / $width ) );
+		}
+		$image->resize( $th_width, $th_height, true );
+		$image->save( $savepath );
 	}
 
 	function myglob( $directory ) {
@@ -271,8 +312,14 @@ class foldergallery{
 		if ( 0 == $NoP ) {
 			return '<p style="color:red;"><strong>' . __( 'Folder Gallery Error:', 'foldergallery' ) . '</strong> ' .
 				sprintf( __( 'No picture available inside %s.', 'foldergallery' ), $folder ) . '</p>';
-		}
-	
+		}	
+		// Cleanup parameters
+		$width=intval($width);
+		$height=intval($height);
+		$margin=intval($margin);
+		$border=intval($border);
+		$padding=intval($padding);
+		// Cache folder
 		$cache_folder = $folder . '/cache_' . $width . 'x' . $height;
 		if ( ! is_dir( $cache_folder ) ) {
 				@mkdir( $cache_folder, 0777 );
@@ -377,7 +424,7 @@ class foldergallery{
 					$options = ''; // group-options required only once per group.
 				break;
 				case 'responsive-lightbox' :
-					$gallery_code .= '<a rel="lightbox[' . $lightbox_id . ']" title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '">';
+					$gallery_code .= '<a rel="lightbox[' . $lightbox_id . ']" data-lightbox-gallery="' . $lightbox_id . '" title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '">';
 				break;
 				case 'easy-fancybox' :
 					$gallery_code .= '<a class="fancybox" rel="' . $lightbox_id . '" title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '">';
@@ -467,6 +514,7 @@ class foldergallery{
 		$input['show_thumbnail_captions']     = intval( $input['show_thumbnail_captions'] );
 		$input['fb_speed']          = intval( $input['fb_speed'] );
 		$input['permissions']          = intval( $input['permissions'] );
+		$input['orientation']          = intval( $input['orientation'] );
 		return $input;
 	}
 
@@ -488,6 +536,7 @@ class foldergallery{
 			'fb_effect'			=> 'elastic',
 			'fb_speed'			=> 0,
 			'permissions'		=> 0,
+			'orientation'		=> 0,
 		);
 		return $defaults;
 	}
@@ -521,12 +570,12 @@ class foldergallery{
 			if ( is_dir( WP_CONTENT_DIR . '/fancybox' ) ) {
 				echo "\t" .	'<option value="fancybox2"';
 				if ( 'fancybox2' == $fg_options['engine'] ) echo ' selected="selected"';
-				echo '>Fancybox 2 (free for non commercial site)</option>' . "\n";
+				echo '>Fancybox 2</option>' . "\n";
 			}
 			if ( is_dir( WP_CONTENT_DIR . '/lightview' ) ) {
 				echo "\t" .	'<option value="lightview"';
 				if ( 'lightview' == $fg_options['engine'] ) echo ' selected="selected"';
-				echo '>Lightview 3 (free for non commercial site)</option>' . "\n";
+				echo '>Lightview 3</option>' . "\n";
 			}
 			if ( is_plugin_active('easy-fancybox/easy-fancybox.php') ) {
 				echo "\t" .	'<option value="easy-fancybox"';
@@ -547,25 +596,7 @@ class foldergallery{
 				if ( 'none' == $fg_options['engine'] ) echo ' selected="selected"';
 		echo '>' . __( 'None', 'foldergallery') . '</option>' . "\n";
 		echo "</select>\n";
-
-		switch ( $fg_options['engine'] ) {
-			case 'lightbox2' :
-				echo '<p><a href="http://lokeshdhakar.com/projects/lightbox2/" target="_blank">Lightbox</a> is completely free to use. ';
-				echo 'If you are using Lightbox on a commercial project and feeling generous, consider a <a href="http://lokeshdhakar.com/projects/lightbox2/#donate" target="_blank">donation</a>. ';
-				echo 'All donations are sincerely appreciated. Thanks!</p>';
-			break;
-			case 'fancybox2' :
-				echo '<p><a href="http://fancyapps.com/fancybox/" target="_blank">Fancybox 2</a> is licensed under <a href="http://creativecommons.org/licenses/by-nc/3.0/" target="_blank">Creative Commons Attribution-NonCommercial 3.0 license</a>. ';
-				echo 'You are free to use fancyBox for your personal or non-profit website projects.<br />';
-				echo 'See <a href="http://fancyapps.com/fancybox/#license" target="_blank">http://fancyapps.com/fancybox</a> for details.</p>';	
-			break;
-			case 'lightview' :
-				echo '<p><a href="http://projects.nickstakenburg.com/lightview" target="_blank">Lightview</a> is licensed under the terms of the <a href="http://projects.nickstakenburg.com/lightview/license" target="_blank">Lightview License</a>. ';
-				echo 'You are free to use it on non-commercial websites. Licenses are available for commercial use.</p>';
-			break;
-		}
 		echo "</td>\n</tr>\n";
-
 		echo "</tbody></table>\n";
 		echo '<h3 class="title">' . __('Thumbnail Settings','foldergallery') . "</h3>\n";
 		echo '<table class="form-table"><tbody>' . "\n";
@@ -720,6 +751,16 @@ class foldergallery{
 			echo '>';
 		}
 		echo __('Force 777 permissions on cache folders','foldergallery') . '</label></td></tr>';
+
+		if ( function_exists( 'exif_read_data' ) ) {
+			echo '<tr><th>' . __('Orientation', 'foldergallery')  . '</th><td><label for="orientation"><input name="FolderGallery[orientation]" type="checkbox" id="orientation" value="1"';
+			if ( 1 == $fg_options['orientation'] ) {
+				echo ' checked="checked">';
+			} else {
+				echo '>';
+			}
+			echo __('Correct picture orientation according to EXIF tag. (Pictures will be overwritten.)','foldergallery') . '</label></td></tr>';
+		}
 
 		echo "</tbody></table>\n";
 		submit_button();

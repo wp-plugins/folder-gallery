@@ -2,7 +2,7 @@
 Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
-Tested up to: 3.9.1
+Tested up to: 3.9.2
 Stable tag: 1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -38,6 +38,7 @@ An Options page allow to set the default paramaters of the galleries :
 * Fancybox Transition: Elastic, Fade. Available with Fancybox 2 engine only (if installed).
 * Autoplay Speed: Slideshow speed in seconds. 0 to turn autoplay off. Available with Fancybox 2 engine only (if installed).
 * Misc settings - Permissions: force 777 permissions on cache folder. Leave it uncheck unless you really know what you do!
+* Misc settings - Orientation: Correct picture orientation according to EXIF tag. Rotated pictures will be overwritten. (Require EXIF library in PHP.) Delete the cache folder to apply to existing galleries.
  
 Most of theses settings can be overridden using the corresponding shortcode :
 
@@ -144,6 +145,10 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 1.7b3 [2014-08-18] =
+* Option to correct picture orientation according to EXIF tag. Require PHP with EXIF library. Rotated pictures will be overwritten.
+* Support for Nivo Lightbox in Responsive Lightbox Plugin
 
 = 1.6 [2014-07-17] =
 * Because of license issue, Lightbox 2 is not included in Folder Gallery anymore. You have to install it yourself (see FAQ)
