@@ -2,8 +2,8 @@
 Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
-Tested up to: 3.9.2
-Stable tag: 1.6
+Tested up to: 4.0
+Stable tag: 1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://jalby.org/wordpress/donate/
@@ -146,7 +146,7 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 
 == Changelog ==
 
-= 1.7b3 [2014-08-18] =
+= 1.7 [2014-09-04] =
 * Option to correct picture orientation according to EXIF tag. Require PHP with EXIF library. Rotated pictures will be overwritten.
 * Support for Nivo Lightbox in Responsive Lightbox Plugin
 
