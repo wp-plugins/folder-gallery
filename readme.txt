@@ -146,6 +146,9 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 
 == Changelog ==
 
+= 1.7.1b1 [20014-10-26] =
+* Add compatibility with WPML plugin
+
 = 1.7 [2014-09-04] =
 * Option to correct picture orientation according to EXIF tag. Require PHP with EXIF library. Rotated pictures will be overwritten.
 * Support for Nivo Lightbox in Responsive Lightbox Plugin

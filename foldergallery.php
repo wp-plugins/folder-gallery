@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.7
+Version: 1.7.1b1
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -413,29 +413,29 @@ class foldergallery{
 			// Set the link
 			switch ( $fg_options['engine'] ) {
 				case 'lightbox2' :
-					$gallery_code.= '<a title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" data-lightbox="' . $lightbox_id . '">';
+					$gallery_code.= '<a title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '" data-lightbox="' . $lightbox_id . '">';
 				break;
 				case 'fancybox2' :				
-					$gallery_code.= '<a class="fancybox-gallery" title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" data-fancybox-group="' . $lightbox_id . '">';
+					$gallery_code.= '<a class="fancybox-gallery" title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '" data-fancybox-group="' . $lightbox_id . '">';
 				break;
 				case 'lightview' :
 					if ( $options ) $options = " data-lightview-group-options=\"$options\"";
-					$gallery_code .= '<a title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" class="lightview" data-lightview-group="' . $lightbox_id . '"' . $options . '>';
+					$gallery_code .= '<a title="' . $thecaption . '" href="' . home_url( '/'  . $folder . '/' . $pictures[ $idx ] ) . '" class="lightview" data-lightview-group="' . $lightbox_id . '"' . $options . '>';
 					$options = ''; // group-options required only once per group.
 				break;
 				case 'responsive-lightbox' :
-					$gallery_code .= '<a rel="lightbox[' . $lightbox_id . ']" data-lightbox-gallery="' . $lightbox_id . '" title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '">';
+					$gallery_code .= '<a rel="lightbox[' . $lightbox_id . ']" data-lightbox-gallery="' . $lightbox_id . '" title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '">';
 				break;
 				case 'easy-fancybox' :
-					$gallery_code .= '<a class="fancybox" rel="' . $lightbox_id . '" title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '">';
+					$gallery_code .= '<a class="fancybox" rel="' . $lightbox_id . '" title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '">';
 				break;
 				case 'photoswipe' :
 				case 'none' :
-					$gallery_code .= '<a title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '">';
+					$gallery_code .= '<a title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '">';
 				break;
 			}
 			// Show image (possibly hidden, but required for alt tag)
-			$gallery_code .= '<img src="' . home_url( '/' ) . $thumbnail . '" style="' . $imgstyle . '" alt="' . $thecaption . '" />';
+			$gallery_code .= '<img src="' . home_url( '/' . $thumbnail ) . '" style="' . $imgstyle . '" alt="' . $thecaption . '" />';
 			// If no thumbnail, show link instead
 			if ( 'none' == $thumbnails && $idx == $start_idx ) {
 					$gallery_code .= '<span class="fg_title_link">' . $title . '</span>';
