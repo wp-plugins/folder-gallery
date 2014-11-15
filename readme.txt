@@ -32,7 +32,7 @@ An Options page allow to set the default paramaters of the galleries :
 * Thumbnails width and height (width & height)
 * Picture border (border)
 * Padding and Margin (padding & margin)
-* Caption Format (caption): default (title + picture number), filename, filenamewithoutextension, smartfilename (filename with underscores and front numbers removed), none
+* Caption Format (caption): default (title + picture number), filename, filenamewithoutextension, smartfilename (filename with underscores and front numbers removed), modificationdate, modificationdateandtime, modificationdater (RFC 2822), modificationdatec (ISO 8601), none
 * Show Thumbnail Captions (show_thumbnail_captions): yes (true) or no (false). Display (or not) the caption under the picture thumbnail.
 * Fancybox Caption Style: Inside, Outside, Over, Float, None. Available with Fancybox 2 engine only (if installed).
 * Fancybox Transition: Elastic, Fade. Available with Fancybox 2 engine only (if installed).
@@ -145,6 +145,9 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 1.7.1b2 [20014-11-15] =
+* Add date and time caption formats
 
 = 1.7.1b1 [20014-10-26] =
 * Add compatibility with WPML plugin

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.7.1b1
+Version: 1.7.1b2
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -404,6 +404,22 @@ class foldergallery{
 					$thecaption = preg_replace ( '/^\d+/' , '' , $thecaption );
 					$thecaption = str_replace( '_', ' ', $thecaption );
 				break;
+				case 'modificationdater' :
+					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] );
+					$thecaption = date( 'r', $moddate);
+				break;
+				case 'modificationdatec' :
+					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] );
+					$thecaption = date( 'c', $moddate);
+				break;
+				case 'modificationdate' :
+					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] );
+					$thecaption = date_i18n( get_option( 'date_format' ), $moddate);					
+				break;
+				case 'modificationdateandtime' :
+					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] );
+					$thecaption = date_i18n( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ) , $moddate);					
+				break;
 				default :
 					$thecaption = $title ;
 					if ( 'lightbox2' != $fg_options['engine'] ) $thecaption .= ' (' . ($idx+1-$start_idx) . '/' . ($NoP-$start_idx) . ')' ;
@@ -510,7 +526,7 @@ class foldergallery{
 		if ( ! in_array( $input['thumbnails'], array( 'all','none','single' ) ) ) $input['thumbnails'] = 'all';
 		if ( ! in_array( $input['fb_title'], array( 'inside','outside','float','over','null' ) ) ) $input['fb_title'] = 'all';
 		if ( ! in_array( $input['fb_effect'], array( 'elastic','fade' ) ) ) $input['fb_effect'] = 'elastic';
-		if ( ! in_array( $input['caption'], array( 'default','none','filename','filenamewithoutextension','smartfilename' ) ) ) $input['caption'] = 'default';
+		if ( ! in_array( $input['caption'], array( 'default','none','filename','filenamewithoutextension','smartfilename','modificationdater','modificationdatec','modificationdate','modificationdateandtime'  ) ) ) $input['caption'] = 'default';
 		$input['show_thumbnail_captions']     = intval( $input['show_thumbnail_captions'] );
 		$input['fb_speed']          = intval( $input['fb_speed'] );
 		$input['permissions']          = intval( $input['permissions'] );
@@ -677,6 +693,18 @@ class foldergallery{
 			echo "\t" .	'<option value="smartfilename"';
 				if ( 'smartfilename' == $fg_options['caption'] ) echo ' selected="selected"';
 				echo '>' . __('Smart Filename', 'foldergallery') . '</option>' . "\n";	
+			echo "\t" .	'<option value="modificationdate"';
+				if ( 'modificationdate' == $fg_options['caption'] ) echo ' selected="selected"';
+				echo '>' . __('Modification date', 'foldergallery') . '</option>' . "\n";				
+			echo "\t" .	'<option value="modificationdateandtime"';
+				if ( 'modificationdateandtime' == $fg_options['caption'] ) echo ' selected="selected"';
+				echo '>' . __('Modification date and time', 'foldergallery') . '</option>' . "\n";
+			echo "\t" .	'<option value="modificationdater"';
+				if ( 'modificationdater' == $fg_options['caption'] ) echo ' selected="selected"';
+				echo '>' . __('Modification date (RFC 2822)', 'foldergallery') . '</option>' . "\n";	
+			echo "\t" .	'<option value="modificationdatec"';
+				if ( 'modificationdatec' == $fg_options['caption'] ) echo ' selected="selected"';
+				echo '>' . __('Modification date (ISO 8601)', 'foldergallery') . '</option>' . "\n";	
 			echo "\t" .	'<option value="none"';
 				if ( 'none' == $fg_options['caption'] ) echo ' selected="selected"';
 			echo '>' . __( 'None', 'foldergallery') . '</option>' . "\n";
