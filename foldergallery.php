@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.7.1b2
+Version: 1.7.1b3
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -413,11 +413,11 @@ class foldergallery{
 					$thecaption = date( 'c', $moddate);
 				break;
 				case 'modificationdate' :
-					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] );
+					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] ) + get_option( 'gmt_offset' ) * 3600;
 					$thecaption = date_i18n( get_option( 'date_format' ), $moddate);					
 				break;
 				case 'modificationdateandtime' :
-					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] );
+					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] ) + get_option( 'gmt_offset' ) * 3600;
 					$thecaption = date_i18n( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ) , $moddate);					
 				break;
 				default :
