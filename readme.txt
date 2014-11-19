@@ -146,8 +146,8 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 
 == Changelog ==
 
-= 1.7.1b3 [20014-11-18] =
-* Half-fixed time zone bug
+= 1.7.1b4 [20014-11-19] =
+* Fixed time zone bug
 
 = 1.7.1b2 [20014-11-15] =
 * Add date and time caption formats

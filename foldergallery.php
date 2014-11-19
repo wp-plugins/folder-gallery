@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.7.1b3
+Version: 1.7.1b4
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -405,12 +405,16 @@ class foldergallery{
 					$thecaption = str_replace( '_', ' ', $thecaption );
 				break;
 				case 'modificationdater' :
-					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] );
-					$thecaption = date( 'r', $moddate);
+					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] ) + get_option( 'gmt_offset' ) * 3600;
+					$gmtoffset = get_option( 'gmt_offset' );
+					$tmznstr = sprintf( "%+03d%02d", $gmtoffset, (abs($gmtoffset) - intval(abs($gmtoffset)))*60 );
+					$thecaption = str_replace( '+0000', $tmznstr, date( 'r', $moddate));
 				break;
 				case 'modificationdatec' :
-					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] );
-					$thecaption = date( 'c', $moddate);
+					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] ) + get_option( 'gmt_offset' ) * 3600;				
+					$gmtoffset = get_option( 'gmt_offset' );
+					$tmznstr = sprintf( "%+03d:%02d", $gmtoffset, (abs($gmtoffset) - intval(abs($gmtoffset)))*60 );
+					$thecaption = str_replace( '+00:00', $tmznstr, date( 'c', $moddate)) ;
 				break;
 				case 'modificationdate' :
 					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] ) + get_option( 'gmt_offset' ) * 3600;
