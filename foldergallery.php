@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.7.1
+Version: 1.7.2b1
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -108,6 +108,7 @@ class foldergallery{
 			case 'photoswipe' :
 			case 'responsive-lightbox' :
 			case 'easy-fancybox' :
+			case 'slenderbox-plugin' :
 			case 'none' :
 				// do nothing for now
 			break;
@@ -145,6 +146,7 @@ class foldergallery{
 			case 'photoswipe' :
 			case 'responsive-lightbox' :
 			case 'easy-fancybox' :
+			case 'slenderbox-plugin' :
 			case 'none' :
 				// Do nothing for now
 			break;
@@ -449,6 +451,9 @@ class foldergallery{
 				case 'easy-fancybox' :
 					$gallery_code .= '<a class="fancybox" rel="' . $lightbox_id . '" title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '">';
 				break;
+				case 'slenderbox-plugin' :
+					$gallery_code .= '<a data-sbox="' . $lightbox_id . '" title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '">';
+				break;				
 				case 'photoswipe' :
 				case 'none' :
 					$gallery_code .= '<a title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '">';
@@ -505,6 +510,12 @@ class foldergallery{
 		}
 		if ( 'easy-fancybox' == $fg_options['engine'] ) {
 			if ( ! is_plugin_active('easy-fancybox/easy-fancybox.php') ) {
+				$fg_options['engine'] = 'none';
+				update_option( 'FolderGallery', $fg_options );
+			}
+		}
+		if ( 'slenderbox-plugin' == $fg_options['engine'] ) {
+			if ( ! is_plugin_active('slenderbox/slenderbox.php') ) {
 				$fg_options['engine'] = 'none';
 				update_option( 'FolderGallery', $fg_options );
 			}
@@ -611,6 +622,11 @@ class foldergallery{
 				echo "\t" .	'<option value="photoswipe"';
 				if ( 'photoswipe' == $fg_options['engine'] ) echo ' selected="selected"';
 				echo '>Photo Swipe (Plugin)</option>' . "\n";			
+			}	
+			if ( is_plugin_active('slenderbox/slenderbox.php') ) {
+				echo "\t" .	'<option value="slenderbox-plugin"';
+				if ( 'slenderbox-plugin' == $fg_options['engine'] ) echo ' selected="selected"';
+				echo '>Slenderbox (Plugin)</option>' . "\n";			
 			}	
 			echo "\t" .	'<option value="none"';
 				if ( 'none' == $fg_options['engine'] ) echo ' selected="selected"';

@@ -98,7 +98,7 @@ See http://projects.nickstakenburg.com/lightview/documentation for details about
 
 = Can I use Folder Gallery along with another Lightbox plugin? =
 
-Folder Gallery has built-in support for "Easy Fancybox" plugin by RavanH and "Responsive Lightbox" plugin by dFactory. After activating the plugin, select it in Folder Gallery Settings (Gallery Engine).
+Folder Gallery has built-in support for "Easy Fancybox" plugin by RavanH, "Responsive Lightbox" plugin by dFactory, and "Slenderbox" plugin by Matthew Petroff. After activating the plugin, select it in Folder Gallery Settings (Gallery Engine).
 
 Otherwise, if your Lightbox plugin automatically handles images, you may set the lightbox engine to 'None' in Folder Gallery Options.
 This should work with
@@ -145,6 +145,10 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+
+= 1.7.2b1 [2014-11-28] =
+* Support for Slenderbox plugin
 
 = 1.7.1 [20014-11-28] =
 * Compatibility with WPML plugin
