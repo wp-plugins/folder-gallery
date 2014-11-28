@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.7
+Version: 1.7.1
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -404,6 +404,26 @@ class foldergallery{
 					$thecaption = preg_replace ( '/^\d+/' , '' , $thecaption );
 					$thecaption = str_replace( '_', ' ', $thecaption );
 				break;
+				case 'modificationdater' :
+					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] ) + get_option( 'gmt_offset' ) * 3600;
+					$gmtoffset = get_option( 'gmt_offset' );
+					$tmznstr = sprintf( "%+03d%02d", $gmtoffset, (abs($gmtoffset) - intval(abs($gmtoffset)))*60 );
+					$thecaption = str_replace( '+0000', $tmznstr, date( 'r', $moddate));
+				break;
+				case 'modificationdatec' :
+					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] ) + get_option( 'gmt_offset' ) * 3600;				
+					$gmtoffset = get_option( 'gmt_offset' );
+					$tmznstr = sprintf( "%+03d:%02d", $gmtoffset, (abs($gmtoffset) - intval(abs($gmtoffset)))*60 );
+					$thecaption = str_replace( '+00:00', $tmznstr, date( 'c', $moddate)) ;
+				break;
+				case 'modificationdate' :
+					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] ) + get_option( 'gmt_offset' ) * 3600;
+					$thecaption = date_i18n( get_option( 'date_format' ), $moddate);					
+				break;
+				case 'modificationdateandtime' :
+					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] ) + get_option( 'gmt_offset' ) * 3600;
+					$thecaption = date_i18n( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ) , $moddate);					
+				break;
 				default :
 					$thecaption = $title ;
 					if ( 'lightbox2' != $fg_options['engine'] ) $thecaption .= ' (' . ($idx+1-$start_idx) . '/' . ($NoP-$start_idx) . ')' ;
@@ -413,29 +433,29 @@ class foldergallery{
 			// Set the link
 			switch ( $fg_options['engine'] ) {
 				case 'lightbox2' :
-					$gallery_code.= '<a title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" data-lightbox="' . $lightbox_id . '">';
+					$gallery_code.= '<a title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '" data-lightbox="' . $lightbox_id . '">';
 				break;
 				case 'fancybox2' :				
-					$gallery_code.= '<a class="fancybox-gallery" title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" data-fancybox-group="' . $lightbox_id . '">';
+					$gallery_code.= '<a class="fancybox-gallery" title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '" data-fancybox-group="' . $lightbox_id . '">';
 				break;
 				case 'lightview' :
 					if ( $options ) $options = " data-lightview-group-options=\"$options\"";
-					$gallery_code .= '<a title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '" class="lightview" data-lightview-group="' . $lightbox_id . '"' . $options . '>';
+					$gallery_code .= '<a title="' . $thecaption . '" href="' . home_url( '/'  . $folder . '/' . $pictures[ $idx ] ) . '" class="lightview" data-lightview-group="' . $lightbox_id . '"' . $options . '>';
 					$options = ''; // group-options required only once per group.
 				break;
 				case 'responsive-lightbox' :
-					$gallery_code .= '<a rel="lightbox[' . $lightbox_id . ']" data-lightbox-gallery="' . $lightbox_id . '" title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '">';
+					$gallery_code .= '<a rel="lightbox[' . $lightbox_id . ']" data-lightbox-gallery="' . $lightbox_id . '" title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '">';
 				break;
 				case 'easy-fancybox' :
-					$gallery_code .= '<a class="fancybox" rel="' . $lightbox_id . '" title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '">';
+					$gallery_code .= '<a class="fancybox" rel="' . $lightbox_id . '" title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '">';
 				break;
 				case 'photoswipe' :
 				case 'none' :
-					$gallery_code .= '<a title="' . $thecaption . '" href="' . home_url( '/' ) . $folder . '/' . $pictures[ $idx ] . '">';
+					$gallery_code .= '<a title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '">';
 				break;
 			}
 			// Show image (possibly hidden, but required for alt tag)
-			$gallery_code .= '<img src="' . home_url( '/' ) . $thumbnail . '" style="' . $imgstyle . '" alt="' . $thecaption . '" />';
+			$gallery_code .= '<img src="' . home_url( '/' . $thumbnail ) . '" style="' . $imgstyle . '" alt="' . $thecaption . '" />';
 			// If no thumbnail, show link instead
 			if ( 'none' == $thumbnails && $idx == $start_idx ) {
 					$gallery_code .= '<span class="fg_title_link">' . $title . '</span>';
@@ -510,7 +530,7 @@ class foldergallery{
 		if ( ! in_array( $input['thumbnails'], array( 'all','none','single' ) ) ) $input['thumbnails'] = 'all';
 		if ( ! in_array( $input['fb_title'], array( 'inside','outside','float','over','null' ) ) ) $input['fb_title'] = 'all';
 		if ( ! in_array( $input['fb_effect'], array( 'elastic','fade' ) ) ) $input['fb_effect'] = 'elastic';
-		if ( ! in_array( $input['caption'], array( 'default','none','filename','filenamewithoutextension','smartfilename' ) ) ) $input['caption'] = 'default';
+		if ( ! in_array( $input['caption'], array( 'default','none','filename','filenamewithoutextension','smartfilename','modificationdater','modificationdatec','modificationdate','modificationdateandtime'  ) ) ) $input['caption'] = 'default';
 		$input['show_thumbnail_captions']     = intval( $input['show_thumbnail_captions'] );
 		$input['fb_speed']          = intval( $input['fb_speed'] );
 		$input['permissions']          = intval( $input['permissions'] );
@@ -677,6 +697,18 @@ class foldergallery{
 			echo "\t" .	'<option value="smartfilename"';
 				if ( 'smartfilename' == $fg_options['caption'] ) echo ' selected="selected"';
 				echo '>' . __('Smart Filename', 'foldergallery') . '</option>' . "\n";	
+			echo "\t" .	'<option value="modificationdate"';
+				if ( 'modificationdate' == $fg_options['caption'] ) echo ' selected="selected"';
+				echo '>' . __('Modification date', 'foldergallery') . '</option>' . "\n";				
+			echo "\t" .	'<option value="modificationdateandtime"';
+				if ( 'modificationdateandtime' == $fg_options['caption'] ) echo ' selected="selected"';
+				echo '>' . __('Modification date and time', 'foldergallery') . '</option>' . "\n";
+			echo "\t" .	'<option value="modificationdater"';
+				if ( 'modificationdater' == $fg_options['caption'] ) echo ' selected="selected"';
+				echo '>' . __('Modification date (RFC 2822)', 'foldergallery') . '</option>' . "\n";	
+			echo "\t" .	'<option value="modificationdatec"';
+				if ( 'modificationdatec' == $fg_options['caption'] ) echo ' selected="selected"';
+				echo '>' . __('Modification date (ISO 8601)', 'foldergallery') . '</option>' . "\n";	
 			echo "\t" .	'<option value="none"';
 				if ( 'none' == $fg_options['caption'] ) echo ' selected="selected"';
 			echo '>' . __( 'None', 'foldergallery') . '</option>' . "\n";
