@@ -3,7 +3,7 @@ Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
 Tested up to: 4.0
-Stable tag: 1.7
+Stable tag: 1.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://jalby.org/wordpress/donate/
@@ -146,14 +146,9 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 
 == Changelog ==
 
-= 1.7.1b4 [20014-11-19] =
-* Fixed time zone bug
-
-= 1.7.1b2 [20014-11-15] =
-* Add date and time caption formats
-
-= 1.7.1b1 [20014-10-26] =
-* Add compatibility with WPML plugin
+= 1.7.1 [20014-11-28] =
+* Compatibility with WPML plugin
+* Date and time caption formats
 
 = 1.7 [2014-09-04] =
 * Option to correct picture orientation according to EXIF tag. Require PHP with EXIF library. Rotated pictures will be overwritten.
