@@ -2,8 +2,8 @@
 Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
-Tested up to: 4.0
-Stable tag: 1.7.1
+Tested up to: 4.1
+Stable tag: 1.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://jalby.org/wordpress/donate/
@@ -147,7 +147,7 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 == Changelog ==
 
 
-= 1.7.2b1 [2014-11-28] =
+= 1.7.2 [2014-12-21] =
 * Support for Slenderbox plugin
 
 = 1.7.1 [20014-11-28] =
