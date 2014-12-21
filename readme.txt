@@ -2,8 +2,8 @@
 Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
-Tested up to: 4.0
-Stable tag: 1.7
+Tested up to: 4.1
+Stable tag: 1.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://jalby.org/wordpress/donate/
@@ -32,7 +32,7 @@ An Options page allow to set the default paramaters of the galleries :
 * Thumbnails width and height (width & height)
 * Picture border (border)
 * Padding and Margin (padding & margin)
-* Caption Format (caption): default (title + picture number), filename, filenamewithoutextension, smartfilename (filename with underscores and front numbers removed), none
+* Caption Format (caption): default (title + picture number), filename, filenamewithoutextension, smartfilename (filename with underscores and front numbers removed), modificationdate, modificationdateandtime, modificationdater (RFC 2822), modificationdatec (ISO 8601), none
 * Show Thumbnail Captions (show_thumbnail_captions): yes (true) or no (false). Display (or not) the caption under the picture thumbnail.
 * Fancybox Caption Style: Inside, Outside, Over, Float, None. Available with Fancybox 2 engine only (if installed).
 * Fancybox Transition: Elastic, Fade. Available with Fancybox 2 engine only (if installed).
@@ -98,7 +98,7 @@ See http://projects.nickstakenburg.com/lightview/documentation for details about
 
 = Can I use Folder Gallery along with another Lightbox plugin? =
 
-Folder Gallery has built-in support for "Easy Fancybox" plugin by RavanH and "Responsive Lightbox" plugin by dFactory. After activating the plugin, select it in Folder Gallery Settings (Gallery Engine).
+Folder Gallery has built-in support for "Easy Fancybox" plugin by RavanH, "Responsive Lightbox" plugin by dFactory, and "Slenderbox" plugin by Matthew Petroff. After activating the plugin, select it in Folder Gallery Settings (Gallery Engine).
 
 Otherwise, if your Lightbox plugin automatically handles images, you may set the lightbox engine to 'None' in Folder Gallery Options.
 This should work with
@@ -145,6 +145,14 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+
+= 1.7.2 [2014-12-21] =
+* Support for Slenderbox plugin
+
+= 1.7.1 [20014-11-28] =
+* Compatibility with WPML plugin
+* Date and time caption formats
 
 = 1.7 [2014-09-04] =
 * Option to correct picture orientation according to EXIF tag. Require PHP with EXIF library. Rotated pictures will be overwritten.
