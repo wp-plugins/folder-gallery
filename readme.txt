@@ -8,22 +8,25 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://jalby.org/wordpress/donate/
 
-This plugin generates picture galleries from a folder using a shortcode.
+This plugin generates picture (or document) galleries from a folder using a shortcode.
 
 == Description ==
 
-This plugin creates picture galleries from a folder. 
+This plugin creates picture (or document) galleries from a folder. 
 The pictures folder must be uploaded (using FTP) somewhere on the server (e.g. wp-content/upload). It must be writable (chmod 777).
 
 Folder Gallery Plugin does not include any lightbox JS engine anymore. You have to install one or use a compatible lightbox plugin. See FAQ.
 
-To include a gallery in a post or a page, you have to use the following shortcode :
+To include a picture gallery in a post or a page, you have to use the following shortcode :
 
 	[foldergallery folder="local_path_to_folder" title="Gallery title"]
 
 For each gallery, a subfolder cache_[width]x[height] is created inside the pictures folder when the page is accessed for the first time. 
 
-An Options page allow to set the default paramaters of the galleries :
+To include a document gallery or list, see FAQ.
+
+
+A Settings page allows to set the default paramaters of the galleries :
 
 * Lightbox JS Engine: Lightbox 2 (if installed), Fancybox 2 (if installed), Lightview 3 (if installed), Easy Fancybox Plugin (if available), Responsive Lightbox Plugin (if available) or none (default)
 * Display Thumbnails (thumbnails): all = standard Gallery, single = displays a single thumbnail linked to the lightbox gallery, none = displays a link to the lightbox gallery
@@ -32,7 +35,7 @@ An Options page allow to set the default paramaters of the galleries :
 * Thumbnails width and height (width & height)
 * Picture border (border)
 * Padding and Margin (padding & margin)
-* Caption Format (caption): default (title + picture number), filename, filenamewithoutextension, smartfilename (filename with underscores and front numbers removed), modificationdate, modificationdateandtime, modificationdater (RFC 2822), modificationdatec (ISO 8601), none
+* Caption Format (caption): default (title + picture number), filename, filenamewithoutextension, smartfilename (filename with underscores and front numbers removed), modificationdate, modificationdateandtime, modificationdater (RFC 2822), modificationdatec (ISO 8601), iptctitle, iptccaption, none
 * Show Thumbnail Captions (show_thumbnail_captions): yes (true) or no (false). Display (or not) the caption under the picture thumbnail.
 * Fancybox Caption Style: Inside, Outside, Over, Float, None. Available with Fancybox 2 engine only (if installed).
 * Fancybox Transition: Elastic, Fade. Available with Fancybox 2 engine only (if installed).
@@ -137,7 +140,18 @@ You have to set show_thumbnail_captions to 1 (or change the global option in Fol
 The caption format is set with the attribute `caption`. It can be set to `filename`, `filenamewithoutextension` or `smartfilename` which displays the filename without extension, front number removed and underscores (_) replaced with spaces.
 
 	[foldergallery folder="path" title="My Gallery" show_thumbnail_captions=1 caption='smartfilename']
+	
+= How to display a document list ?=
 
+To build a list or gallery of a folder documents, use the following short code : 
+
+[foldergallery folder="path" engine="documentlist" filetypes="pdf xlsx" caption="filename"] 
+
+Two engines are available : documentlist and documentgallery. Filetypes is a space-separated list of document extensions.
+
+A generic document thumbnail is used for all documents. To use a custom thumbnail for each document, put an image (png or jpg) with the same name as the document inside the document folder. If you want to change the generic thumbnail, put a file thumbnail.jpg or thumbnail.png inside the folder.
+
+Engine and filetypes can be change in the Settings page.
 
 == Screenshots ==
 1. Folder Gallery Options
@@ -146,6 +160,9 @@ The caption format is set with the attribute `caption`. It can be set to `filena
 
 == Changelog ==
 
+= 1.8a3 =
+* Support for document list (see FAQ)
+* Support for IPTC title/caption tag as caption
 
 = 1.7.2 [2014-12-21] =
 * Support for Slenderbox plugin

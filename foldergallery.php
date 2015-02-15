@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.7.2
+Version: 1.8a3
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
-Description: This plugin creates picture galleries from a folder. The gallery is automatically generated in a post or page with a shortcode. Usage: [foldergallery folder="local_path_to_folder" title="Gallery title"]. For each gallery, a subfolder cache_[width]x[height] is created inside the pictures folder when the page is accessed for the first time. The picture folder must be writable (chmod 777).
+Description: This plugin creates picture (or document) galleries from a folder. The gallery is automatically generated in a post or page with a shortcode. Usage: [foldergallery folder="local_path_to_folder" title="Gallery title"]. For each gallery, a subfolder cache_[width]x[height] is created inside the pictures folder when the page is accessed for the first time. The picture folder must be writable (chmod 777).
 Tags: gallery, folder, lightbox, lightview
 Requires: 3.5
 License: GPLv2
@@ -90,11 +90,15 @@ class foldergallery{
 			$fg_options['orientation'] = 0;
 			update_option( 'FolderGallery', $fg_options );
 		}
+		if ( ! isset( $fg_options['filetypes'] ) ) { // 2.0 update
+			$fg_options['filetypes'] = 'doc docx xls xlsx ppt pptx pdf';
+			update_option( 'FolderGallery', $fg_options );
+		}
 	}
 
 	function fg_styles(){
 		$fg_options = get_option( 'FolderGallery' );
-		wp_enqueue_style( 'fg-style', plugins_url( '/css/style.css', __FILE__ ) );
+		wp_enqueue_style( 'fg-style', plugins_url( '/style.css', __FILE__ ) );
 		switch ( $fg_options['engine'] ) {
 			case 'lightbox2' :
 				wp_enqueue_style( 'fg-lightbox-style', content_url( '/lightbox/css/lightbox.css', __FILE__ ) );
@@ -159,7 +163,10 @@ class foldergallery{
 		$fg_options = get_option( 'FolderGallery' );
 		// Get picture
 		$image = wp_get_image_editor( $path );
-		if ( is_wp_error( $image ) ) return;		
+		if ( is_wp_error( $image ) ) {
+			echo '<p style="color:red;"><strong>' . __( 'Folder Gallery Error:', 'foldergallery' ) . '</strong> ' . $image->get_error_code() . ' (' . $path . ')</p>';
+			return;
+		}
 		// Correct EXIF orientation	(of main picture)
 		if ( function_exists( 'exif_read_data' ) && $fg_options['orientation'] == 1 ) {	
 			$exif = @ exif_read_data( $path );
@@ -212,12 +219,12 @@ class foldergallery{
 		$image->save( $savepath );
 	}
 
-	function myglob( $directory ) {
+	function myglob( $directory, $extensions ) {
 		$files = array();
 		if( $handle = opendir( $directory ) ) {
 			while ( false !== ( $file = readdir( $handle ) ) ) {
 				$ext = strtolower( pathinfo( $file, PATHINFO_EXTENSION ) );
-				if ( 'jpg' == $ext || 'png' == $ext || 'gif' == $ext || 'bmp' == $ext ) {
+				if ( in_array( $ext, $extensions ) ) {
 					$files[] = $file;
 				}
 			}
@@ -226,14 +233,16 @@ class foldergallery{
 		return $files;
 	}
 	
-	function file_array( $directory , $sort) { // List all image files in $directory
+	function file_array( $directory , $sort, $filetypes = 'jpg gif png jpeg bmp') { // List all image/documents files in $directory
+		$extensions = explode(" ", $filetypes);
+		$extensions = array_merge( array_map( 'strtolower', $extensions ) , array_map( 'strtoupper', $extensions ) );		
 		$cwd = getcwd();
 		chdir( $directory );
-		$files = glob( '*.{jpg,JPG,gif,GIF,png,PNG,jpeg,JPEG,bmp,BMP}' , GLOB_BRACE );
+		$files = glob( '*.{' . implode( ",", $extensions ) .'}' , GLOB_BRACE );
 		// Free.fr doesn't accept glob function. Use a workaround		
 		if ( 0 == count( $files ) ||  $files === FALSE ) {
 			chdir( $cwd ); // Back to root
-			$files = $this->myglob( $directory );
+			$files = $this->myglob( $directory, $extensions );
 			chdir( $directory );
 		}
 		// Verify there's something to sort
@@ -278,7 +287,19 @@ class foldergallery{
 		$info = pathinfo($filename);
 		return basename($filename,'.'.$info['extension']);
 	}
-				
+
+	function file_size($size_in_bytes ) {
+		if ($size_in_bytes < 1000) {
+			return "$size_in_bytes B";
+		} elseif ($size_in_bytes < 1000*1000) {
+			$size_in_kb = (int) ($size_in_bytes/1000);
+			return "$size_in_kb KB";	
+		} else {
+			$size_in_mb = (int) ($size_in_bytes/1000/1000);
+			return "$size_in_mb MB";
+		}
+	}
+					
 	function fg_gallery( $atts ) { // Generate gallery
 		$fg_options = get_option( 'FolderGallery' );
 		extract( shortcode_atts( array(
@@ -296,6 +317,8 @@ class foldergallery{
 			'subtitle'=> false, // 1.3 compatibility
 			'show_thumbnail_captions'=> $fg_options['show_thumbnail_captions'],
 			'sort'	  => $fg_options['sort'],
+			'filetypes'   => $fg_options['filetypes'],
+			'engine' => $fg_options['engine'],
 		), $atts ) );
 		
 		// 1.3 Compatibility
@@ -307,8 +330,12 @@ class foldergallery{
 			return '<p style="color:red;"><strong>' . __( 'Folder Gallery Error:', 'foldergallery' ) . '</strong> ' .
 				sprintf( __( 'Unable to find the directory %s.', 'foldergallery' ), $folder ) . '</p>';	
 		}
-
-		$pictures = $this->file_array( $folder, $sort );
+		
+		if ( $engine == 'documentgallery' || $engine == 'documentlist') {
+			$pictures = $this->file_array( $folder, $sort, $filetypes );
+		} else {
+			$pictures = $this->file_array( $folder, $sort );
+		}
 
 		$NoP = count( $pictures );		
 		if ( 0 == $NoP ) {
@@ -322,35 +349,47 @@ class foldergallery{
 		$border=intval($border);
 		$padding=intval($padding);
 		// Cache folder
-		$cache_folder = $folder . '/cache_' . $width . 'x' . $height;
-		if ( ! is_dir( $cache_folder ) ) {
-				@mkdir( $cache_folder, 0777 );
-		}
-		if ( ! is_dir( $cache_folder ) ) {
-			return '<p style="color:red;"><strong>' . __( 'Folder Gallery Error:', 'foldergallery' ) . '</strong> ' .
-				sprintf( __( 'Unable to create the thumbnails directory inside %s.', 'foldergallery' ), $folder ) . ' ' .
-				__( 'Verify that this directory is writable (chmod 777).', 'foldergallery' ) . '</p>';
-		}
+		if ( $engine != 'documentgallery' && $engine != 'documentlist') {
+			$cache_folder = $folder . '/cache_' . $width . 'x' . $height;
+			if ( ! is_dir( $cache_folder ) ) {
+					@mkdir( $cache_folder, 0777 );
+			}
+			if ( ! is_dir( $cache_folder ) ) {
+				return '<p style="color:red;"><strong>' . __( 'Folder Gallery Error:', 'foldergallery' ) . '</strong> ' .
+					sprintf( __( 'Unable to create the thumbnails directory inside %s.', 'foldergallery' ), $folder ) . ' ' .
+					__( 'Verify that this directory is writable (chmod 777).', 'foldergallery' ) . '</p>';
+			}
 		
-		if ( 1 == $fg_options['permissions'] ) @chmod( $cache_folder, 0777);
-		
+			if ( 1 == $fg_options['permissions'] ) @chmod( $cache_folder, 0777);
+		}		
 		// Image and Thumbnail style
 		if ( 'none' == $thumbnails ) {
 			$thmbdivstyle = '';
 			$imgstyle = "display: none;";
 		} else {
-			$thmbdivstyle = ' style="width:' . ($width + 2*$border + 2*$padding) . 'px;';
-			$thmbdivstyle .= "margin:0px {$margin}px {$margin}px 0px;\"";
-			$imgstyle = "width:{$width}px;";
-			$imgstyle .= 'margin:0;';
-			$imgstyle .= "padding:{$padding}px;";
-			$imgstyle .= "border-width:{$border}px;";
+			if ( $engine == 'documentlist' ) {
+				$imgstyle = "float:left;width:{$width}px;";
+				$imgstyle .= "margin:0 {$margin}px 0 0;";
+				$imgstyle .= "padding:{$padding}px;";
+				$imgstyle .= "border-width:{$border}px;";		
+				$thmbdivstyle = ' style="width:100%;';
+				$thmbdivstyle .= "margin:0px 0px {$margin}px 0px;text-align:left;\"";			
+			} else {
+				$thmbdivstyle = ' style="width:' . ($width + 2*$border + 2*$padding) . 'px;';
+				$thmbdivstyle .= "margin:0px {$margin}px {$margin}px 0px;\"";
+				$imgstyle = "width:{$width}px;";
+				$imgstyle .= 'margin:0;';
+				$imgstyle .= "padding:{$padding}px;";
+				$imgstyle .= "border-width:{$border}px;";
+			}
 		}
-
-		$this->fg_scripts();			
-		$lightbox_id = uniqid(); //md5( $folder . );
+		
+		if ( $engine != 'documentgallery' && $engine != 'documentlist' ) {
+			$this->fg_scripts();			
+			$lightbox_id = uniqid(); //md5( $folder . );
+		}
 		// Main Div
-		if ( 'photoswipe' == $fg_options['engine'] ) {
+		if ( 'photoswipe' == $engine ) {
 			$gallery_code = '<div class="fg_gallery gallery-icon">';
 		} else {
 			$gallery_code = '<div class="fg_gallery">';
@@ -381,11 +420,36 @@ class foldergallery{
 			if ( 'all' == $thumbnails ) {
 				$thumbnail_idx = $idx;	
 			}
-			$thumbnail = $cache_folder . '/' . strtolower($pictures[ $thumbnail_idx ]);
-			// Generate thumbnail
-			if ( ! file_exists( $thumbnail ) ) {
-				$this->save_thumbnail( $folder . '/' . $pictures[ $thumbnail_idx ], $thumbnail, $width, $height );
+			// Thumbnail picture
+			if ( $engine == 'documentgallery' || $engine == 'documentlist' ) {			
+				$filenamewithoutextension = $this->filename_without_extension( $pictures[ $thumbnail_idx ] )	;		
+				if ( file_exists( $folder . '/' . $filenamewithoutextension . '.jpg' ) ) {
+					$thumbnail = $folder . '/' . $filenamewithoutextension . '.jpg';
+				} else if ( file_exists( $folder . '/' . $filenamewithoutextension . '.png' ) ) {
+					$thumbnail = $folder . '/' . $filenamewithoutextension . '.png';
+				} else if ( file_exists( $folder . '/' . $filenamewithoutextension . '.JPG' ) ) {
+					$thumbnail = $folder . '/' . $filenamewithoutextension . '.JPG';
+				} else if ( file_exists( $folder . '/' . $filenamewithoutextension . '.PNG' ) ) {
+					$thumbnail = $folder . '/' . $filenamewithoutextension . '.PNG';
+				} else if ( file_exists( $folder . '/thumbnail.jpg' ) ) {
+					$thumbnail = $folder . '/thumbnail.jpg';
+				} else if ( file_exists( $folder . '/thumbnail.png' ) ) {
+					$thumbnail = $folder . '/thumbnail.png';
+				} else if ( file_exists( $folder . '/thumbnail.JPG' ) ) {
+					$thumbnail = $folder . '/thumbnail.JPG';
+				} else if ( file_exists( $folder . '/thumbnail.PNG' ) ) {
+					$thumbnail = $folder . '/thumbnail.PNG';
+				} else {
+					$thumbnail = 'wp-includes/images/crystal/document.png';
+				}
+			} else {
+				$thumbnail = $cache_folder . '/' . strtolower($pictures[ $thumbnail_idx ]);
+				// Generate thumbnail
+				if ( ! file_exists( $thumbnail ) ) {
+					$this->save_thumbnail( $folder . '/' . $pictures[ $thumbnail_idx ], $thumbnail, $width, $height );
+				}		
 			}
+			
 			if ( ( $idx > $start_idx && 'all' != $thumbnails ) || $idx > $max_thumbnails_idx ) {
 				$thmbdivstyle = ' style="display:none;"';
 				$columns = 0;
@@ -426,6 +490,24 @@ class foldergallery{
 					$moddate = filemtime( $folder . '/' . $pictures[ $idx ] ) + get_option( 'gmt_offset' ) * 3600;
 					$thecaption = date_i18n( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ) , $moddate);					
 				break;
+				case 'iptctitle' :
+					$tmp = getimagesize( $folder . '/' . $pictures[ $idx ], $iptcinfo);
+					if(isset($iptcinfo['APP13'])) {
+    					$iptc = iptcparse( $iptcinfo[ 'APP13' ] );
+    					$thecaption = $iptc[ '2#005' ][ 0 ];
+					} else {
+						$thecaption = 'Unable to read IPTC info';
+					}
+				break;
+				case 'iptccaption' :
+					$tmp = getimagesize( $folder . '/' . $pictures[ $idx ], $iptcinfo);
+					if(isset($iptcinfo['APP13'])) {
+    					$iptc = iptcparse( $iptcinfo[ 'APP13' ] );
+    					$thecaption = $iptc[ '2#120' ][ 0 ];
+					} else {
+						$thecaption = 'Unable to read IPTC info';
+					}
+				break;
 				default :
 					$thecaption = $title ;
 					if ( 'lightbox2' != $fg_options['engine'] ) $thecaption .= ' (' . ($idx+1-$start_idx) . '/' . ($NoP-$start_idx) . ')' ;
@@ -433,7 +515,7 @@ class foldergallery{
 			// Let's start
 			$gallery_code .= "\n<div class=\"fg_thumbnail\"$thmbdivstyle>\n";
 			// Set the link
-			switch ( $fg_options['engine'] ) {
+			switch ( $engine ) {
 				case 'lightbox2' :
 					$gallery_code.= '<a title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '" data-lightbox="' . $lightbox_id . '">';
 				break;
@@ -454,6 +536,10 @@ class foldergallery{
 				case 'slenderbox-plugin' :
 					$gallery_code .= '<a data-sbox="' . $lightbox_id . '" title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '">';
 				break;				
+				case 'documentlist' :
+				case 'documentgallery' :
+					$gallery_code .= '<a title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '" target="_blank">';
+				break;
 				case 'photoswipe' :
 				case 'none' :
 					$gallery_code .= '<a title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '">';
@@ -468,10 +554,21 @@ class foldergallery{
 			// Close link
 			$gallery_code .= '</a>';
 			// Display caption
-			if ( $show_thumbnail_captions && 'all' == $thumbnails ) $gallery_code .= '<div class="fg_caption">' . $thecaption . '</div>';	
-			// Display title
-			if ( 'single' == $thumbnails && $idx == $start_idx && $title != '' ) {
-				$gallery_code .= '<div class="fg_title">' . $title . '</div>';
+			if ( $engine == 'documentlist' ) {
+				$gallery_code .= '<div class="fg_caption">';
+				$gallery_code .= '<a title="' . $thecaption . '" href="' . home_url( '/' . $folder . '/' . $pictures[ $idx ] ) . '" target="_blank">';
+				$gallery_code .= $thecaption . '</a></div>';
+				$gallery_code .= '<div class="fg_fileinfo">' . strtoupper( pathinfo( $pictures[ $idx ], PATHINFO_EXTENSION ) ) . ' - ' ;
+				$gallery_code .= $this->file_size( filesize( $folder . '/' . $pictures[ $idx ] ) ) . ' - ' ;
+				$moddate = filemtime( $folder . '/' . $pictures[ $idx ] ) + get_option( 'gmt_offset' ) * 3600;
+				$gallery_code .= date_i18n( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ) , $moddate);					
+				$gallery_code .= '</div>';
+			} else {			
+				if ( $show_thumbnail_captions && 'all' == $thumbnails ) $gallery_code .= '<div class="fg_caption">' . $thecaption . '</div>';	
+				// Display title
+				if ( 'single' == $thumbnails && $idx == $start_idx && $title != '' ) {
+					$gallery_code .= '<div class="fg_title">' . $title . '</div>';
+				}
 			}
 			$gallery_code .= '</div>';
 
@@ -541,7 +638,7 @@ class foldergallery{
 		if ( ! in_array( $input['thumbnails'], array( 'all','none','single' ) ) ) $input['thumbnails'] = 'all';
 		if ( ! in_array( $input['fb_title'], array( 'inside','outside','float','over','null' ) ) ) $input['fb_title'] = 'all';
 		if ( ! in_array( $input['fb_effect'], array( 'elastic','fade' ) ) ) $input['fb_effect'] = 'elastic';
-		if ( ! in_array( $input['caption'], array( 'default','none','filename','filenamewithoutextension','smartfilename','modificationdater','modificationdatec','modificationdate','modificationdateandtime'  ) ) ) $input['caption'] = 'default';
+		if ( ! in_array( $input['caption'], array( 'default','none','filename','filenamewithoutextension','smartfilename','modificationdater','modificationdatec','modificationdate','modificationdateandtime','iptctitle','iptccaption' ) ) ) $input['caption'] = 'default';
 		$input['show_thumbnail_captions']     = intval( $input['show_thumbnail_captions'] );
 		$input['fb_speed']          = intval( $input['fb_speed'] );
 		$input['permissions']          = intval( $input['permissions'] );
@@ -568,6 +665,7 @@ class foldergallery{
 			'fb_speed'			=> 0,
 			'permissions'		=> 0,
 			'orientation'		=> 0,
+			'filetypes'			=> 'doc docx xls xlsx ppt pptx pdf',
 		);
 		return $defaults;
 	}
@@ -628,11 +726,27 @@ class foldergallery{
 				if ( 'slenderbox-plugin' == $fg_options['engine'] ) echo ' selected="selected"';
 				echo '>Slenderbox (Plugin)</option>' . "\n";			
 			}	
+			echo "\t" .	'<option value="documentlist"';
+				if ( 'documentlist' == $fg_options['engine'] ) echo ' selected="selected"';
+			echo '>' . __( 'Document List', 'foldergallery') . '</option>' . "\n";
+			echo "\t" .	'<option value="documentgallery"';
+				if ( 'documentgallery' == $fg_options['engine'] ) echo ' selected="selected"';
+			echo '>' . __( 'Document Gallery', 'foldergallery') . '</option>' . "\n";
 			echo "\t" .	'<option value="none"';
 				if ( 'none' == $fg_options['engine'] ) echo ' selected="selected"';
-		echo '>' . __( 'None', 'foldergallery') . '</option>' . "\n";
+			echo '>' . __( 'None', 'foldergallery') . '</option>' . "\n";
 		echo "</select>\n";
 		echo "</td>\n</tr>\n";
+		
+		if ( 'documentgallery' == $fg_options['engine'] || 'documentlist' == $fg_options['engine'] ) {
+			echo '<tr valign="top">' . "\n";
+			echo '<th scope="row"><label for="filetypes">' . __( 'Filetypes', 'foldergallery' ) . '</label></th>' . "\n";
+			echo '<td><input id="filetypes"  name="FolderGallery[filetypes]" class="regular-text" value="' . $fg_options['filetypes'] . '">' ;
+			echo "</td>\n</tr>\n";
+		} else {
+			echo '<input type="hidden" name="FolderGallery[filetypes]" id="filetypes" value="' . $fg_options['filetypes'] . '" />' ;
+		}
+		
 		echo "</tbody></table>\n";
 		echo '<h3 class="title">' . __('Thumbnail Settings','foldergallery') . "</h3>\n";
 		echo '<table class="form-table"><tbody>' . "\n";
@@ -725,6 +839,12 @@ class foldergallery{
 			echo "\t" .	'<option value="modificationdatec"';
 				if ( 'modificationdatec' == $fg_options['caption'] ) echo ' selected="selected"';
 				echo '>' . __('Modification date (ISO 8601)', 'foldergallery') . '</option>' . "\n";	
+			echo "\t" .	'<option value="iptctitle"';
+				if ( 'iptctitle' == $fg_options['caption'] ) echo ' selected="selected"';
+				echo '>' . __('IPTC Title Metatag', 'foldergallery') . '</option>' . "\n";	
+			echo "\t" .	'<option value="iptccaption"';
+				if ( 'iptccaption' == $fg_options['caption'] ) echo ' selected="selected"';
+				echo '>' . __('IPTC Caption Metatag', 'foldergallery') . '</option>' . "\n";	
 			echo "\t" .	'<option value="none"';
 				if ( 'none' == $fg_options['caption'] ) echo ' selected="selected"';
 			echo '>' . __( 'None', 'foldergallery') . '</option>' . "\n";
