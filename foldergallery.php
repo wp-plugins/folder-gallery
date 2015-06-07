@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.8a3
+Version: 1.8a4
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -90,8 +90,9 @@ class foldergallery{
 			$fg_options['orientation'] = 0;
 			update_option( 'FolderGallery', $fg_options );
 		}
-		if ( ! isset( $fg_options['filetypes'] ) ) { // 2.0 update
+		if ( ! isset( $fg_options['gridlayout'] ) ) { // 1.8 update
 			$fg_options['filetypes'] = 'doc docx xls xlsx ppt pptx pdf';
+			$fg_options['gridlayout'] = 0;
 			update_option( 'FolderGallery', $fg_options );
 		}
 	}
@@ -159,7 +160,7 @@ class foldergallery{
 
 	/* --------- Folder Gallery Main Functions --------- */
 
-	function save_thumbnail( $path, $savepath, $th_width, $th_height ) {
+	function save_thumbnail( $path, $savepath, $th_width, $th_height, $gridlayout ) {
 		$fg_options = get_option( 'FolderGallery' );
 		// Get picture
 		$image = wp_get_image_editor( $path );
@@ -214,6 +215,15 @@ class foldergallery{
 			$width = $size['width'];
 			$height = $size['height'];
 			$th_height = floor( $height * ( $th_width / $width ) );
+		} elseif ( 1 == $gridlayout ) { // Grid Layout
+			$size = $image->get_size();
+			$width = $size['width'];
+			$height = $size['height'];
+			if ( $width > $height ) { // Landscape: set width, calculate height
+				$th_height = floor( $height * ( $th_width / $width ) );
+			} else { //Portrait: set height, calculate width		
+				$th_width = floor( $width * ( $th_height / $height ) );
+			}
 		}
 		$image->resize( $th_width, $th_height, true );
 		$image->save( $savepath );
@@ -319,6 +329,7 @@ class foldergallery{
 			'sort'	  => $fg_options['sort'],
 			'filetypes'   => $fg_options['filetypes'],
 			'engine' => $fg_options['engine'],
+			'gridlayout' => $fg_options['gridlayout']
 		), $atts ) );
 		
 		// 1.3 Compatibility
@@ -350,7 +361,11 @@ class foldergallery{
 		$padding=intval($padding);
 		// Cache folder
 		if ( $engine != 'documentgallery' && $engine != 'documentlist') {
-			$cache_folder = $folder . '/cache_' . $width . 'x' . $height;
+			if ( $gridlayout && $height > 0) { // Grid Layout
+				$cache_folder = $folder . '/cache_' . $width . '+' . $height;
+			} else {
+				$cache_folder = $folder . '/cache_' . $width . 'x' . $height;
+			}
 			if ( ! is_dir( $cache_folder ) ) {
 					@mkdir( $cache_folder, 0777 );
 			}
@@ -391,6 +406,8 @@ class foldergallery{
 		// Main Div
 		if ( 'photoswipe' == $engine ) {
 			$gallery_code = '<div class="fg_gallery gallery-icon">';
+		} elseif ( 1 == $gridlayout ) {
+			$gallery_code = '<div class="fg_gallery gallery">';
 		} else {
 			$gallery_code = '<div class="fg_gallery">';
 		}		
@@ -446,7 +463,7 @@ class foldergallery{
 				$thumbnail = $cache_folder . '/' . strtolower($pictures[ $thumbnail_idx ]);
 				// Generate thumbnail
 				if ( ! file_exists( $thumbnail ) ) {
-					$this->save_thumbnail( $folder . '/' . $pictures[ $thumbnail_idx ], $thumbnail, $width, $height );
+					$this->save_thumbnail( $folder . '/' . $pictures[ $thumbnail_idx ], $thumbnail, $width, $height, $gridlayout );
 				}		
 			}
 			
@@ -513,7 +530,11 @@ class foldergallery{
 					if ( 'lightbox2' != $fg_options['engine'] ) $thecaption .= ' (' . ($idx+1-$start_idx) . '/' . ($NoP-$start_idx) . ')' ;
 			}		
 			// Let's start
-			$gallery_code .= "\n<div class=\"fg_thumbnail\"$thmbdivstyle>\n";
+			if ( 1 == $gridlayout ) {
+				$gallery_code .= "\n<div class=\"fg_thumbnail gallery-item\"$thmbdivstyle>\n";
+			} else {
+				$gallery_code .= "\n<div class=\"fg_thumbnail\"$thmbdivstyle>\n";
+			}
 			// Set the link
 			switch ( $engine ) {
 				case 'lightbox2' :
@@ -641,6 +662,7 @@ class foldergallery{
 		if ( ! in_array( $input['caption'], array( 'default','none','filename','filenamewithoutextension','smartfilename','modificationdater','modificationdatec','modificationdate','modificationdateandtime','iptctitle','iptccaption' ) ) ) $input['caption'] = 'default';
 		$input['show_thumbnail_captions']     = intval( $input['show_thumbnail_captions'] );
 		$input['fb_speed']          = intval( $input['fb_speed'] );
+		$input['gridlayout']          = intval( $input['gridlayout'] );
 		$input['permissions']          = intval( $input['permissions'] );
 		$input['orientation']          = intval( $input['orientation'] );
 		return $input;
@@ -666,6 +688,7 @@ class foldergallery{
 			'permissions'		=> 0,
 			'orientation'		=> 0,
 			'filetypes'			=> 'doc docx xls xlsx ppt pptx pdf',
+			'gridlayout'		=> 0
 		);
 		return $defaults;
 	}
@@ -911,6 +934,14 @@ class foldergallery{
 		echo "</tbody></table>\n";
 		echo '<h3 class="title">' . __('Misc Settings','foldergallery') . "</h3>\n";
 		echo '<table class="form-table"><tbody>' . "\n";
+
+		echo '<tr><th>' . __('Layout', 'foldergallery')  . '</th><td><label for="gridlayout"><input name="FolderGallery[gridlayout]" type="checkbox" id="gridlayout" value="1"';
+		if ( 1 == $fg_options['gridlayout'] ) {
+			echo ' checked="checked">';
+		} else {
+			echo '>';
+		}
+		echo __('Use Grid Layout (required Masonry Plugin)','foldergallery') . '</label></td></tr>';
 		
 		echo '<tr><th>' . __('Permissions', 'foldergallery')  . '</th><td><label for="permissions"><input name="FolderGallery[permissions]" type="checkbox" id="permissions" value="1"';
 		if ( 1 == $fg_options['permissions'] ) {

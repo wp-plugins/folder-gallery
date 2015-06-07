@@ -2,7 +2,7 @@
 Contributors: vjalby
 Tags: gallery, folder, lightbox
 Requires at least: 3.5
-Tested up to: 4.1
+Tested up to: 4.2.2
 Stable tag: 1.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -40,6 +40,7 @@ A Settings page allows to set the default paramaters of the galleries :
 * Fancybox Caption Style: Inside, Outside, Over, Float, None. Available with Fancybox 2 engine only (if installed).
 * Fancybox Transition: Elastic, Fade. Available with Fancybox 2 engine only (if installed).
 * Autoplay Speed: Slideshow speed in seconds. 0 to turn autoplay off. Available with Fancybox 2 engine only (if installed).
+* Misc settings - Layout (gridlayout): Use a grid layout when Masonry plugin is active.
 * Misc settings - Permissions: force 777 permissions on cache folder. Leave it uncheck unless you really know what you do!
 * Misc settings - Orientation: Correct picture orientation according to EXIF tag. Rotated pictures will be overwritten. (Require EXIF library in PHP.) Delete the cache folder to apply to existing galleries.
  
@@ -115,6 +116,12 @@ This should work with
 
 Yes! First install and activate Easy Fancybox plugin. In Wordpress > Settings > Media > Fancybox > Images > Gallery, Disabled Autogllery. Then, in Wordpress > Settings > Folder Gallery, select "Easy Fancybox (plugin)" as Gallery Engine.
 
+= How to use the GridLayout of jQuery Masonry Image Gallery Plugin with Folder Gallery? =
+
+First install and activate jQuery Masonry Image Gallery, then check the GridLayout option in Folder Gallery Misc Settings. 
+
+If thumbnails height is non-zero in Folder Gallery option, then width is used for landscape pictures and height for portrait pictures ; the other size is calculated to keep picture proportions. If thumbnails height is set to zero, then all pictures have the same width ; height is calculated to keep picture proportions.
+
 = I'd like to display a single thumbnail instead of the full thumbnails list =
 
 Add the attribute `thumbnails` in the shortcode with value `single` to display only the first thumbnail.
@@ -159,6 +166,9 @@ Engine and filetypes can be change in the Settings page.
 3. Folder Gallery Lightbox
 
 == Changelog ==
+
+= 1.8a4 [2015-06-07] =
+* New GridLayout option for use with jQuery Masonry Image Gallery Plugin (and maybe other). See FAQ 
 
 = 1.8a3 =
 * Support for document list (see FAQ)
