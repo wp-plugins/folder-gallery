@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Folder Gallery
-Version: 1.8a4
+Version: 1.8a7
 Plugin URI: http://www.jalby.org/wordpress/
 Author: Vincent Jalby
 Author URI: http://www.jalby.org
@@ -341,6 +341,22 @@ class foldergallery{
 			return '<p style="color:red;"><strong>' . __( 'Folder Gallery Error:', 'foldergallery' ) . '</strong> ' .
 				sprintf( __( 'Unable to find the directory %s.', 'foldergallery' ), $folder ) . '</p>';	
 		}
+		// Scan subdirectory
+		$gallery_code ='';
+		$cwd = getcwd();
+		chdir( $folder );
+		$subfolder = glob( '*' , GLOB_ONLYDIR );
+		chdir( $cwd ); // Back to root
+		if ( count( $subfolder ) > 0 ) {
+			$NoF = count( $subfolder );
+			for ( $idf = 0 ; $idf < $NoF ; $idf++ ) {
+				if ( strpos( $subfolder[$idf], 'cache_' ) === false ) {
+					$gallery_code .= $this->fg_gallery( array_replace( $atts, array ( 'folder' => $folder . '/' . $subfolder[$idf] ) ) ) ;
+				}
+			}
+			
+		}
+		//echo $folder . '|' ;
 		
 		if ( $engine == 'documentgallery' || $engine == 'documentlist') {
 			$pictures = $this->file_array( $folder, $sort, $filetypes );
@@ -405,11 +421,11 @@ class foldergallery{
 		}
 		// Main Div
 		if ( 'photoswipe' == $engine ) {
-			$gallery_code = '<div class="fg_gallery gallery-icon">';
+			$gallery_code .= '<div class="fg_gallery gallery-icon">';
 		} elseif ( 1 == $gridlayout ) {
-			$gallery_code = '<div class="fg_gallery gallery">';
+			$gallery_code .= '<div class="fg_gallery gallery">';
 		} else {
-			$gallery_code = '<div class="fg_gallery">';
+			$gallery_code .= '<div class="fg_gallery">';
 		}		
 		// Default single thumbnail
 		$thumbnail_idx = 0;

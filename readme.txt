@@ -167,6 +167,9 @@ Engine and filetypes can be change in the Settings page.
 
 == Changelog ==
 
+= 1.8a7 [2015-08-12] =
+* Basic support of subfolders.
+
 = 1.8a4 [2015-06-07] =
 * New GridLayout option for use with jQuery Masonry Image Gallery Plugin (and maybe other). See FAQ 
 
